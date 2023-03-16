@@ -1,0 +1,387 @@
+<template>
+
+    <v-card class="form-register">
+        <v-row>
+            <v-col>
+                <div class="h2">ข้อมูลผู้ร้อง / ข้อมูลติดต่อ</div>
+            </v-col>
+            <v-col v-if="!check_page" class="text-right">
+                <router-link to="/user/login">เคยร้องเรียนผ่านเว็บไซต์แล้ว ? / เข้าสู่ระบบ</router-link>
+            </v-col>
+        </v-row>
+
+       
+        <v-row justify="space-between">
+            <v-col cols="12" md="12">
+                <p class="style-label"><span>*</span>Email :</p>
+                <v-text-field
+                v-model="item.email"
+                :rules="emailRules"
+                single-line
+                label="ระบุอีเมล"
+                required
+                dense
+                outlined
+                hide-details="auto"
+            ></v-text-field>
+            </v-col>
+
+            <v-col cols="6" md="3">
+                <p class="style-label"><span>*</span>ชื่อ :</p>
+                <v-text-field
+                    v-model="item.name"
+                    :rules="nameRules"
+                    single-line
+                    label="กรอกชื่อ"
+                    required
+                    dense
+                    outlined
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="6" md="3">
+                <p class="style-label"><span>*</span>นามสกุล :</p>
+                <v-text-field
+                    v-model="item.lastname"
+                    :rules="lastnameRules"
+                    label="นามสกุล"
+                    single-line
+                    required
+                    dense
+                    outlined
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="3" md="3">
+                <p class="style-label"><span>*</span>เพศ : </p>
+                <v-select
+                    :items="selectGender"
+                    v-model="item.gender"
+                    :rules="genderRules"
+                    item-text="value"
+                    item-value="id"
+                    label="เลือกเพศ"
+                    dense
+                    outlined
+                    hide-details="auto"
+                    single-line
+                ></v-select>
+                <!-- <div class="box-gender">                    
+                    <div class="male" :class="{ active : active == 'male' }" @click="dataGender('male')">ชาย</div>
+                    <div class="female" :class="{ active : active == 'female' }"  @click="dataGender('female')">หญิง</div>
+                </div> -->
+            </v-col>
+            <v-col cols="3" md="3">
+                <p class="style-label"><span>*</span>อายุ (ปี) : </p>
+                <v-text-field
+                    v-model="item.age"
+                    :rules="ageRules"
+                    single-line
+                    label="อายุ"
+                    required
+                    dense
+                    outlined
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+       
+            <v-col cols="6" md="6">
+                <p class="style-label"><span>*</span>เบอร์โทรศัพท์มือถือ : </p>
+                <v-text-field
+                    v-model="item.phone"
+                    :rules="phoneRules"
+                    label="โทรศัพท์มือถือ"
+                    :maxlength="10"
+                    single-line
+                    required
+                    dense
+                    outlined
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="6" md="6">
+                <p class="style-label">เบอร์ติดต่ออื่น ๆ :</p>
+                <v-text-field
+                    v-model="item.phone_other"
+                    label="เบอร์ติดต่ออื่น ๆ"
+                 
+                    :maxlength="10"
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="12">
+                <p class="style-label">ที่อยู่ :</p>
+                <v-text-field
+                    v-model="item.address"
+                    label="ที่อยู่"
+                    required
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                ></v-text-field>
+            </v-col>
+
+            <v-col cols="3" md="3">
+                <p class="style-label">จังหวัด</p>
+                <v-autocomplete
+                    :items="selectProvince"
+                    v-model="province"
+                    item-text="value"
+                    item-value="id"
+                    label="เลือกจังหวัด"
+                    dense
+                    outlined
+                    hide-details="auto"
+                    density="compact"
+                    return-object
+                    single-line
+                ></v-autocomplete>
+            </v-col>
+            <v-col cols="3" md="3">
+                <p class="style-label">เขต / อำเภอ</p>
+                <v-select
+                    :items="selectDistrict"
+                    v-model="district"
+                    item-text="value"
+                    item-value="id"
+                    label="เลือกเขต/อำเภอ"
+                    dense
+                    outlined
+                    hide-details="auto"
+                    density="compact"
+                    return-object
+                    single-line
+                ></v-select>
+            </v-col>
+            <v-col cols="3" md="3">
+                <p class="style-label">แขวง / ตำบล</p>
+                <v-select
+                    :items="selectSubDistrict"
+                    v-model="subdistrict"
+                    item-text="value"
+                    item-value="id"
+                    label="เลือกแขวง/ตำบล"
+                    dense
+                    outlined
+                    hide-details="auto"
+                    density="compact"
+                    return-object
+                    single-line
+                ></v-select>
+            </v-col>
+            <v-col cols="3" md="3">
+                <p class="style-label">รหัสไปรษณีย์</p>
+                <v-text-field
+                    v-model="item.postcode"
+                    label="รหัสไปรษณีย์"
+                    required
+                    dense
+                    outlined
+                    single-line
+                ></v-text-field>
+            </v-col>
+        </v-row>
+    </v-card>
+
+</template>
+
+<script>
+  import  axios  from "axios"
+    export default {
+        props: ['datas', 'check_page'],
+        //     datas:{
+        //     type: Object
+        //     }
+        // },
+        data: () => ({
+        
+            maxLength: 10,
+            item: {},
+            email: '',
+            name: '',
+            lastname: '',
+            gender: [],
+            age: '',
+            phone: '',
+            phone_other: '',
+            address: '',
+            postcode: '',
+            
+            selectGender:[
+                { value: 'ชาย', id: 'male' },
+                { value: 'หญิง', id: 'female' },
+                { value: 'อื่นๆ', id: 'other' },
+            ],
+            province: null,
+            // province_value: '',
+            district: null,
+            // district_value: '',
+            subdistrict: null,
+            // subdistrict_value: '',
+            selectProvince:[],
+            selectDistrict: [],
+            selectSubDistrict: [],
+          
+            emailRules: [ 
+                v => !!v || 'กรุณากรอกข้อมูล',
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'อีเมลไม่ถูกต้อง'
+            ],
+            nameRules: [
+                v => !!v || 'กรุณากรอกข้อมูล',
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+            ],
+            lastnameRules: [
+                v => !!v || 'กรุณากรอกข้อมูล',
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+            ],
+            ageRules: [
+                v => !!v || 'กรุณากรอกข้อมูล',
+            ],
+            phoneRules: [
+                v => !!v || 'กรุณากรอกข้อมูล',
+                v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
+            ],
+            phoneOtherRules: [
+                v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
+            ],
+            genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
+         
+        }),
+        // created(){
+        //   this.getProvince()
+        // },
+        mounted(){
+          
+          
+            if (this.datas) {
+
+                this.item = this.datas
+                this.province = this.datas.province_id
+                this.district = this.datas.district_id
+                this.subdistrict = this.datas.subdistrict_id
+    
+         
+            //     // this.item.postcode = this.datas.postcode
+            }
+            this.getProvince()
+
+        },
+        watch:{
+            province : function(v_province){
+
+                // this.province_value = v_province.value
+
+                let province_id = null
+
+                if(v_province.id){
+                    province_id = v_province.id
+                }else{
+                    province_id = v_province
+                }
+
+       
+                // this.getDistricts(v_province.id);
+                this.getDistricts(province_id);
+            },
+            district : function(v_district){
+
+                // this.district_value = v_district.value
+
+                let district_id = null
+
+                if(v_district.id){
+                    district_id = v_district.id
+                }else{
+                    district_id = v_district
+                }
+
+                this.getSubDistricts(district_id);
+                // this.getSubDistricts(v_district.id);
+            },
+            
+            subdistrict: function(v_subdistrict){
+
+                this.item.postcode = v_subdistrict.postcode       
+
+            },
+        },
+        methods: {
+            async getProvince(){
+                let path = await `/api/get/province`
+                let response = await axios.get(`${path}`)
+
+                this.selectDistrict = [];
+                this.selectSubDistrict = [];
+              
+                await response.data.data.forEach(async item => {
+                    await this.selectProvince.push({'id':item.id, 'value':item.name_th})
+                })
+            },
+            async getDistricts(id){
+                let path = await `/api/get/districts`
+                let response = await axios.get(`${path}/`+id)
+
+                this.selectDistrict = []
+                this.selectSubDistrict = []
+                this.item.postcode = ''
+
+                await response.data.data.forEach(async item => {
+
+                    await this.selectDistrict.push({'id':item.id, 'value':item.name_th})
+
+                })
+            },
+            async getSubDistricts(id){
+
+                
+
+               
+                let path = await `/api/get/subdistricts`
+                let response = await axios.get(`${path}/`+id)
+
+                this.selectSubDistrict = []
+                this.item.postcode = ''
+
+                await response.data.data.forEach(async item => {
+
+                    await this.selectSubDistrict.push({'id':item.id, 'value':item.name_th, 'postcode': item.postcode})
+
+                })
+
+            }
+        }
+    }
+</script>
+
+<style>
+     .box-gender{
+        display: flex;
+        justify-content: center;
+        height: 40px;
+        align-items: center;
+
+    }
+    .box-gender .male{
+        width: 50%;
+        background: #010128;
+        padding: 8px;
+        border: 1px solid #010128;
+        color: white;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    .box-gender .female{
+        width: 50%;
+        background: white;
+        padding: 8px;
+        border: 1px solid #010128;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        
+    }
+</style>
