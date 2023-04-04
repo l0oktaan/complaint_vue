@@ -25,15 +25,8 @@
                 <span>callcenter@cgd.go.th (สำหรับ สอบถามปัญหาทั่วไป)</span>
                 <br>
                 <span>saraban@cgd.go.th (สำหรับรับ-ส่งเอกสารทางราชการ)</span>
-
-
-               
-
-
-            </v-container>
-           
+            </v-container>   
         </div>
-      
     </div>
 </template>
 

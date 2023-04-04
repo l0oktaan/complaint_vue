@@ -22,7 +22,10 @@
           >
               <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
               <template v-slot:[`item.call_no`]="{ item }">
-                <router-link :to="{ name: 'complain-detail', params: { id: item.id }}">
+                <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
+                  {{ item.call_no }}
+                </router-link>
+                <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
                   {{ item.call_no }}
                 </router-link>
               </template>
@@ -34,7 +37,7 @@
                   :color="getColor(item.status_call)"
                   dark
                   >
-                  {{ item.status_call }}
+                  {{ getstatus(item.status_call) }}
                   </v-chip>
               </template>
           </v-data-table>
@@ -82,9 +85,27 @@
     },
     methods: {
       getColor (status_call) {
-        if (status_call > 400) return 'red'
-        else if (status_call > 200) return 'orange'
+        if (status_call == 0) return '#FFA000'
+        else if (status_call == 1) return '#EF6C00'
+        else if (status_call == 2) return 'green'
+        else if (status_call == 3) return '#01579B'
+        else if (status_call == 4) return '#512DA8'
+        else if (status_call == 5) return '#D81B60'
         else return 'green'
+
+        
+
+
+      },
+      getstatus (status_call) {
+
+        if (status_call == 0) return 'รอรับเรื่อง'
+        else if (status_call == 1) return 'อยู่ระหว่างดำเนินการ'
+        else if (status_call == 2) return 'เรื่องเสร็จ'
+        else if (status_call == 3) return 'สอบถามข้อมูลเพิ่มเติม'
+        else if (status_call == 4) return 'ส่งต่อผู้เกี่ยวข้อง'
+        else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
+        else return ''
       },
       formattedDate(create_date) {
         // moment.locale('th'); // Set the locale to Thai
@@ -92,7 +113,7 @@
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
       },
       async getListComplain(){
-        let path = await `/api/user/get/listComplain`
+        let path = await `/api/backoffice/get/listFollow`
         let response =  await axios.get(`${path}/`+ this.check_roles.id)
         this.datas = await response.data.data
         this.loading = await false

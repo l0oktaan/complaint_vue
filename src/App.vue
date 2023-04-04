@@ -51,4 +51,8 @@ nav {
     .w-100{
         width: 100%;
     }
+
+    /* .main{
+      z-index: 6;
+    } */
 </style>

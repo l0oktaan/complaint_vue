@@ -6,29 +6,31 @@ import store from '../store/index.js'
 // user
 import LayoutView from "../views/users/LayoutView.vue"
 import MainView from "../views/users/MainView.vue"
-import ContactView from "../views/users/ContactView.vue"
+import ContactView from "../views/users/contact/ContactView.vue"
 import UserLoginView from '../views/users/LoginView.vue'
-import EditProfile from '../views/users/EditProfile.vue'
+
 import ForgotPasswordView from '../views/users/ForgotPassword.vue'
 import ResetPasswordView from '../views/users/ResetPassword.vue'
 import ComplainView from '../views/users/complain/ComplainView.vue'
-import FollowView from '../views/users/complain/FollowView.vue'
-import ComplainDetail from '../views/users/complain/ComplainDetail.vue'
+import FollowView from '../views/users/follow/FollowView.vue'
+import FollowDetail from '../views/users/follow/FollowDetail.vue'
 
 
 // backoffice
 import LoginView from '../views/backoffice/LoginView.vue'
-import BackofficeComplaint from "../views/backoffice/complaint/ComplaintView.vue"
-import ReceiveComplain from "../views/backoffice/complaint/ReceiveComplain.vue"
-import SearchView from "../views/backoffice/search/SearchView.vue"
+import ReceiveComplain from "../views/backoffice/receive/ReceiveView.vue"
+import ReceiveDetail from "../views/backoffice/receive/ReceiveDetail.vue"
 import PersonnelView from '../views/backoffice/personnel/UserViews.vue'
 import PersonnelForm from '../views/backoffice/personnel/UserForm.vue'
 import PersonnelFormEdit from '../views/backoffice/personnel/UserForm.vue'
+import BackofficeFollowView from '../views/backoffice/follow/FollowView.vue'
+import BackofficeFollowDetail from '../views/backoffice/follow/FollowDetail.vue'
+import ReportView from '../views/backoffice/report/ReportView.vue'
 
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 
-
+import EditProfile from '../views/EditProfile.vue'
 
 
 Vue.use(VueRouter)
@@ -111,46 +113,54 @@ const routes = [
 
     children: [
       {
-        path: '/user/report/complain',
-        name: 'complain',
+        path: '/user/report',
+        name: 'complain-report',
         component: ComplainView,
       },
       {
-        path: '/user/complain/detail/:id',
+        path: '/user/follow/detail/:id',
         name: 'complain-detail',
-        component: ComplainDetail,
+        component: FollowDetail,
       },
       {
-        path: '/user/complain',
+        path: '/user/follow',
         name: 'complain-follow',
         component: FollowView,
       },
      
       {
-        path: '/user/profile',
+        path: '/profile',
         name: 'profile',
         component: EditProfile,
       },
 
       {
-        path: '/backoffice/complaint',
-        name: 'complaint',
-        component: BackofficeComplaint,  
-      },
-
-      {
-        path: '/backoffice/search',
-        name: 'search',
-        component: SearchView,
-        
-      },
-
-      {
-        path: '/backoffice/receive_complaint',
+        path: '/backoffice/receive',
         name: 'receive',
         component: ReceiveComplain,
         
       },
+
+      {
+        path: '/backoffice/receive/detail/:id',
+        name: 'receive-detail',
+        component: ReceiveDetail,
+        
+      },
+
+      {
+        path: '/backoffice/follow',
+        name: 'backoffice-follow',
+        component: BackofficeFollowView,
+      },
+
+      {
+        path: '/backoffice/follow/detail/:id',
+        name: 'backoffice-complaindetail',
+        component: BackofficeFollowDetail,
+      },
+
+
 
       {
         path: '/backoffice/personnel',
@@ -168,9 +178,14 @@ const routes = [
         name: 'personnel_formedit',
         component: PersonnelFormEdit
       },
+      {
+        path: '/backoffice/report',
+        name: 'report_view',
+        component: ReportView
+      },
 
       {
-        path: '',
+        path: '/user/testPdf',
         name: 'about',
         component: AboutView,
         

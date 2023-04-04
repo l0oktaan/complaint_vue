@@ -22,9 +22,9 @@
 
                             <v-stepper-step :complete="e1 > 3" step="3">ข้อมูลการร้องเรียน</v-stepper-step>
 
-                            <!-- <v-divider></v-divider> -->
+                            <v-divider></v-divider>
 
-                            <!-- <v-stepper-step step="4" :complete="isOkay" >บันทึกรายการ</v-stepper-step> -->
+                            <v-stepper-step step="4" :complete="isOkay" >บันทึกรายการ</v-stepper-step>
                         </v-stepper-header>
                         <v-stepper-items>
                         
@@ -34,7 +34,6 @@
                                     <v-btn color="#003366" class="text-white" @click="checkStepOne">  ข้าพเจ้ายอมรับข้อตกลงและเงื่อนไข</v-btn>
                                 </div>
                             </v-stepper-content>
-
                             <v-stepper-content step="2">
                                 <v-form
                                     ref="formRegister"
@@ -45,11 +44,10 @@
 
                                     <div class="text-right">
                                         <v-btn  class="btn-back" @click="e1 = 1">ย้อนกลับ</v-btn>
-                                        <v-btn color="#003366" class="btn-next text-white"  @click="checkStepTwo">บันทึก</v-btn>
+                                        <v-btn color="#003366" class="btn-next text-white"  @click="checkStepTwo">ถัดไป</v-btn>
                                     </div>
                                 </v-form>
                             </v-stepper-content>
-
                             <v-stepper-content step="3">
                                 <v-form
                                     ref="formOfficer"
@@ -59,11 +57,11 @@
                                     <StepTree ref="employee"/>
                                     <div class="text-right">
                                         <v-btn class="btn-back"  @click="e1 = 2">ย้อนกลับ</v-btn>
-                                        <v-btn color="#003366" class="btn-next text-white" @click="checkStepTree">บันทึก</v-btn>
+                                        <v-btn color="#003366" class="btn-next text-white" @click="checkStepTree">ถัดไป</v-btn>
                                     </div>
                                 </v-form>
                             </v-stepper-content>
-                            <!-- <v-stepper-content step="4">
+                            <v-stepper-content step="4">
                                 <v-form
                                     ref="formSubmit"
                                     v-model="validOne"
@@ -99,7 +97,7 @@
                                         <v-btn color="#003366" class="btn-next text-white" @click="submit">บันทึก</v-btn>
                                     </div>
                                 </v-form>
-                            </v-stepper-content> -->
+                            </v-stepper-content>
 
                         </v-stepper-items>
                     </v-stepper>
@@ -129,7 +127,6 @@ import StepTree from '@/components/step/stepTree.vue'
         validOne: true,
         validTwo: true,
         blobUrl: null,
-        register_id : null,
         dataString: "Hello, world!"
     }),
     methods: {
@@ -138,157 +135,37 @@ import StepTree from '@/components/step/stepTree.vue'
             this.step_one = true
 
         },
-
         async checkStepTwo(){
-
             if(this.$refs.formRegister.validate()){
 
                 this.user = this.$refs.user
 
                 try {
+                    
+                    let fd_mail = await { "email": this.user.item.email}
+                    
+                    let path = await `/api/user/checkMail`
+                    let response = await axios.post(`${path}`, fd_mail)
 
-                    let fd = await {
-                        "email"                 : this.user.item.email,
-                        "name"                  : this.user.item.name,
-                        "lastname"              : this.user.item.lastname,
-                        "gender"                : this.user.item.gender,
-                        "age"                   : this.user.item.age,
-                        "phone"                 : this.user.item.phone,
-                        "phone_other"           : this.user.item.phone_other,
-                        "address"               : this.user.item.address,     
-                        "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
-                        "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
-                        "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
-                        "postcode"              : this.user.item.postcode,
-                        "check_policy"          : this.step_one,
+                    if(response.data.status == 200){
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'มีอีเมลนี่ในระบบเเล้ว',
+                            // footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     }
-
-                    await Swal.fire({
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: 'บันทึก',
-                        cancelButtonText: `ยกเลิก`,
-                    }).then(async (result)  => {
-                    /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-
-                            let path = await `/api/user/register`
-                            let response = await axios.post(`${path}`, fd)
-
-                            this.register_id = response.data.register_id
-
-                           
-                            await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                        // } else if (result.isDenied) {
-                        //     Swal.fire('Changes are not saved', '', 'info')
-                        }
-                    })
+                
+                } catch (error) {
 
                     this.e1 = await 3
-
-                } catch (error) {
-                    console.log(error);
                 }
-
-                // try {
-                    
-                //     let fd_mail = await { "email": this.user.item.email}
-                    
-                //     let path = await `/api/user/checkMail`
-                //     let response = await axios.post(`${path}`, fd_mail)
-
-                //     if(response.data.status == 200){
-                //         await Swal.fire({
-                //             icon: 'error',
-                //             title: 'Oops...',
-                //             text: 'มีอีเมลนี่ในระบบเเล้ว',
-                //             // footer: '<a href="">Why do I have this issue?</a>'
-                //         })
-                //     }
-                
-                // } catch (error) {
-
-                //     this.e1 = await 3
-                // }
-
             }
         },
-
-        async checkStepTree(){
+        checkStepTree(){
             if(this.$refs.formOfficer.validate()){
-                // this.e1 = 4
-                this.employee = await this.$refs.employee
-
-                try {
-  
-                    let fd = await {
-                        "name"              : this.employee.name,
-                        "lastname"          : this.employee.lastname,
-                        "register_id"       : this.register_id,
-                        "division"          : this.employee.division,
-                        "description_face"  : this.employee.description_face,
-                        "topic"             : this.employee.complain_topic,
-                        "location"          : this.employee.complain_location,
-                        "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
-                        "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
-                        "detail"            : this.employee.complain_detail,
-                        "create_by"         : this.register_id,
-                        "modified_by"       : this.register_id,
-                    }
-
-                    await Swal.fire({
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: 'บันทึก',
-                        cancelButtonText: `ยกเลิก`,
-                    }).then(async (result)  => {
-                    /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-
-                            let path = await `/api/user/complain`
-
-                            let response = await axios.post(`${path}`, fd)
-
-
-                            if(response){
-
-                                for (let i = 0; i < this.employee.files.length; i++) {
-
-                                    let number = await i + 1
-
-                                    await this.insertFile(this.register_id, response.data.complain_id, this.employee.files[i], number)
-                                    
-                                
-                                }
-                            }
-
-                           
-                            await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                        // } else if (result.isDenied) {
-                        //     Swal.fire('Changes are not saved', '', 'info')
-                        }
-                    })
-
-                    // let path = await `/api/user/complain`
-                    // let response = await axios.post(`${path}`, fd)
-
-                    // if(response){
-
-                    //     for (let i = 0; i < this.employee.files.length; i++) {
-
-                    //         let number = await i + 1
-
-                    //         await this.insertFile(register_id, response.data.complain_id, this.employee.files[i], number)
-                            
-                        
-                    //     }
-                    // }
-                    
-                } catch (error) {
-                    console.log("insertcomplain", error );
-                }
+                this.e1 = 4
+                this.employee = this.$refs.employee
             }
         },
         dataUrl(v){
@@ -296,7 +173,7 @@ import StepTree from '@/components/step/stepTree.vue'
             window.open(blobUrl, '_blank');
         },
         async submit(){
-            try {
+           try {
                 let fd = await {
                     "email"                 : this.user.item.email,
                     "name"                  : this.user.item.name,
@@ -326,13 +203,11 @@ import StepTree from '@/components/step/stepTree.vue'
                             let path = await `/api/user/register`
                             let response = await axios.post(`${path}`, fd)
 
-                            console.log(response);
+                            if(response){
 
-                            // if(response){
-
-                            //     await this.insertComplain(response.data.register_id)
+                                await this.insertComplain(response.data.register_id)
                                 
-                            // }
+                            }
 
                             await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
                         // } else if (result.isDenied) {
@@ -441,11 +316,6 @@ import StepTree from '@/components/step/stepTree.vue'
   }
 </script>
 <style>
-    /* .page-main{
-        border: 1px solid #ff0000;
-        display: block;
-        height: 100%;
-    } */
     .head-topic{
         background: #003366;
     }

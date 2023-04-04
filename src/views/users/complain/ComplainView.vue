@@ -7,8 +7,8 @@
         v-model="valid"
         lazy-validation
       >
-          <stepTree ref="employee"/>
-          <v-btn class="btn-submit" @click="insertComplain">บันทึก</v-btn>
+        <stepTree ref="employee"/>
+        <v-btn class="btn-submit mt-3" @click="insertComplain">บันทึก</v-btn>
       </v-form>
     </div>
   </div>
@@ -33,6 +33,8 @@ export default {
         try {
 
           this.employee = await this.$refs.employee
+
+          console.log(this.employee);
           let fd = await {
             "name"              : this.employee.name,
             "lastname"          : this.employee.lastname,
@@ -79,6 +81,8 @@ export default {
     async insertFile(register_id, complain_id, file, id){
       try {
 
+        console.log(file);
+
           const arr_file = await file.name.split(".")
 
           let file_name = await ''
@@ -95,6 +99,7 @@ export default {
           let fd_upload = await {
               "register_id"   : register_id,
               "complain_id"   : complain_id,
+              "file_original" : file.name,
               "file_name"     : file_name
           }
 

@@ -123,7 +123,6 @@
                         <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                             v-model="complain_start_date"
-                            :rules="startDateRules"
                             label="วันที่เริ่มต้น"
                             append-icon="mdi-calendar"
                             readonly
@@ -209,7 +208,14 @@
             <v-row>
                 <v-col>
                     <p class="style-label"><span>*</span>รายละเอียดเรื่องร้องเรียน : </p>
-                    <v-tiptap class="mb-5" v-model="complain_detail" />
+                    <v-textarea
+                        outlined
+                        label="รายละเอียดเรื่องร้องเรียน"
+                        v-model="complain_detail"
+                        clearable 
+                        single-line
+                    ></v-textarea>
+                    <!-- <v-tiptap class="mb-5" v-model="complain_detail" /> -->
                     <!-- <v-text-field
                         v-model="data.detail"
                         label="*รายละเอียดเรื่องร้องเรียน"
@@ -235,7 +241,8 @@
                     <v-file-input v-model="files" 
                         small-chips 
                         :show-size="1000"
-                        counter
+                        :accept="acceptTypes"
+                        :rules="fileRules"
                         outlined
                         placeholder="Select your files"
                         multiple 
@@ -275,6 +282,7 @@ export default {
         files: [],
         modal: false,
         modal2: false,
+        acceptTypes: "image/*, application/pdf",
         nameRules: [
             v => !!v || 'กรุณากรอกข้อมูล',
             v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
@@ -292,9 +300,35 @@ export default {
         locationRules: [
             v => !!v || 'กรุณากรอกข้อมูล',
         ],
+        fileRules: [
+            value => {
+            if (!value || value.length === 0) {
+                return "Please select at least one file";
+            }
+            if (value.length > 5) {
+                return "Maximum 5 files allowed";
+            }
+            const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
+            for (let i = 0; i < value.length; i++) {
+                const file = value[i];
+                console.log(file);
+                if (!allowedTypes.includes(file.type)) {
+                return "File type not allowed";
+                }
+            }
+            return true;
+            }
+        ],
+    //     filesRules: [
+    //     // v => !!v || 'กรุณากรอกข้อมูล',
+    //     v => !!v || "File is required", 
+    //     v => (v && v.type.indexOf("image/") !== -1) || "Please upload an image"
+    //     // v => v.type == 'image/png' || 'อัพโหลดได้เฉพาะไฟล์ PDF เท่านั้น'
+    //     // v => v.type == 'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
+      
+    // ],
         start_date: new Date().toISOString().substr(0, 10),
         end_date: new Date().toISOString().substr(0, 10),
-        startDateRules: [],
         
       }),
 
@@ -324,6 +358,7 @@ export default {
             }
         },
         remove (index) {
+            console.log(index);
             this.files.splice(index, 1)
         },
         fileAdded () {

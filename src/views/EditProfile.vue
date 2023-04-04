@@ -1,20 +1,22 @@
 <template>
   <div class="edit-profile">
-    <v-form
-      ref="form"
-      v-model="valid"
-      lazy-validation
-    >
-      <stepTwo ref="user" :datas="check_roles" check_page="edit-profile"/>
-      <v-btn class="btn-submit" @click="editProfile">บันทึก</v-btn>
-    </v-form>
+    <div class="style-page">
+      <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation
+      >
+        <stepTwo ref="user" :datas="check_roles" check_page="edit-profile"/>
+        <v-btn class="btn-submit" @click="editProfile">บันทึก</v-btn>
+      </v-form>
+    </div>
   </div>
 </template>
 
 <script>
 import axios  from "axios"
 import Swal from 'sweetalert2'
-import store from '../../store/index.js'
+import store from '../store/index.js'
 import stepTwo from '@/components/step/stepTwo.vue'
 
 export default {

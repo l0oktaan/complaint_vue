@@ -18,6 +18,16 @@
         <v-main class="box-main">
             <router-view></router-view>
         </v-main>
+        <v-footer class="footer-main">
+            <v-container>
+                <p>กรมบัญชีกลาง ถนนพระรามที่ 6 แขวงพญาไท เขตพญาไท กรุงเทพฯ 10400</p>
+                <p>Call Center 0-2270-6400</p>
+                <p>หมายเลขโทรศัพท์กลาง 0-2127-7000 </p>
+            </v-container>
+        </v-footer>
+        <!-- <v-footer class="footer-main"> -->
+               
+        <!-- </v-footer> -->
     </div>
   
 
@@ -57,6 +67,21 @@
     .router-link-exact-active{
         border-bottom: 2px solid ;
         color: #fcc200!important;
+    }
+
+    .footer-main{
+        background: #003366!important;
+        padding-bottom: 16px;
+        padding-top: 16px;
+        /* position: absolute;
+        width: 100%;
+        bottom: 0; */
+        /* padding: 16px 0; */
+    }
+    .footer-main p {
+       color: white;
+        text-align: left;
+        /* margin-bottom: 4px; */
     }
    
 </style>

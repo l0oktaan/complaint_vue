@@ -15,16 +15,27 @@
             <v-col cols="12" md="12">
                 <p class="style-label"><span>*</span>Email :</p>
                 <v-text-field
-                v-model="item.email"
-                :rules="emailRules"
-                single-line
-                label="ระบุอีเมล"
-                required
-                dense
-                outlined
-                hide-details="auto"
-            ></v-text-field>
+                    v-model="item.email"
+                    :rules="emailRules"
+                    single-line
+                    label="ระบุอีเมล"
+                    required
+                    dense
+                    outlined
+                    hide-details="auto"
+                    @input="checkMail"
+                ></v-text-field>
             </v-col>
+            <!-- <v-col cols="12" md="2">
+                <v-btn
+                    rounded
+                    color="primary"
+                    dark
+                   @click="checkMail"
+                    >
+                    ตรวจสอบอีเมล
+                </v-btn>
+            </v-col> -->
 
             <v-col cols="6" md="3">
                 <p class="style-label"><span>*</span>ชื่อ :</p>
@@ -191,7 +202,8 @@
 </template>
 
 <script>
-  import  axios  from "axios"
+    import  axios  from "axios"
+    import Swal from 'sweetalert2'
     export default {
         props: ['datas', 'check_page'],
         //     datas:{
@@ -264,8 +276,6 @@
                 this.province = this.datas.province_id
                 this.district = this.datas.district_id
                 this.subdistrict = this.datas.subdistrict_id
-    
-         
             //     // this.item.postcode = this.datas.postcode
             }
             this.getProvince()
@@ -311,6 +321,29 @@
             },
         },
         methods: {
+            async checkMail(){
+                console.log(this.item.email);
+                try {
+                    
+                    let fd_mail = await { "email": this.item.email}
+                    
+                    let path = await `/api/user/checkMail`
+                    let response = await axios.post(`${path}`, fd_mail)
+
+                    if(response.data.status == 200){
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'มีอีเมลนี่ในระบบเเล้ว',
+                        })
+                        
+                        this.item.email = await ''
+                    }
+                
+                } catch (error) {
+                    console.log('checkmail', error);
+                }
+            },
             async getProvince(){
                 let path = await `/api/get/province`
                 let response = await axios.get(`${path}`)
@@ -337,10 +370,6 @@
                 })
             },
             async getSubDistricts(id){
-
-                
-
-               
                 let path = await `/api/get/subdistricts`
                 let response = await axios.get(`${path}/`+id)
 

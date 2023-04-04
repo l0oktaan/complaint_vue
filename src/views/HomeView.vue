@@ -17,23 +17,29 @@
           v-if="check_roles.roles === 'user'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
-          to="/user/report/complain"
+          to="/user/report"
         >
           <v-list-item link>
             <i class="fa-solid fa-comment menu-icon"></i>
             <v-list-item-content>
               <v-list-item-title class="menu-text">
-                เเจ้งปัญหา
+                เเจ้งเรื่องร้องเรียนทุจริต
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </router-link>
 
-        <router-link 
+        <!-- <router-link 
           v-if="check_roles.roles === 'user'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/user/complain"
+        > -->
+        <router-link 
+          v-if="check_roles.roles === 'user'"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/user/follow"
         >
           <v-list-item link>
             <i class="fa-solid fa-eye menu-icon"></i>
@@ -46,7 +52,7 @@
         </router-link>
 
 
-        <router-link 
+        <!-- <router-link 
           v-if="check_roles.roles === 'admin'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
@@ -76,23 +82,57 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </router-link>
+        </router-link> -->
 
-        <!-- <router-link 
+        <router-link 
           v-if="check_roles.roles === 'admin'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
-          to="/backoffice/receive_complaint"
+          to="/backoffice/receive"
         >
           <v-list-item link>
             <i class="fa-solid fa-magnifying-glass menu-icon"></i>
             <v-list-item-content>
               <v-list-item-title class="menu-text">
-                รับปัญหา
+                รับเรื่องร้องเรียนทุจริต
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </router-link> -->
+        </router-link>
+
+        <router-link 
+          v-if="check_roles.roles === 'admin'"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/backoffice/follow"
+        >
+          <v-list-item link>
+            <i class="fa-solid fa-eye menu-icon"></i>
+            <v-list-item-content>
+              <v-list-item-title class="menu-text">
+                รายการที่ต้องดำเนินการ
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
+
+        <router-link 
+          v-if="check_roles.roles === 'admin'"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/backoffice/report"
+        >
+          <v-list-item link>
+            <i class="fa-solid fa-pen-to-square menu-icon"></i>
+            <!-- <i class="fa-solid fa-magnifying-glass menu-icon"></i> -->
+            <v-list-item-content>
+              <v-list-item-title class="menu-text">
+                รายงาน
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
 
         <router-link 
           v-if="check_roles.roles === 'admin'"
@@ -334,7 +374,13 @@ import store from '../store/index.js';
   }
   .btn-submit{
       border: 1px solid #003366;
-      background: #003366;
+      background-color: #003366!important;
       color: white!important;
   }
+  /* .v-app-bar.v-app-bar--fixed{
+    z-index: 1;
+  }
+  .v-navigation-drawer--fixed {
+    z-index: 1;
+} */
 </style>

@@ -89,7 +89,7 @@ export default {
     formattedDate(create_date) {
       // moment.locale('th'); // Set the locale to Thai
       // return moment(this.datas.create_date).format('DD MMMM YYYY, HH:mm', { lang: 'th' });
-      return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
+      return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
     },
     async getListComplain(){
       let path = await `/api/user/get/listComplain`

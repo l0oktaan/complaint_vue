@@ -175,7 +175,7 @@ export default {
                         password: this.password
                     })
 
-                    await this.$router.push({name:"complain"});
+                    await this.$router.push({name:"complain-report"});
 
                     Swal.fire({
                         position: 'center',

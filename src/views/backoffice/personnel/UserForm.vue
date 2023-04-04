@@ -156,7 +156,7 @@
 </template>
 <script>
     import axios from "axios";
-    import Swal from 'sweetalert2'
+    import Swal from 'sweetalert2';
     import store from '../../../store/index.js';
     import loaderView from '@/components/loaderView.vue';
     import BreadcrumbsView from '@/components/breadcrumbsView.vue';
