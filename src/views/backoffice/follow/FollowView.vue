@@ -2,20 +2,24 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-          <v-card-title>
-              เเสดงรายการปัญหา
-              <v-spacer></v-spacer>
+          <v-card-title>เเสดงรายการปัญหา</v-card-title>
+          <v-row>
+            <v-col cols>
+              <selectStatus  ref="filter_status"/>
+            </v-col>
+            <v-col cols>
               <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  single-line
-                  hide-details
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
               ></v-text-field>
-          </v-card-title>
+            </v-col>
+          </v-row>   
           <v-data-table
               :headers="headers"
-              :items="datas"
+              :items="filteredItems"
               :search="search"
               :loading="loading"
               loading-text="Loading... Please wait"
@@ -50,7 +54,9 @@
   import moment from 'moment';
   import 'moment/locale/th'; // Import the Thai locale
   import store from '../../../store/index.js';
+import selectStatus from '@/components/selectStatus.vue';
   export default {
+  components: { selectStatus },
     data () {
       return {
         check_roles: store.getters.user,
@@ -83,6 +89,20 @@
     mounted(){
       this.getListComplain()
     },
+    computed: {
+        filteredItems() {
+          return this.datas.filter(item => {
+            const status_call = this.getstatus(item.status_call)
+              return (
+                (this.$refs.filter_status.selectedStatus === 'ทั้งหมด' || status_call === this.$refs.filter_status.selectedStatus) 
+                // &&
+                // (this.search === '' || item.name?.toLowerCase().includes(this.search.toLowerCase()))
+              );
+            // }
+          
+          });
+        },
+    },
     methods: {
       getColor (status_call) {
         if (status_call == 0) return '#FFA000'
@@ -92,10 +112,6 @@
         else if (status_call == 4) return '#512DA8'
         else if (status_call == 5) return '#D81B60'
         else return 'green'
-
-        
-
-
       },
       getstatus (status_call) {
 

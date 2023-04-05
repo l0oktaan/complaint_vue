@@ -2,44 +2,48 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-          <v-card-title>
-              เเสดงรายการปัญหา
-              <v-spacer></v-spacer>
+          <v-card-title>เเสดงรายการปัญหา</v-card-title>
+          <v-row>
+            <v-col cols>
+              <selectStatus  ref="filter_status"/>
+            </v-col>
+            <v-col cols>
               <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  single-line
-                  hide-details
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
               ></v-text-field>
-          </v-card-title>
+            </v-col>
+          </v-row>           
           <v-data-table
-              :headers="headers"
-              :items="datas"
-              :search="search"
-              :loading="loading"
-              loading-text="Loading... Please wait"
+            :headers="headers"
+            :search="search"
+            :loading="loading"
+            loading-text="Loading... Please wait"
+            :items="filteredItems"
           >
-              <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
-              <template v-slot:[`item.call_no`]="{ item }">
-                <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
-                  {{ item.call_no }}
-                </router-link>
-                <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
-                  {{ item.call_no }}
-                </router-link>
-              </template>
-              <template v-slot:[`item.create_date`]="{ item }">
-                {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-              </template>
-              <template v-slot:[`item.status_call`]="{ item }">
-                  <v-chip
-                  :color="getColor(item.status_call)"
-                  dark
-                  >
-                  {{ getstatus(item.status_call) }}
-                  </v-chip>
-              </template>
+            <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
+            <template v-slot:[`item.call_no`]="{ item }">
+              <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
+                {{ item.call_no }}
+              </router-link>
+              <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+                {{ item.call_no }}
+              </router-link>
+            </template>
+            <template v-slot:[`item.create_date`]="{ item }">
+              {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
+            </template>
+            <template v-slot:[`item.status_call`]="{ item }">
+                <v-chip
+                :color="getColor(item.status_call)"
+                dark
+                >
+                {{ getstatus(item.status_call) }}
+                </v-chip>
+            </template>
           </v-data-table>
         </v-card>
       </div>
@@ -50,7 +54,9 @@
   import moment from 'moment';
   import 'moment/locale/th'; // Import the Thai locale
   import store from '../../../store/index.js';
+  import selectStatus from '@/components/selectStatus.vue';
   export default {
+    components: {selectStatus},
     data () {
       return {
         check_roles: store.getters.user,
@@ -78,10 +84,24 @@
           { text: 'สถานะ Call', value: 'status_call' },
         ],
         desserts: [],
-      }
+        }
     },
     mounted(){
       this.getListComplain()
+    },
+    computed: {
+        filteredItems() {
+          return this.datas.filter(item => {
+            const status_call = this.getstatus(item.status_call)
+              return (
+                (this.$refs.filter_status.selectedStatus === 'ทั้งหมด' || status_call === this.$refs.filter_status.selectedStatus) 
+                // &&
+                // (this.search === '' || item.name?.toLowerCase().includes(this.search.toLowerCase()))
+              );
+            // }
+          
+          });
+        },
     },
     methods: {
       getColor (status_call) {
@@ -92,10 +112,6 @@
         else if (status_call == 4) return '#512DA8'
         else if (status_call == 5) return '#D81B60'
         else return 'green'
-
-        
-
-
       },
       getstatus (status_call) {
 

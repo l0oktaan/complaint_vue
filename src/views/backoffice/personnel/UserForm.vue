@@ -14,12 +14,24 @@
                 >
                     <v-card-text >
                         <v-row align="center">
-                            <v-col cols="12">
+                            <v-col cols="6">
                                 <p class="style-label"><span>*</span>รหัสผู้ใช้งาน : </p>
                                 <v-text-field
                                     v-model="username"
                                     :rules="usernameRules"
                                     label="รหัสผู้ใช้งาน"
+                                    dense
+                                    outlined
+                                    single-line
+                                    hide-details="auto"
+                                    clearable
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                                <p class="style-label">รหัสผ่านผู้ใช้งาน : </p>
+                                <v-text-field
+                                    v-model="password"
+                                    label="รหัสผ่านผู้ใช้งาน"
                                     dense
                                     outlined
                                     single-line
@@ -266,6 +278,7 @@
                     let fd = {
                         "userId"        : this.userId,
                         "username"      : this.username,
+                        "password"      : this.password,
                         "name"          : this.name,
                         "lastname"      : this.lastname,
                         "position"      : this.position,
