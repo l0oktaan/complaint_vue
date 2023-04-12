@@ -6,7 +6,8 @@
 
         <v-tabs
             v-model="tab"
-            background-color="deep-purple accent-4"
+            background-color="#003366"
+            class="style-tabs"
             centered
             dark
             icons-and-text
@@ -109,7 +110,7 @@
                       <v-textarea
                         solo
                         name="input-7-4"
-                        label="Solo textarea"
+                        label=""
                         v-model="data.description_face"
                         readonly
                         hide-details="auto"
@@ -156,9 +157,6 @@
         
         <v-tab-item :value="'tab-2'">
           <v-card flat>
-            <!-- <v-card-title class="text-h5">
-              An even better title
-            </v-card-title> -->
             <v-card-text>
               <v-container fluid>
                     <v-row>
@@ -194,7 +192,7 @@
                             class="input-gray"
                           ></v-text-field>
                       </v-col>
-                      <v-col cols="3" class="d-flex">
+                      <!-- <v-col cols="3" class="d-flex">
                         <v-subheader>เพศ</v-subheader>
                         <v-text-field
                           v-model="user.gender"
@@ -203,7 +201,7 @@
                           hide-details="auto"
                           class="input-gray"
                           ></v-text-field>
-                      </v-col>
+                      </v-col> -->
                       <v-col cols="3" class="d-flex">
                             <v-subheader>อายุ</v-subheader>
                             <v-text-field
@@ -314,7 +312,7 @@
         <v-card-text>
           <v-subheader>รายละเอียดปัญหา/สาเหตุ</v-subheader>
           <v-textarea
-            filled
+            outlined
             name="input-7-4"
             hide-details="auto"
             v-model="complain_detail"
@@ -453,5 +451,9 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
   }
   .input-gray ::v-deep input{
       color: gray!important;
+  }
+  .style-tabs .v-tabs-slider-wrapper{
+    color: rgb(255, 204, 102);
+    height: 4px!important;
   }
 </style>

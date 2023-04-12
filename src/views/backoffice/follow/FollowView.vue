@@ -24,15 +24,20 @@
               :loading="loading"
               loading-text="Loading... Please wait"
           >
-              <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
-              <template v-slot:[`item.call_no`]="{ item }">
+              <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
+              <template v-slot:[`item.action`]="{ item }">
+                <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </router-link>
+              </template>
+              <!-- <template v-slot:[`item.call_no`]="{ item }">
                 <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
                   {{ item.call_no }}
                 </router-link>
                 <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
                   {{ item.call_no }}
                 </router-link>
-              </template>
+              </template> -->
               <template v-slot:[`item.create_date`]="{ item }">
                 {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
               </template>
@@ -64,10 +69,15 @@ import selectStatus from '@/components/selectStatus.vue';
         loading: true,
         datas: [],
         headers: [
+          // {
+          //   text: 'No',
+          //   align: 'start',
+          //   value: 'no',
+          // },
           {
-            text: 'No',
-            align: 'start',
-            value: 'no',
+            text: 'Action',
+            align: 'center',
+            value: 'action',
           },
           {
             text: 'Call No',

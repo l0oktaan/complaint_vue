@@ -181,10 +181,76 @@
                       dense
                       outlined
                       single-line
-                      hide-details="auto"
+                      hide-details="auto" 
+                      @change="showDetailStatus"
                     ></v-select>
                   </v-col>
                 </v-row>
+              
+                <v-row v-if="show_detail_status">
+                  <v-col cols="3">
+                    <v-subheader>ประเภทการร้องเรียน</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-radio-group
+                      v-model="check_corrupt"
+                      row
+                    >
+                      <v-radio
+                        label="ไม่ทุจริต"
+                        :value=false
+                        @click="show_detail_corrupt = false"
+                      ></v-radio>
+                      <v-radio
+                        label="ทุจริต"
+                        :value=true
+                        @click="show_detail_corrupt = true"
+                      ></v-radio>
+                    </v-radio-group>
+                  </v-col>
+    
+                </v-row>
+                <!-- <v-card 
+                  class="mx-auto"
+                > -->
+                <v-card v-if="show_detail_corrupt"
+                  class="mx-auto"
+                >
+                  <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
+                  <v-card-text class="pt-5">
+                    <v-row>
+                      <v-col>
+                        <v-text-field
+                          v-model="corrupt.reference"
+                          :rules="corruptRefRules"
+                          hide-details="auto"
+                          label="เลขที่หนังสือ"
+                          outlined
+                          dense
+                        ></v-text-field>
+                      </v-col>
+      
+                      <v-col>
+                        <DatePickers ref="corrupt_date" :show_date="corrupt_date"  label="วันที่ดำเนินการ"/>
+                      </v-col>
+                      <v-col>
+                        <InputFiles  ref="corrupt_file"/>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-textarea
+                          v-model="corrupt.detail"
+                          :rules="corruptDetailfRules"
+                          label="รายละเอียดการทุจริต"
+                          hide-details="auto"
+                          outlined
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+
                 <v-btn
                   depressed
                   class="btn-submit mt-5"
@@ -356,13 +422,15 @@
   import loaderView from '@/components/loaderView.vue';
   import BreadcrumbsView from '@/components/breadcrumbsView.vue';
   import InputFiles from '@/components/inputFiles.vue';
+import DatePickers from '@/components/datePickers.vue';
   
   
   export default {
-    components: { loaderView, BreadcrumbsView, InputFiles},
+    components: { loaderView, BreadcrumbsView, InputFiles, DatePickers},
     data: () => ({
       check_roles: store.getters.user,
       // zIndex: 4,
+      check_corrupt: null,
       panel: [0],
       valid: true,
       data: {},
@@ -371,6 +439,8 @@
       url: '',
       status_detail: '',
       status_call: { value: '', id: null },
+      show_detail_status : false,
+      show_detail_corrupt : false,
       edit_status_detail: '',
       edit_status_call: { value: '', id: null },
       selectStatus: [
@@ -380,6 +450,8 @@
             { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
             { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
         ],
+      corrupt: {},
+      corrupt_date:  new Date().toISOString(),
       dialog_files: false,
       dialog_edit: false,
       overlayImg: false,
@@ -387,7 +459,8 @@
       opacity: 1,
       desserts: [],
       detailRules: [v => !!v || 'กรุณากรอกข้อมูล'],
-    
+      corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล'],
+      corruptDetailfRules : [v => !!v || 'กรุณากรอกข้อมูล'],
       item: [
           {
             text: 'ติดตามเรื่องร้องเรียน',
@@ -398,8 +471,7 @@
             text: 'รายละเอียดปัญหา',
             disabled: true,
             href: 'breadcrumbs_link_1',
-          },
-          
+          },  
       ],
       headers: [
           {
@@ -408,7 +480,6 @@
             sortable: false,
             value: 'date',
           },
-          // { text: 'ชื่อ - สกุล', value: 'name' },
           { text: 'หน่วยงาน', value: 'division' },
           { text: 'รายละเอียด', value: 'detail' },
           { text: 'สถานะ', value: 'status_call' },
@@ -421,9 +492,8 @@
       this.getComplainStep()
     },
     methods: {
-      dailogfiles(v){
+      dailogfiles(){
         this.dialog_files = true
-        console.log(v);
       },
       async dailogEdit(v){
         this.dialog_edit        = await true
@@ -461,7 +531,7 @@
       },
       base64ToBlob(base64String, contentType) {
         // const byteCharacters = atob(base64String);
-        console.log(contentType);
+
         const byteCharacters = this.isBase64(base64String);
         const byteArrays = [];
         for (let i = 0; i < byteCharacters.length; i++) {
@@ -470,25 +540,21 @@
         const blob = new Blob([new Uint8Array(byteArrays)], { type: contentType });
         return blob;
       },
-      displayPdf(base64String) {
-        const contentType = 'application/pdf';
-        try {
-          const blob = this.base64ToBlob(base64String, contentType);
+      // displayPdf(base64String) {
+      //   const contentType = 'application/pdf';
+      //   try {
+      //     const blob = this.base64ToBlob(base64String, contentType);
   
-          const fileUrl =  window.URL.createObjectURL(blob);
+      //     const fileUrl =  window.URL.createObjectURL(blob);
   
-          console.log(fileUrl);
+      //     console.log(fileUrl);
   
-          // window.open(fileUrl, '_blank');
-        } catch (error) {
-          console.error(error);
-        }
-      },
-      async urlFiles(file_name, file_type){
-  
-        console.log(file_name);
-        console.log(file_type);
-  
+      //     // window.open(fileUrl, '_blank');
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // },
+      async urlFiles(file_name){
         let path = await `/api/user/getUrlFiles?filename=${file_name}`
         let res = await axios.get(`${path}`)
   
@@ -532,8 +598,7 @@
           // Clean up by revoking the URL object
           URL.revokeObjectURL(url);
               
-        console.log('=======', url);
-  
+
      
   
   
@@ -558,18 +623,17 @@
         this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
         this.files            = await response.data.data_files
   
-  
-        console.log(this.files);
         
         await setTimeout(() => (this.$refs.loader.overlay = false), 300);
       },
       async getComplainStep(){
-        let path              = await `/api/user/get/complainStep`
+        let path              = await `/api/backoffice/get/complainStep`
         let response          =  await axios.get(`${path}/`+ this.$route.params.id)
         this.desserts         = await response.data.data
-        console.log(this.desserts );
+
       },
       async saveComplainStep(){
+       
         if(this.$refs.form.validate()){
           try {
             let fd = await {
@@ -578,25 +642,58 @@
               "register_id"       : this.data.register_id,
               "detail"            : this.status_detail,
               "status_call"       : this.status_call,
+              "check_corrupt"     : this.check_corrupt,
               "create_by"         : this.check_roles.id,
               "modified_by"       : this.check_roles.id,
             }
   
-            let path        = await `/api/backoffice/complainStep`
+            let path        = await `/api/backoffice/create/complainStep`
             let response    = await axios.post(`${path}`, fd)
+
   
-            console.log('=========',response);
             if(response){
   
+              this.saveComplainCorrupt(response.data.complain_step_id)
+
               for (let i = 0; i < this.$refs.status.files.length; i++) {
   
               let number = await i + 1
+
+              let file = await this.$refs.status.files[i]
+
+              let complain_id = await response.data.complain_step_id
+
+              const arr_file = await file.name.split(".")
+      
+              let file_name = await ''
+                
+                if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+      
+                  file_name = await 'imgcid' + complain_id + '_' + number + '.' +arr_file[1] 
+      
+                }else if(file.type === 'application/pdf'){
+      
+                  file_name = await 'pdfcid' + complain_id + '_' + number + '.' +arr_file[1] 
+                }
+      
+                let fd_upload = await {
+                    "register_id"         : this.data.register_id,
+                    "complain_step_id"    : complain_id,
+                    "file_original"       : file.name,
+                    "file_name"           : file_name
+                }
   
-              await this.insertFile(this.data.register_id, response.data.complain_step_id, this.$refs.status.files[i], number)
+                let path = await `/api/backoffice/complainStepFiles`
+
+                let path_api = await  `/api/backoffice/uploadStepFiles`
+
+              await this.insertFile(fd_upload, path, file_name, file, path_api)
               
-  
               }
-            }
+
+           
+              }
+          
   
             Swal.fire({
                 icon: 'success',
@@ -617,46 +714,123 @@
         }
      
       },
+      async saveComplainCorrupt(complain_step_id){
+        if(this.check_corrupt){
+
+          let fd_corrupt = await {
+            "complain_step_id"  : complain_step_id,
+            "reference_code"    : this.corrupt.reference,
+            "date"              : this.$refs.corrupt_date.date,
+            "detail"            : this.corrupt.detail,
+            "create_by"         : this.check_roles.id,
+            "modified_by"       : this.check_roles.id,
+          }
+
+          let path        = await `/api/backoffice/create/complainCorrupt`
+          let response    = await axios.post(`${path}`, fd_corrupt)
+
+          if(response){
+
+            for (let i = 0; i < this.$refs.corrupt_file.files.length; i++) {
+
+              let number = await i + 1
+
+              let file = await this.$refs.corrupt_file.files[i]
+
+              let complain_corrupt_id = await response.data.complain_corrupt_id
+
+              const arr_file = await file.name.split(".")
+
+              let file_name = await ''
+                
+              if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+
+                file_name = await 'imgcid' + complain_corrupt_id + '_' + number + '.' +arr_file[1] 
+
+              }else if(file.type === 'application/pdf'){
+
+                file_name = await 'pdfcid' + complain_corrupt_id + '_' + number + '.' +arr_file[1] 
+              }
+
+              let fd_upload = await {
+                "complain_step_id"    : complain_step_id,
+                "file_original"       : file.name,
+                "file_name"           : file_name,
+                "admin_id"          : this.check_roles.id,
+              }
+
+              let path = await `/api/backoffice/complainCorruptFiles`
+
+              let path_api = await  `/api/backoffice/uploadCorruptFiles`
+
+
+
+              await this.insertFile(fd_upload, path, file_name, file, path_api)
+    
+
+            }
+
+
+          } 
+        }
   
-      async insertFile(register_id, complain_id, file, id){
+      },
+
+  
+      async insertFile(fd, path, file_name, file, path_api){
   
         try {
   
-            const arr_file = await file.name.split(".")
-  
-            let file_name = await ''
-            
-            if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
-  
-              file_name = await 'imgcid' + complain_id + '_' + id + '.' +arr_file[1] 
-  
-            }else if(file.type === 'application/pdf'){
-  
-              file_name = await 'pdfcid' + complain_id + '_' + id + '.' +arr_file[1] 
-            }
-  
-            let fd_upload = await {
-                "register_id"         : register_id,
-                "complain_step_id"    : complain_id,
-                "file_original"       : file.name,
-                "file_name"           : file_name
-            }
-  
-                let path = await `/api/backoffice/complainStepFiles`
-  
-                let response = await axios.post(`${path}`, fd_upload )
-  
-                if(response){
-                    setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
-                }
-  
+          let response = await axios.post(`${path}`, fd )
+
+          if(response){
+              setTimeout(() => {this.myUpload(file_name,  file, path_api)}, 2000);
+          }
+
         } catch (error) {
             console.log(error);
         }
   
       },
+      // async insertFile(register_id, complain_id, file, id){
   
-      async myUpload(file_name, files){
+      //   try {
+  
+      //       const arr_file = await file.name.split(".")
+  
+      //       let file_name = await ''
+            
+      //       if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+  
+      //         file_name = await 'imgcid' + complain_id + '_' + id + '.' +arr_file[1] 
+  
+      //       }else if(file.type === 'application/pdf'){
+  
+      //         file_name = await 'pdfcid' + complain_id + '_' + id + '.' +arr_file[1] 
+      //       }
+  
+      //       let fd_upload = await {
+      //           "register_id"         : register_id,
+      //           "complain_step_id"    : complain_id,
+      //           "file_original"       : file.name,
+      //           "file_name"           : file_name
+      //       }
+  
+      //           let path = await `/api/backoffice/complainStepFiles`
+  
+      //           let response = await axios.post(`${path}`, fd_upload )
+  
+      //           if(response){
+      //               setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
+      //           }
+  
+      //   } catch (error) {
+      //       console.log(error);
+      //   }
+  
+      // },
+  
+      async myUpload(file_name, files, path_api){
   
         try {
   
@@ -665,7 +839,7 @@
             await fd_upload.append('images', files);
   
   
-            let res2  = await axios.post(`/api/backoffice/uploadStepFiles`, fd_upload)
+            let res2  = await axios.post(`${path_api}`, fd_upload)
             
             console.log(res2);
   
@@ -674,25 +848,21 @@
             console.log(error);
         }
       },
-  
-      // async updateStep(){
-      //   try {
-      //     let fd = await {
-      //       "edit_status_detail"  : this.edit_status_detail,
-      //       "edit_status_call"    : this.edit_status_call,
-      //       "register_id"       : this.data.register_id,
-      //       "detail"            : this.status_detail,
-      //       "status_call"       : this.status_call,
-      //       "create_by"         : this.check_roles.id,
-      //       "modified_by"       : this.check_roles.id,
-      //     }
-  
-      //   } catch (error) {
-          
-      //   }
-      // }
-  
-  
+      showDetailStatus(){
+        if(this.status_call == 2){
+          this.show_detail_status = true
+         
+        }else{
+          this.show_detail_status = false
+        }
+      
+      },
+      showCorrupt(v){
+        if(this.check_corrupt == 'corrupt'){
+          this.show_detail_corrupt = true
+          console.log(v);
+        }
+      }
      
     }
   }
@@ -719,4 +889,12 @@
     /* .v-subheader{
       justify-content: right;
     } */
+    .head-corrupt{
+      background-color: #003366;
+      border-bottom: 1px solid #ada3a3;
+      color: white;
+      font-size: 0.9375rem;
+      padding: 8px 16px;
+    }
+
   </style>

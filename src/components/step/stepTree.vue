@@ -240,12 +240,13 @@
                     <p class="style-label"><span>*</span>upload file : </p>
                     <v-file-input v-model="files" 
                         small-chips 
-                        :show-size="1000"
+                        :max-size="1000000"
                         :accept="acceptTypes"
                         :rules="fileRules"
                         outlined
                         placeholder="Select your files"
                         multiple 
+                        dense
                         clearable 
                         label="Add files"
                         single-line

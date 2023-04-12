@@ -5,7 +5,7 @@ import store from '../store/index.js'
 
 // user
 import LayoutView from "../views/users/LayoutView.vue"
-import MainView from "../views/users/MainView.vue"
+import MainView from "../views/users/main/MainView.vue"
 import ContactView from "../views/users/contact/ContactView.vue"
 import UserLoginView from '../views/users/LoginView.vue'
 
@@ -31,6 +31,7 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 
 import EditProfile from '../views/EditProfile.vue'
+
 
 
 Vue.use(VueRouter)
@@ -129,7 +130,7 @@ const routes = [
       },
      
       {
-        path: '/profile',
+        path: '/user/profile',
         name: 'profile',
         component: EditProfile,
       },

@@ -37,7 +37,7 @@
                 </v-btn>
             </v-col> -->
 
-            <v-col cols="6" md="3">
+            <v-col cols="6" md="5">
                 <p class="style-label"><span>*</span>ชื่อ :</p>
                 <v-text-field
                     v-model="item.name"
@@ -50,7 +50,7 @@
                     hide-details="auto"
                 ></v-text-field>
             </v-col>
-            <v-col cols="6" md="3">
+            <v-col cols="6" md="5">
                 <p class="style-label"><span>*</span>นามสกุล :</p>
                 <v-text-field
                     v-model="item.lastname"
@@ -63,7 +63,7 @@
                     hide-details="auto"
                 ></v-text-field>
             </v-col>
-            <v-col cols="3" md="3">
+            <!-- <v-col cols="3" md="3">
                 <p class="style-label"><span>*</span>เพศ : </p>
                 <v-select
                     :items="selectGender"
@@ -77,12 +77,12 @@
                     hide-details="auto"
                     single-line
                 ></v-select>
-                <!-- <div class="box-gender">                    
+                <div class="box-gender">                    
                     <div class="male" :class="{ active : active == 'male' }" @click="dataGender('male')">ชาย</div>
                     <div class="female" :class="{ active : active == 'female' }"  @click="dataGender('female')">หญิง</div>
-                </div> -->
-            </v-col>
-            <v-col cols="3" md="3">
+                </div>
+            </v-col> -->
+            <v-col cols="3" md="2">
                 <p class="style-label"><span>*</span>อายุ (ปี) : </p>
                 <v-text-field
                     v-model="item.age"
@@ -217,18 +217,18 @@
             email: '',
             name: '',
             lastname: '',
-            gender: [],
+            // gender: [],
             age: '',
             phone: '',
             phone_other: '',
             address: '',
             postcode: '',
             
-            selectGender:[
-                { value: 'ชาย', id: 'male' },
-                { value: 'หญิง', id: 'female' },
-                { value: 'อื่นๆ', id: 'other' },
-            ],
+            // selectGender:[
+            //     { value: 'ชาย', id: 'male' },
+            //     { value: 'หญิง', id: 'female' },
+            //     { value: 'อื่นๆ', id: 'other' },
+            // ],
             province: null,
             // province_value: '',
             district: null,
@@ -261,7 +261,7 @@
             phoneOtherRules: [
                 v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
             ],
-            genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
+            // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
          
         }),
         // created(){

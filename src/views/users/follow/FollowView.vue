@@ -24,7 +24,7 @@
             loading-text="Loading... Please wait"
             :items="filteredItems"
           >
-            <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
+            <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
             <template v-slot:[`item.call_no`]="{ item }">
               <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
                 {{ item.call_no }}
@@ -43,6 +43,14 @@
                 >
                 {{ getstatus(item.status_call) }}
                 </v-chip>
+            </template>
+            <template v-slot:[`item.detail`]="{ item }">
+              <router-link :to="{ name: 'complain-detail', params: { id: item.id }}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </router-link>
+              <!-- <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+                {{ item.call_no }}
+              </router-link> -->
             </template>
           </v-data-table>
         </v-card>
@@ -64,11 +72,11 @@
         loading: true,
         datas: [],
         headers: [
-          {
-            text: 'No',
-            align: 'start',
-            value: 'no',
-          },
+          // {
+          //   text: 'No',
+          //   align: 'start',
+          //   value: 'no',
+          // },
           {
             text: 'Call No',
             align: 'center',
@@ -82,6 +90,11 @@
           },
           { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
+          {
+            text: 'รายละเอียดเรื่องร้องเรียน',
+            align: 'center',
+            value: 'detail',
+          },
         ],
         desserts: [],
         }

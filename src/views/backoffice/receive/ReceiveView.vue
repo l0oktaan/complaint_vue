@@ -20,11 +20,16 @@
               :loading="loading"
               loading-text="Loading... Please wait"
           >
-              <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template>
-              <template v-slot:[`item.call_no`]="{ item }">
+              <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
+              <template v-slot:[`item.action`]="{ item }">
                 <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
-                  {{ item.call_no }}
+                  <i class="fa-solid fa-pen-to-square"></i>
                 </router-link>
+              </template>
+              <template v-slot:[`item.call_no`]="{ item }">
+                <!-- <router-link :to="{ name: 'receive-detail', params: { id: item.id }}"> -->
+                  {{ item.call_no }}
+                <!-- </router-link> -->
               </template>
               <template v-slot:[`item.create_date`]="{ item }">
                 {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
@@ -55,10 +60,15 @@
         loading: true,
         datas: [],
         headers: [
+          // {
+          //   text: 'No',
+          //   align: 'start',
+          //   value: 'no',
+          // },
           {
-            text: 'No',
-            align: 'start',
-            value: 'no',
+            text: 'Action',
+            align: 'center',
+            value: 'action',
           },
           {
             text: 'Call No',
@@ -87,8 +97,6 @@
         else return '#FFA000'
       },
       formattedDate(create_date) {
-        // moment.locale('th'); // Set the locale to Thai
-        // return moment(this.datas.create_date).format('DD MMMM YYYY, HH:mm', { lang: 'th' });
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
       },
       async getListComplain(){

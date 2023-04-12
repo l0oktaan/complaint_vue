@@ -7,12 +7,12 @@
         :accept="acceptTypes"
         :rules="fileRules"
         outlined
-        placeholder="Select your files"
         multiple 
+        dense
         clearable 
-        label="Add files"
         single-line
         hide-details="auto"
+        label="ไฟล์เเนบ"
         @change="fileAdded">
         <template v-slot:selection="{ text, index }">
             <v-chip small text-color="white" color="#295671" close @click:close="remove(index)">

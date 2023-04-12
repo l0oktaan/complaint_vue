@@ -260,7 +260,13 @@ import store from '../store/index.js';
         //     // this.$router.push({ name: "reset-password" });
         // },
         async editProfile(){
-          await this.$router.push("/user/profile").catch(()=>{});
+          if(this.check_roles.roles === 'user'){
+            await this.$router.push("/user/profile").catch(()=>{});
+          }else{
+            // await this.$router.push("/backoffice/profile").catch(()=>{});
+            this.$router.push({ name: 'personnel_formedit', params: { id: this.check_roles.id },})
+          }
+    
           // await this.$router.push("/user/profile");
         },
       async logout() {
