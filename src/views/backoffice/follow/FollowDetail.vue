@@ -103,22 +103,11 @@
                       <v-list-item-content class="text-left">
                         <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                       </v-list-item-content>
-                      <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
+                      <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
   
                       
   
-                      <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
-                          <img :src="url" />
-                          <v-btn
-                              class="btn-overlay"
-                              icon
-                              @click="overlayImg = false"
-                          >
-                          <v-icon  dark>
-                              fa-xmark
-                          </v-icon>
-                          </v-btn>
-                      </v-overlay>
+                      
   
                     </v-list-item>
                     
@@ -263,6 +252,7 @@
             </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
+        
         <v-expansion-panel>
           <v-expansion-panel-header>
             ขั้นตอนการเเก้ปัญหา
@@ -281,15 +271,32 @@
                 {{ formattedDate(item.cdate) == 'Invalid date' ? '' : formattedDate(item.date) }}
               </template>
   
-              <template v-slot:[`item.files`]="{ item }">
-                <v-btn
-                  color="primary"
-                  dark
-                  icon
-                  @click="dailogfiles(item)"
-                >
-                <i class="fa-solid fa-file"></i>
+              <template v-slot:[`item.files_step`]="{ item }">
+                <div  v-if="item.status_call != 0 && item.status_call != 1">
+                  <v-btn
+                    color="primary"
+                    dark
+                    icon
+                    @click="dailogfiles('complain_step', item)"
+                  >
+                  <i class="fa-solid fa-file"></i>
                 </v-btn>
+                </div>
+               
+              </template>
+  
+              <template v-slot:[`item.files_corrupt`]="{ item }">
+                <div  v-if="item.status_call == 2">
+                  <v-btn
+                    color="primary"
+                    dark
+                    icon
+                    @click="dailogfiles('corrupt',item)"
+                  >
+                  <i class="fa-solid fa-file"></i>
+                </v-btn>
+                </div>
+               
               </template>
   
               <template v-slot:[`item.status_call`]="{ item }">
@@ -319,48 +326,125 @@
         </v-expansion-panel>
   
       </v-expansion-panels>
+
+      <!-- เเนบไฟล์ -->
       <v-dialog
-        v-model="dialog_files"
-        max-width="290"
+        v-model="dialog_files_step"
+        max-width="500"
       >
-        <v-card>
-          <v-card-title class="text-h5">
-            Use Google's location service?
-          </v-card-title>
-  
-          <v-card-text>
-            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-          </v-card-text>
-  
-          <v-card-actions>
-            <v-spacer></v-spacer>
-  
-            <v-btn
-              color="green darken-1"
-              text
-              @click="dialog = false"
-            >
-              Disagree
-            </v-btn>
-  
-            <v-btn
-              color="green darken-1"
-              text
-              @click="dialog = false"
-            >
-              Agree
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+
+        <v-toolbar
+          color="#167dc2"
+          dark
+        >
+          <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+
+          <v-toolbar-title>ไฟล์เเนบ</v-toolbar-title>
+
+          <!-- <v-spacer></v-spacer>
+
+          <v-btn icon>
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn> -->
+        </v-toolbar>
+
+        <v-list
+          subheader
+          two-line
+        >
+          <v-list-item
+            v-for="corrupt_file in corrupt_files"
+            :key="corrupt_file.id"
+          >
+          
+            <v-list-item-content class="text-left">
+              <v-list-item-title >{{ corrupt_file.file_original }}</v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <!-- <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div> -->
+              <v-btn icon @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name, corrupt_file.file_type)">
+                <i class="fa-solid fa-file"></i>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+        
       </v-dialog>
+
+
+
+      <!-- เเนบไฟล์การทุจริต -->
+      <v-dialog
+        v-model="dialog_files_corrupt"
+        max-width="500"
+      >
+
+      <v-toolbar
+        color="#167dc2"
+        dark
+      >
+        <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+
+        <v-toolbar-title>ไฟล์เเนบการทุจริต</v-toolbar-title>
+
+        <!-- <v-spacer></v-spacer>
+
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn> -->
+      </v-toolbar>
+
+      <v-list
+        subheader
+        two-line
+      >
+        <v-list-item
+          v-for="corrupt_file in corrupt_files"
+          :key="corrupt_file.id"
+        >
+        
+          <v-list-item-content class="text-left">
+            <v-list-item-title >{{ corrupt_file.file_original }}</v-list-item-title>
+          </v-list-item-content>
+
+          <v-list-item-action>
+            <!-- <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div> -->
+            <v-btn icon @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name, corrupt_file.file_type)">
+              <i class="fa-solid fa-file"></i>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+      
+      </v-dialog>
+
+      
+      
+      
+      
       <v-dialog
         v-model="dialog_edit"
         max-width="500"
       >
         <v-card>
-          <v-card-title class="text-h5">
+          <v-toolbar
+            color="#167dc2"
+            dark
+          >
+            <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+
+            <v-toolbar-title>แก้ไขข้อมูลการดำเนินงานของเจ้าหน้าที่</v-toolbar-title>
+
+            <!-- <v-spacer></v-spacer>
+
+            <v-btn icon>
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn> -->
+          </v-toolbar>
+          <!-- <v-card-title class="text-h5">
            แก้ไขข้อมูลการดำเนินงานของเจ้าหน้าที่
-          </v-card-title>
+          </v-card-title> -->
           <v-card-text>
             <v-col cols>
               <p class="style-label"><span>*</span>รายละเอียดข้อมูล : </p>
@@ -372,10 +456,10 @@
                 v-model="edit_status_detail"
               ></v-textarea>
             </v-col>
-            <v-col cols>
+            <!-- <v-col cols>
               <p class="style-label"><span>*</span>ไฟล์เเนบ : </p>
               <InputFiles  ref="status_edit"/>
-            </v-col>
+            </v-col> -->
             <v-col cols>
               <p class="style-label"><span>*</span>สถานะการดำเนินงาน : </p>
               <v-select
@@ -395,15 +479,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
   
+            <v-btn class="btn-submit" text>บันทึก</v-btn>
             <v-btn
-              color="green darken-1"
-              text
-            >
-              บันทึก
-            </v-btn>
-  
-            <v-btn
-              color="green darken-1"
+              class="btn-cancel"
               text
               @click="dialog_edit = false"
             >
@@ -412,6 +490,38 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
+        <img :src="url" />
+        <v-btn
+            class="btn-overlay"
+            icon
+            @click="overlayImg = false"
+        >
+        <v-icon  dark>
+            fa-xmark
+        </v-icon>
+        </v-btn>
+    </v-overlay>
+
+
+      <!-- <a :href="url" target="_blank">
+        <img width="220" height="250" border="0" align="center"  :src="url" alt=""/>
+      </a> -->
+
+    
+      <!-- <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
+          <img :src="url" />
+          <v-btn
+              class="btn-overlay"
+              icon
+              @click="overlayImg = false"
+          >
+          <v-icon  dark>
+              fa-xmark
+          </v-icon>
+          </v-btn>
+      </v-overlay> -->
     </div>
   </template>
   <script>
@@ -422,20 +532,19 @@
   import loaderView from '@/components/loaderView.vue';
   import BreadcrumbsView from '@/components/breadcrumbsView.vue';
   import InputFiles from '@/components/inputFiles.vue';
-import DatePickers from '@/components/datePickers.vue';
+  import DatePickers from '@/components/datePickers.vue';
   
   
   export default {
     components: { loaderView, BreadcrumbsView, InputFiles, DatePickers},
     data: () => ({
       check_roles: store.getters.user,
-      // zIndex: 4,
       check_corrupt: null,
       panel: [0],
       valid: true,
       data: {},
       files: {},
-      files_url: '',
+     
       url: '',
       status_detail: '',
       status_call: { value: '', id: null },
@@ -444,15 +553,17 @@ import DatePickers from '@/components/datePickers.vue';
       edit_status_detail: '',
       edit_status_call: { value: '', id: null },
       selectStatus: [
-            // { value: 'อยู่ระหว่างดำเนินการ', id: 2 },
-            { value: 'เรื่องเสร็จ', id: 2 },
-            { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
-            { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
-            { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
-        ],
+        // { value: 'อยู่ระหว่างดำเนินการ', id: 2 },
+        { value: 'เรื่องเสร็จ', id: 2 },
+        { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
+        { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
+        { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
+      ],
       corrupt: {},
+      corrupt_files: {},
       corrupt_date:  new Date().toISOString(),
-      dialog_files: false,
+      dialog_files_step: false,
+      dialog_files_corrupt: false,
       dialog_edit: false,
       overlayImg: false,
       absolute: false,
@@ -462,38 +573,47 @@ import DatePickers from '@/components/datePickers.vue';
       corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล'],
       corruptDetailfRules : [v => !!v || 'กรุณากรอกข้อมูล'],
       item: [
-          {
-            text: 'ติดตามเรื่องร้องเรียน',
-            disabled: false,
-            href: '/user/complain',
-          },
-          {
-            text: 'รายละเอียดปัญหา',
-            disabled: true,
-            href: 'breadcrumbs_link_1',
-          },  
+        {
+          text: 'ติดตามเรื่องร้องเรียน',
+          disabled: false,
+          href: '/user/complain',
+        },
+        {
+          text: 'รายละเอียดปัญหา',
+          disabled: true,
+          href: 'breadcrumbs_link_1',
+        },  
       ],
       headers: [
-          {
-            text: 'วันที่ / เวลา',
-            align: 'center',
-            sortable: false,
-            value: 'date',
-          },
-          { text: 'หน่วยงาน', value: 'division' },
-          { text: 'รายละเอียด', value: 'detail' },
-          { text: 'สถานะ', value: 'status_call' },
-          { text: 'ไฟล์เเนบ', value: 'files' },
-          { text: 'Action', value: 'edit' },
-        ],
-      }),
+        {
+          text: 'วันที่ / เวลา',
+          align: 'center',
+          sortable: false,
+          value: 'date',
+        },
+        { text: 'หน่วยงาน', value: 'division' },
+        { text: 'รายละเอียด', value: 'detail' },
+        { text: 'สถานะ', value: 'status_call' },
+        { text: 'ไฟล์เเนบ', value: 'files_step', align: 'center' },
+        { text: 'ไฟล์เเนบการทุจริต', value: 'files_corrupt', align: 'center' },
+        { text: 'Action', value: 'edit', align: 'center' },
+      ],
+    }),
     mounted() {
       this.getComplainDetail()
       this.getComplainStep()
     },
     methods: {
-      dailogfiles(){
-        this.dialog_files = true
+      dailogfiles(typeFile, v){
+
+        if(typeFile == 'complain_step'){
+          this.dialog_files_step = true
+        }else if(typeFile == 'corrupt'){
+          this.dialog_files_corrupt = true
+          this.getCorruptFiles(v)
+        }
+
+        
       },
       async dailogEdit(v){
         this.dialog_edit        = await true
@@ -554,66 +674,25 @@ import DatePickers from '@/components/datePickers.vue';
       //     console.error(error);
       //   }
       // },
-      async urlFiles(file_name){
-        let path = await `/api/user/getUrlFiles?filename=${file_name}`
-        let res = await axios.get(`${path}`)
-  
-        this.url = await res.data
-  
-  
-        // if(file_type == 'pdf'){
-        //   await this.displayPdf(this.url)
-        // }else{
-        //   this.overlayImg = await !this.overlayImg 
-        // }
-  
-        const binaryString  = await this.isBase64(this.url)
-  
-        // Convert the binary string to a Uint8Array
-        const uint8Array = new Uint8Array(binaryString.length);
-  
-  
-        for (let i = 0; i < binaryString.length; i++) {
-          uint8Array[i] = binaryString.charCodeAt(i);
-        }
-  
-        // Create a Blob object from the Uint8Array and set the MIME type
-        const blob = new Blob([uint8Array], { type: 'application/pdf' }); // replace 'application/pdf' with your desired MIME type
-  
-        
-        // Create a URL for the Blob object
-        const url = URL.createObjectURL(blob);
-  
-   
-  
-        // Create an anchor tag with the URL and the download attribute
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'file.pdf'); // replace 'file.pdf' with your desired file name
-  
-          // Append the anchor tag to the document body and click it to download the file
-          document.body.appendChild(link);
-          link.click();
-  
-          // Clean up by revoking the URL object
-          URL.revokeObjectURL(url);
-              
+      async urlFiles(url,file_name, file_type){
 
-     
-  
-  
-  
-        // console.log(this.files_url);
-  
-      
-        // const blobPDF = await this.base64ToBlobPDF(res.data)
-        // const blobUrl = await URL.createObjectURL(blobPDF);
-  
-        // const blobImage = await this.base64ToBlob(res.data);
-        // const blobUrl = await URL.createObjectURL(blobImage);
-  
-        // return  window.open(blobUrl, '_blank');
-     
+        console.log(file_name);
+        console.log(file_type);
+
+
+        let path = await `/api/get/${url}?filename=${file_name}`
+
+        console.log(path);
+        let res = await axios.get(`${path}`)
+
+        this.url = await res.data
+
+
+        if(file_type == 'pdf'){
+          await this.displayPdf(this.url)
+        }else{
+          this.overlayImg = await !this.overlayImg 
+        }
       },
       async getComplainDetail(){
         let path              = await `/api/user/get/complainDetail`
@@ -629,7 +708,19 @@ import DatePickers from '@/components/datePickers.vue';
       async getComplainStep(){
         let path              = await `/api/backoffice/get/complainStep`
         let response          =  await axios.get(`${path}/`+ this.$route.params.id)
+        
         this.desserts         = await response.data.data
+
+        console.log('========',this.desserts);
+
+      },
+      async getCorruptFiles(v){
+        console.log(v);
+        let path              = await `/api/backoffice/get/CorruptFiles`
+        let response          = await axios.get(`${path}/`+ v.id)
+        this.corrupt_files    = await response.data.data
+
+        console.log(response);
 
       },
       async saveComplainStep(){
@@ -657,15 +748,15 @@ import DatePickers from '@/components/datePickers.vue';
 
               for (let i = 0; i < this.$refs.status.files.length; i++) {
   
-              let number = await i + 1
+                let number = await i + 1
 
-              let file = await this.$refs.status.files[i]
+                let file = await this.$refs.status.files[i]
 
-              let complain_id = await response.data.complain_step_id
+                let complain_id = await response.data.complain_step_id
 
-              const arr_file = await file.name.split(".")
-      
-              let file_name = await ''
+                const arr_file = await file.name.split(".")
+        
+                let file_name = await ''
                 
                 if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
       
@@ -676,33 +767,39 @@ import DatePickers from '@/components/datePickers.vue';
                   file_name = await 'pdfcid' + complain_id + '_' + number + '.' +arr_file[1] 
                 }
       
-                let fd_upload = await {
-                    "register_id"         : this.data.register_id,
-                    "complain_step_id"    : complain_id,
-                    "file_original"       : file.name,
-                    "file_name"           : file_name
-                }
-  
-                let path = await `/api/backoffice/complainStepFiles`
+                  let fd_upload = await {
+                      "register_id"         : this.data.register_id,
+                      "complain_step_id"    : complain_id,
+                      "file_original"       : file.name,
+                      "file_name"           : file_name,
+                      "file_type"           : file.type
+                  }
+    
+                  let path = await `/api/backoffice/complainStepFiles`
 
-                let path_api = await  `/api/backoffice/uploadStepFiles`
+                  let path_api = await  `/api/backoffice/uploadStepFiles`
 
-              await this.insertFile(fd_upload, path, file_name, file, path_api)
-              
+                await this.insertFile(fd_upload, path, file_name, file, path_api)
+                
               }
 
            
               }
           
   
-            Swal.fire({
+            await Swal.fire({
                 icon: 'success',
                 title: 'บันทึกสำเร็จ',
                 text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
             }).then( function(){
+
             });
             console.log(response);
+            // this.corrupt = await {}
+            // this.$refs.corrupt_date = await null
+            // this.this.$refs.corrupt_file = await null
             await this.getComplainStep()
+
           } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -756,7 +853,8 @@ import DatePickers from '@/components/datePickers.vue';
                 "complain_step_id"    : complain_step_id,
                 "file_original"       : file.name,
                 "file_name"           : file_name,
-                "admin_id"          : this.check_roles.id,
+                "file_type"           : file.type,
+                "admin_id"            : this.check_roles.id,
               }
 
               let path = await `/api/backoffice/complainCorruptFiles`
@@ -776,7 +874,6 @@ import DatePickers from '@/components/datePickers.vue';
   
       },
 
-  
       async insertFile(fd, path, file_name, file, path_api){
   
         try {
@@ -792,46 +889,8 @@ import DatePickers from '@/components/datePickers.vue';
         }
   
       },
-      // async insertFile(register_id, complain_id, file, id){
-  
-      //   try {
-  
-      //       const arr_file = await file.name.split(".")
-  
-      //       let file_name = await ''
-            
-      //       if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
-  
-      //         file_name = await 'imgcid' + complain_id + '_' + id + '.' +arr_file[1] 
-  
-      //       }else if(file.type === 'application/pdf'){
-  
-      //         file_name = await 'pdfcid' + complain_id + '_' + id + '.' +arr_file[1] 
-      //       }
-  
-      //       let fd_upload = await {
-      //           "register_id"         : register_id,
-      //           "complain_step_id"    : complain_id,
-      //           "file_original"       : file.name,
-      //           "file_name"           : file_name
-      //       }
-  
-      //           let path = await `/api/backoffice/complainStepFiles`
-  
-      //           let response = await axios.post(`${path}`, fd_upload )
-  
-      //           if(response){
-      //               setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
-      //           }
-  
-      //   } catch (error) {
-      //       console.log(error);
-      //   }
-  
-      // },
-  
+
       async myUpload(file_name, files, path_api){
-  
         try {
   
             let fd_upload =  await new FormData();
@@ -896,5 +955,14 @@ import DatePickers from '@/components/datePickers.vue';
       font-size: 0.9375rem;
       padding: 8px 16px;
     }
+
+    .v-overlay.style-bg{
+    z-index: 300!important;
+  }
+  .v-overlay.style-bg img{
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+  }
 
   </style>

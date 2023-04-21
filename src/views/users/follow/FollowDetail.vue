@@ -105,21 +105,6 @@
                     </v-list-item-content>
                     <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
 
-                    
-
-                    <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
-                        <img :src="url" />
-                        <v-btn
-                            class="btn-overlay"
-                            icon
-                            @click="overlayImg = false"
-                        >
-                        <v-icon  dark>
-                            fa-xmark
-                        </v-icon>
-                        </v-btn>
-                    </v-overlay>
-
                   </v-list-item>
                   
                 </v-list>
@@ -303,6 +288,23 @@
       
       </v-card>
     </v-dialog>
+
+    <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
+        <img :src="url" />
+        <v-btn
+            class="btn-overlay"
+            icon
+            @click="overlayImg = false"
+        >
+        <v-icon  dark>
+            fa-xmark
+        </v-icon>
+        </v-btn>
+    </v-overlay>
+
+    <!-- <a v-if="overlayImg" :href="url" target="_blank">
+      <img width="220" height="250" border="0" align="center"  :src="url" alt=""/>
+    </a> -->
   </div>
 </template>
 <script>
@@ -444,50 +446,52 @@ export default {
       console.log(file_name);
       console.log(file_type);
 
-      let path = await `/api/user/getUrlFiles?filename=${file_name}`
+      // let path = await `/api/user/getUrlFiles?filename=${file_name}`
+      let path = await `/api/get/UrlFilesComplain?filename=${file_name}`
       let res = await axios.get(`${path}`)
 
       this.url = await res.data
+      
 
-
-      // if(file_type == 'pdf'){
-      //   await this.displayPdf(this.url)
-      // }else{
-      //   this.overlayImg = await !this.overlayImg 
-      // }
-
-      const binaryString  = await this.isBase64(this.url)
-
-      // Convert the binary string to a Uint8Array
-      const uint8Array = new Uint8Array(binaryString.length);
-
-
-      for (let i = 0; i < binaryString.length; i++) {
-        uint8Array[i] = binaryString.charCodeAt(i);
+      if(file_type == 'pdf'){
+        await this.displayPdf(this.url)
+      }else{
+        // window.open(this.url, '_blank');
+        this.overlayImg = await !this.overlayImg 
       }
 
-      // Create a Blob object from the Uint8Array and set the MIME type
-      const blob = new Blob([uint8Array], { type: 'application/pdf' }); // replace 'application/pdf' with your desired MIME type
+      // const binaryString  = await this.isBase64(this.url)
+
+      // // Convert the binary string to a Uint8Array
+      // const uint8Array = new Uint8Array(binaryString.length);
+
+
+      // for (let i = 0; i < binaryString.length; i++) {
+      //   uint8Array[i] = binaryString.charCodeAt(i);
+      // }
+
+      // // Create a Blob object from the Uint8Array and set the MIME type
+      // const blob = new Blob([uint8Array], { type: 'application/pdf' }); // replace 'application/pdf' with your desired MIME type
 
       
-      // Create a URL for the Blob object
-      const url = URL.createObjectURL(blob);
+      // // Create a URL for the Blob object
+      // const url = URL.createObjectURL(blob);
 
  
 
-      // Create an anchor tag with the URL and the download attribute
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'file.pdf'); // replace 'file.pdf' with your desired file name
+      // // Create an anchor tag with the URL and the download attribute
+      //   const link = document.createElement('a');
+      //   link.href = url;
+      //   link.setAttribute('download', 'file.pdf'); // replace 'file.pdf' with your desired file name
 
-        // Append the anchor tag to the document body and click it to download the file
-        document.body.appendChild(link);
-        link.click();
+      //   // Append the anchor tag to the document body and click it to download the file
+      //   document.body.appendChild(link);
+      //   link.click();
 
-        // Clean up by revoking the URL object
-        URL.revokeObjectURL(url);
+      //   // Clean up by revoking the URL object
+      //   URL.revokeObjectURL(url);
             
-      console.log('=======', url);
+      // console.log('=======', url);
 
    
 
@@ -522,7 +526,7 @@ export default {
       let path              = await `/api/user/get/complainStep`
       let response          =  await axios.get(`${path}/`+ this.$route.params.id)
       this.desserts         = await response.data.data
-      console.log(this.desserts );
+      console.log(response );
     }, 
   }
 }
@@ -545,7 +549,14 @@ export default {
   .input-gray ::v-deep input{
     color: gray!important;
   }
-
+  .v-overlay.style-bg{
+    z-index: 6!important;
+  }
+  .v-overlay.style-bg img{
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+  }
   /* .v-subheader{
     justify-content: right;
   } */

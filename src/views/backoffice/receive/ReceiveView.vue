@@ -101,7 +101,8 @@
       },
       async getListComplain(){
         let path = await `/api/backoffice/get/listComplain`
-        let response =  await axios.get(`${path}/`+ this.check_roles.id)
+        let response =  await axios.get(`${path}/`)
+        // let response =  await axios.get(`${path}/`+ this.check_roles.id)
         this.datas = await response.data.data
         this.loading = await false
         console.log(response);

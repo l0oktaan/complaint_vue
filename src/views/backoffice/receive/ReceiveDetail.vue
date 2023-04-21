@@ -276,13 +276,6 @@
                           ></v-text-field>
                       </v-col>
                     </v-row>
-
-
-
-                    <!-- <v-btn class="btn-submit" @click="dialog = true">รับเรื่อง</v-btn> -->
-                    <!-- <v-btn class="btn-cancel">ยกเลิก</v-btn> -->
-
-
                     
                 </v-container>
             </v-card-text>
@@ -295,16 +288,6 @@
       persistent
       max-width="500"
     >
-      <!-- <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
-        </v-btn>
-      </template> -->
       <v-card>
         <v-card-title class="text-h5">
           <!-- Use Google's location service? -->
@@ -321,18 +304,18 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            class="btn-cancel"
-            text
-            @click="dialog = false"
-          >
-            ยกเลิก
-          </v-btn>
-          <v-btn
             class="btn-submit"
             text
             @click="saveComplainStep"
           >
             บันทึก
+          </v-btn>
+          <v-btn
+            class="btn-cancel"
+            text
+            @click="dialog = false"
+          >
+            ยกเลิก
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -398,7 +381,6 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
           console.log(this.files_url);
         },
         async getRegisterDetail(){
-          console.log(this.data.register_id);
           let path              = await `/api/get/registerDetail`
           let response          = await axios.get(`${path}/` + this.data.register_id)
           this.user             = await response.data.data[0]
@@ -406,7 +388,6 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
         },
         async saveComplainStep(){
           try {
-            console.log(this.data);
 
             let fd = await {
               "complain_id"       : this.data.id,
@@ -418,7 +399,7 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
               "modified_by"       : this.check_roles.id,
             }
 
-              let path        = await `/api/backoffice/complainStep`
+              let path        = await `/api/backoffice/create/complainStep`
               let response    = await axios.post(`${path}`, fd)
 
               Swal.fire({

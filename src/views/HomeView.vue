@@ -221,7 +221,7 @@
 
         <DialogsResetPassword ref="sum" :userId="check_roles.id" />
 
-        <button @click="logout">  <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+        <button @click="logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
     </v-app-bar>
     <v-main class="main">
       <v-container>

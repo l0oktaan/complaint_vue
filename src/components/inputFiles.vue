@@ -58,6 +58,16 @@ export default {
             if (value.length > 10) {
                 return "Maximum 10 files allowed";
             }
+
+            const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+            for (let i = 0; i < value.length; i++) {
+                if (value[i].size > maxFileSize) {
+                    return 'File size should not exceed 2MB.';
+                }else{
+                    return true;
+                }
+            }
+                
             const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
             for (let i = 0; i < value.length; i++) {
                 const file = value[i];

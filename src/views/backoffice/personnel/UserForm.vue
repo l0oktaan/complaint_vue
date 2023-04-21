@@ -14,7 +14,7 @@
                 >
                     <v-card-text >
                         <v-row align="center">
-                            <v-col cols="6">
+                            <v-col cols="12">
                                 <p class="style-label"><span>*</span>รหัสผู้ใช้งาน : </p>
                                 <v-text-field
                                     v-model="username"
@@ -27,7 +27,7 @@
                                     clearable
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="6">
+                            <!-- <v-col cols="6">
                                 <p class="style-label">รหัสผ่านผู้ใช้งาน : </p>
                                 <v-text-field
                                     v-model="password"
@@ -38,7 +38,7 @@
                                     hide-details="auto"
                                     clearable
                                 ></v-text-field>
-                            </v-col>
+                            </v-col> -->
                         </v-row>
                         <v-row align="center">
                             <v-col cols="12" md="6">
