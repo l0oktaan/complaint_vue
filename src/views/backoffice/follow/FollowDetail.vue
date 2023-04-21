@@ -105,10 +105,6 @@
                       </v-list-item-content>
                       <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
   
-                      
-  
-                      
-  
                     </v-list-item>
                     
                   </v-list>
@@ -353,17 +349,17 @@
           two-line
         >
           <v-list-item
-            v-for="corrupt_file in corrupt_files"
-            :key="corrupt_file.id"
+            v-for="step_file in step_files"
+            :key="step_file.id"
           >
-          
+
             <v-list-item-content class="text-left">
-              <v-list-item-title >{{ corrupt_file.file_original }}</v-list-item-title>
+              <v-list-item-title >{{ step_file.file_original }}</v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-action>
               <!-- <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div> -->
-              <v-btn icon @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name, corrupt_file.file_type)">
+              <v-btn icon @click="urlFiles('UrlFilesComplainStep',step_file.file_name, step_file.file_type)">
                 <i class="fa-solid fa-file"></i>
               </v-btn>
             </v-list-item-action>
@@ -560,6 +556,7 @@
         { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
       ],
       corrupt: {},
+      step_files: {},
       corrupt_files: {},
       corrupt_date:  new Date().toISOString(),
       dialog_files_step: false,
@@ -608,6 +605,7 @@
 
         if(typeFile == 'complain_step'){
           this.dialog_files_step = true
+          this.getComplainStepFiles(v)
         }else if(typeFile == 'corrupt'){
           this.dialog_files_corrupt = true
           this.getCorruptFiles(v)
@@ -712,6 +710,13 @@
         this.desserts         = await response.data.data
 
         console.log('========',this.desserts);
+
+      },
+      async getComplainStepFiles(v){
+        console.log(v);
+        let path              = await `/api/backoffice/get/ComplainStepFiles`
+        let response          = await axios.get(`${path}/`+ v.id)
+        this.step_files    = await response.data.data
 
       },
       async getCorruptFiles(v){
