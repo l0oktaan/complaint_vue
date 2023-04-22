@@ -20,12 +20,12 @@
                 <i class="fa-solid fa-plus icon-style mr-1"></i>
                 เพิ่มรายการใหม่
               </v-btn>
-              <v-spacer></v-spacer>
+              <!-- <v-spacer></v-spacer>
               <v-checkbox
                 v-model="checkbox"
                 :label="`เเสดงรายการทั้งหมด`"
                 @click="checkState(datas_user)"
-              ></v-checkbox>
+              ></v-checkbox> -->
               <v-spacer></v-spacer>
               <v-text-field
                 v-model="search"

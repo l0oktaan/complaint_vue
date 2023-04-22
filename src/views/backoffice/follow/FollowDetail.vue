@@ -573,7 +573,7 @@
         {
           text: 'ติดตามเรื่องร้องเรียน',
           disabled: false,
-          href: '/user/complain',
+          href: '/backoffice/follow',
         },
         {
           text: 'รายละเอียดปัญหา',
