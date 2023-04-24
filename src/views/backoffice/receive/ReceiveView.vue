@@ -21,11 +21,7 @@
               loading-text="Loading... Please wait"
           >
               <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
-              <template v-slot:[`item.action`]="{ item }">
-                <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </router-link>
-              </template>
+             
               <template v-slot:[`item.call_no`]="{ item }">
                 <!-- <router-link :to="{ name: 'receive-detail', params: { id: item.id }}"> -->
                   {{ item.call_no }}
@@ -41,6 +37,11 @@
                   >
                   {{ item.status_call  == 0 ? 'รอรับเรื่อง' : '' }}
                   </v-chip>
+              </template>
+              <template v-slot:[`item.action`]="{ item }">
+                <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </router-link>
               </template>
           </v-data-table>
         </v-card>
@@ -65,11 +66,7 @@
           //   align: 'start',
           //   value: 'no',
           // },
-          {
-            text: 'Action',
-            align: 'center',
-            value: 'action',
-          },
+          
           {
             text: 'Call No',
             align: 'center',
@@ -83,6 +80,11 @@
           },
           { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
+          {
+            text: 'Action',
+            align: 'center',
+            value: 'action',
+          },
         ],
         desserts: [],
       }

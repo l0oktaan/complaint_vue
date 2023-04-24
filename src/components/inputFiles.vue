@@ -52,9 +52,9 @@ export default {
         acceptTypes: "image/*, application/pdf",
         fileRules: [
             value => {
-            if (!value || value.length === 0) {
-                return "Please select at least one file";
-            }
+            // if (!value || value.length === 0) {
+            //     return "Please select at least one file";
+            // }
             if (value.length > 10) {
                 return "Maximum 10 files allowed";
             }

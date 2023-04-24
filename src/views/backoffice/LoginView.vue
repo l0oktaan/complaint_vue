@@ -89,8 +89,8 @@ export default {
                         password: this.password
                     })
 
-                    await this.$router.push({name:"personnel"});
-
+                    await this.$router.push({name:"receive"});
+                    this.disabled =  await false
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -106,7 +106,7 @@ export default {
                         icon: 'error',
                         confirmButtonText: 'Ok'
                     })
-                    this.disabled =  await false
+                   
                 } 
             }
         },

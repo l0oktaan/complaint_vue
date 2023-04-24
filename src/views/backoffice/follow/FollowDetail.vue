@@ -261,12 +261,12 @@
                           <v-radio
                             label="ไม่ทุจริต"
                             :value=false
-                            @click="check_corrupt = false"
+                            @click="checkCorrupt"
                           ></v-radio>
                           <v-radio
                             label="ทุจริต"
                             :value=true
-                            @click="check_corrupt = true"
+                            @click="checkCorrupt"
                           ></v-radio>
                         </v-radio-group>
                       </v-col>
@@ -489,6 +489,9 @@
       close(){
         this.dialog_status = false
         this.editedIndex = -1
+        this.$refs.form.reset()
+        this.$refs.form.resetValidation()
+
       },
       formattedDate(create_date) {
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
@@ -528,6 +531,17 @@
           this.dialog_files_corrupt = true
           this.getCorruptFiles(v)
         }
+      },
+      checkCorrupt(){
+        if(this.check_corrupt){
+          this.check_corrupt = true
+        }else{
+          this.check_corrupt = false
+          this.corrupt.reference = ''
+          this.$refs.corrupt_date.date = ''
+          this.corrupt.detail = ''
+        }
+      
       },
       async getComplainDetail(){
         let path              = await `/api/user/get/complainDetail`
@@ -574,7 +588,7 @@
       },
       async saveComplainStep(){
         if(this.editedIndex == -1){
-          this.saveComplainStep()
+          this.createComplainStep()
         }else{
           this.editComplainStep()
         }
@@ -691,6 +705,7 @@
         this.corrupt_id       = await v.corrupt_id
          
         if(v.status_call){
+          console.log('==============');
           await this.showDetailStatus(v.status_call)
           this.check_corrupt = await v.check_corrupt == 1 ? true : false
           this.corrupt.reference = await v.reference_code

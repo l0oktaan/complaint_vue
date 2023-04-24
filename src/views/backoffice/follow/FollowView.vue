@@ -36,9 +36,19 @@
                   </v-chip>
               </template>
               <template v-slot:[`item.action`]="{ item }">
-                <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+               
+                <v-btn
+                  color="primary"
+                  fab
+                  x-small
+                  dark
+                  @click="detailComplain(item.id)"
+                >
                   <i class="fa-solid fa-magnifying-glass"></i>
-                </router-link>
+                </v-btn>
+                <!-- <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </router-link> -->
               </template>
           </v-data-table>
         </v-card>
@@ -101,6 +111,9 @@ import selectStatus from '@/components/selectStatus.vue';
         },
     },
     methods: {
+      detailComplain(id){
+        this.$router.push({ name: 'backoffice-complaindetail', params: { id: id },})
+      },
       getColor (status_call) {
         if (status_call == 0) return '#FFA000'
         else if (status_call == 1) return '#EF6C00'

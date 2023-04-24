@@ -1,5 +1,5 @@
 <template>
-   <div class="complain-view">  
+  <div class="complain-view">  
     <div class="style-page">
       <h2 class="mb-3">ข้อมูลการร้องเรียน</h2>
       <v-form
@@ -8,7 +8,7 @@
         lazy-validation
       >
         <stepTree ref="employee"/>
-        <v-btn class="btn-submit mt-3" @click="insertComplain">บันทึก</v-btn>
+        <v-btn class="btn-submit mt-3" :disabled="isActive" @click="insertComplain">บันทึก</v-btn>
       </v-form>
     </div>
   </div>
@@ -26,14 +26,13 @@ export default {
     valid: true,
     employee: {},
     check_roles: store.getters.user,
+    isActive: false,
   }),
   methods: {
     async insertComplain(){
       if(this.$refs.formComplain.validate()){
         try {
-
           this.employee = await this.$refs.employee
-
           console.log(this.employee);
           let fd = await {
             "name"              : this.employee.name,
@@ -61,8 +60,6 @@ export default {
             let number = await i + 1
 
             await this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)
-
-
             }
           }
           await Swal.fire({
@@ -71,7 +68,7 @@ export default {
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
           }).then( function(){
           });
-          
+          this.isActive =  await true
         } catch (error) {
           console.log(error);
         }
