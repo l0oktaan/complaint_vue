@@ -103,7 +103,7 @@
                     <v-list-item-content class="text-left">
                       <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                     </v-list-item-content>
-                    <div class="btn-files" @click="urlFiles(file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
+                    <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
 
                   </v-list-item>
                   
@@ -198,19 +198,21 @@
               {{ item.name + ' ' +item.lastname }}
             </template>
             <template v-slot:[`item.date`]="{ item }">
-              {{ formattedDate(item.cdate) == 'Invalid date' ? '' : formattedDate(item.date) }}
+              {{ formattedDate(item.date) == 'Invalid date' ? '' : formattedDate(item.date) }}
             </template>
 
-            <template v-slot:[`item.files`]="{ item }">
-              <v-btn
-                color="primary"
-                dark
-                icon
-                @click="dailogfiles(item)"
-              >
-              <i class="fa-solid fa-file"></i>
-              </v-btn>
-            </template>
+            <!-- <template v-slot:[`item.files`]="{ item }">
+              <div  v-if="item.status_call != 0 && item.status_call != 1">
+                <v-btn
+                  color="primary"
+                  dark
+                  icon
+                  @click="dailogfiles(item)"
+                >
+                <i class="fa-solid fa-file"></i>
+                </v-btn>
+              </div>
+            </template> -->
 
             <template v-slot:[`item.status_call`]="{ item }">
               <v-chip
@@ -220,7 +222,7 @@
               {{ getstatus(item.status_call) }}
               </v-chip>
             </template>
-            <template   v-slot:[`item.edit`]="{ item }"  >
+            <!-- <template   v-slot:[`item.edit`]="{ item }"  >
              <div v-if="item.status_call != 0 && item.status_call != 1">
               <v-btn
                 color="primary"
@@ -232,79 +234,80 @@
               </v-btn>
              </div>
              
-            </template>
+            </template> -->
           </v-data-table>
 
         </v-expansion-panel-content>
       </v-expansion-panel>
 
     </v-expansion-panels>
-    <v-dialog
-      v-model="dialog_files"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-          Use Google's location service?
-        </v-card-title>
+   
+      <v-dialog
+        v-model="dialog_files_step" max-width="500">
+        <v-toolbar color="#167dc2" dark>
+          <v-toolbar-title>ไฟล์เเนบ</v-toolbar-title>
+        </v-toolbar>
+     
+        <!-- <div v-if="!loading"> -->
+          <v-list  subheader two-line>
+            <div v-if="step_files.length">
+              <v-list-item
+                  v-for="step_file in step_files"
+                  :key="step_file.id"
+                >
+                <v-list-item-content class="text-left">
+                  <v-list-item-title >{{ step_file.file_original }}</v-list-item-title>
+                </v-list-item-content>
 
-        <v-card-text>
-          Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-        </v-card-text>
+                <v-list-item-action>
+                  <v-btn icon @click="urlFiles('UrlFilesComplainStep',step_file.file_name, step_file.file_type)">
+                    <i class="fa-solid fa-file"></i>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </div>
+            <p v-else>ไม่มีข้อมูล</p>
+          </v-list>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
+      </v-dialog>
 
+
+
+
+
+
+      <v-dialog
+        v-model="dialog_detail"
+        max-width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+          รายการดำเนินงานของเจ้าหน้าที่
+          </v-card-title>
+          <v-card-text>
+
+          </v-card-text>
+
+        
+        </v-card>
+      </v-dialog>
+
+      <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
+          <img :src="url" />
           <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
+              class="btn-overlay"
+              icon
+              @click="overlayImg = false"
           >
-            Disagree
+          <v-icon  dark>
+              fa-xmark
+          </v-icon>
           </v-btn>
+      </v-overlay>
 
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="dialog_detail"
-      max-width="500"
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-         รายการดำเนินงานของเจ้าหน้าที่
-        </v-card-title>
-        <v-card-text>
-
-        </v-card-text>
-
-      
-      </v-card>
-    </v-dialog>
-
-    <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
-        <img :src="url" />
-        <v-btn
-            class="btn-overlay"
-            icon
-            @click="overlayImg = false"
-        >
-        <v-icon  dark>
-            fa-xmark
-        </v-icon>
-        </v-btn>
-    </v-overlay>
-
-    <!-- <a v-if="overlayImg" :href="url" target="_blank">
-      <img width="220" height="250" border="0" align="center"  :src="url" alt=""/>
-    </a> -->
+      <!-- <a v-if="overlayImg" :href="url" target="_blank">
+        <img width="220" height="250" border="0" align="center"  :src="url" alt=""/>
+      </a> -->
   </div>
 </template>
 <script>
@@ -321,25 +324,22 @@ export default {
   components: { loaderView, BreadcrumbsView, InputFiles},
   data: () => ({
     check_roles: store.getters.user,
-    // zIndex: 4,
     panel: [0],
     valid: true,
     data: {},
     files: {},
     files_url: '',
+    step_files: {},
     url: '',
     status_detail: '',
     status_call: { value: '', id: null },
-    // edit_status_detail: '',
-    // edit_status_call: { value: '', id: null },
     selectStatus: [
-          // { value: 'อยู่ระหว่างดำเนินการ', id: 2 },
           { value: 'เรื่องเสร็จ', id: 2 },
           { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
           { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
           { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
       ],
-    dialog_files: false,
+    dialog_files_step: false,
     dialog_detail: false,
     overlayImg: false,
     absolute: false,
@@ -349,7 +349,7 @@ export default {
         {
           text: 'ติดตามเรื่องร้องเรียน',
           disabled: false,
-          href: '/user/complain',
+          href: '/user/follow',
         },
         {
           text: 'รายละเอียดปัญหา',
@@ -366,11 +366,11 @@ export default {
           value: 'date',
         },
         // { text: 'ชื่อ - สกุล', value: 'name' },
-        { text: 'หน่วยงาน', value: 'division' },
+        // { text: 'หน่วยงาน', value: 'division' },
         { text: 'รายละเอียด', value: 'detail' },
         { text: 'สถานะ', value: 'status_call' },
-        { text: 'ไฟล์เเนบ', value: 'files' },
-        { text: 'Action', value: 'edit' },
+        // { text: 'ไฟล์เเนบ', value: 'files' },
+        // { text: 'Action', value: 'edit' },
       ],
     }),
   mounted() {
@@ -378,9 +378,10 @@ export default {
     this.getComplainStep()
   },
   methods: {
-    dailogfiles(v){
-      this.dialog_files = true
-      console.log(v);
+    async dailogfiles(v){
+      this.dialog_files_step = await true
+
+      await this.getComplainStepFiles(v)
     },
     async dailogDetail(v){
       this.dialog_detail        = await true
@@ -441,73 +442,25 @@ export default {
         console.error(error);
       }
     },
-    async urlFiles(file_name, file_type){
+    async urlFiles(url,file_name, file_type){
 
       console.log(file_name);
       console.log(file_type);
 
-      // let path = await `/api/user/getUrlFiles?filename=${file_name}`
-      let path = await `/api/get/UrlFilesComplain?filename=${file_name}`
+
+      let path = await `/api/get/${url}?filename=${file_name}`
+
+      console.log(path);
       let res = await axios.get(`${path}`)
 
       this.url = await res.data
-      
+
 
       if(file_type == 'pdf'){
         await this.displayPdf(this.url)
       }else{
-        // window.open(this.url, '_blank');
         this.overlayImg = await !this.overlayImg 
       }
-
-      // const binaryString  = await this.isBase64(this.url)
-
-      // // Convert the binary string to a Uint8Array
-      // const uint8Array = new Uint8Array(binaryString.length);
-
-
-      // for (let i = 0; i < binaryString.length; i++) {
-      //   uint8Array[i] = binaryString.charCodeAt(i);
-      // }
-
-      // // Create a Blob object from the Uint8Array and set the MIME type
-      // const blob = new Blob([uint8Array], { type: 'application/pdf' }); // replace 'application/pdf' with your desired MIME type
-
-      
-      // // Create a URL for the Blob object
-      // const url = URL.createObjectURL(blob);
-
- 
-
-      // // Create an anchor tag with the URL and the download attribute
-      //   const link = document.createElement('a');
-      //   link.href = url;
-      //   link.setAttribute('download', 'file.pdf'); // replace 'file.pdf' with your desired file name
-
-      //   // Append the anchor tag to the document body and click it to download the file
-      //   document.body.appendChild(link);
-      //   link.click();
-
-      //   // Clean up by revoking the URL object
-      //   URL.revokeObjectURL(url);
-            
-      // console.log('=======', url);
-
-   
-
-
-
-      // console.log(this.files_url);
-
-    
-      // const blobPDF = await this.base64ToBlobPDF(res.data)
-      // const blobUrl = await URL.createObjectURL(blobPDF);
-
-      // const blobImage = await this.base64ToBlob(res.data);
-      // const blobUrl = await URL.createObjectURL(blobImage);
-
-      // return  window.open(blobUrl, '_blank');
-   
     },
     async getComplainDetail(){
       let path              = await `/api/user/get/complainDetail`
@@ -528,6 +481,13 @@ export default {
       this.desserts         = await response.data.data
       console.log(response );
     }, 
+    async getComplainStepFiles(v){
+        console.log(v);
+        let path              = await `/api/backoffice/get/ComplainStepFiles`
+        let response          = await axios.get(`${path}/`+ v.id)
+        this.step_files    = await response.data.data
+
+      },
   }
 }
 </script>
@@ -560,4 +520,13 @@ export default {
   /* .v-subheader{
     justify-content: right;
   } */
+
+  .v-overlay.style-bg{
+    z-index: 300!important;
+  }
+  .v-overlay.style-bg img{
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+  }
 </style>

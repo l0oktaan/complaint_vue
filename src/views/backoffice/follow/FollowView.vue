@@ -11,7 +11,7 @@
               <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="Search"
+                label="ค้นหา"
                 single-line
                 hide-details
               ></v-text-field>
@@ -24,20 +24,6 @@
               :loading="loading"
               loading-text="Loading... Please wait"
           >
-              <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
-              <template v-slot:[`item.action`]="{ item }">
-                <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </router-link>
-              </template>
-              <!-- <template v-slot:[`item.call_no`]="{ item }">
-                <router-link v-if="check_roles.roles == 'user'" :to="{ name: 'complain-detail', params: { id: item.id }}">
-                  {{ item.call_no }}
-                </router-link>
-                <router-link v-else :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
-                  {{ item.call_no }}
-                </router-link>
-              </template> -->
               <template v-slot:[`item.create_date`]="{ item }">
                 {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
               </template>
@@ -48,6 +34,11 @@
                   >
                   {{ getstatus(item.status_call) }}
                   </v-chip>
+              </template>
+              <template v-slot:[`item.action`]="{ item }">
+                <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </router-link>
               </template>
           </v-data-table>
         </v-card>
@@ -75,11 +66,6 @@ import selectStatus from '@/components/selectStatus.vue';
           //   value: 'no',
           // },
           {
-            text: 'Action',
-            align: 'center',
-            value: 'action',
-          },
-          {
             text: 'Call No',
             align: 'center',
             value: 'call_no',
@@ -92,6 +78,11 @@ import selectStatus from '@/components/selectStatus.vue';
           },
           { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
+          {
+            text: 'รายละเอียดเรื่องร้องเรียน',
+            align: 'center',
+            value: 'action',
+          },
         ],
         desserts: [],
       }
@@ -105,11 +96,7 @@ import selectStatus from '@/components/selectStatus.vue';
             const status_call = this.getstatus(item.status_call)
               return (
                 (this.$refs.filter_status.selectedStatus === 'ทั้งหมด' || status_call === this.$refs.filter_status.selectedStatus) 
-                // &&
-                // (this.search === '' || item.name?.toLowerCase().includes(this.search.toLowerCase()))
-              );
-            // }
-          
+              );  
           });
         },
     },

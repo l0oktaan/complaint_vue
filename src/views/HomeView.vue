@@ -171,16 +171,18 @@
           <template v-slot:activator="{ on }">
             <v-btn icon x-large v-on="on">
               <v-avatar color="brown" size="36">
-                <span class="white--text text-h5">{{ check_roles.initials }}</span>
+                <i class="fa-solid fa-user"></i>
+                <!-- <span class="white--text text-h5">{{ check_roles.initials }}</span> -->
+                <!-- <span class="white--text text-h5"> <i class="fa-solid fa-user"></i></span> -->
               </v-avatar>
             </v-btn>
           </template>
           <v-card>
             <v-list-item-content class="justify-center">
               <div class="mx-auto text-center">
-                <v-avatar color="brown">
+                <!-- <v-avatar color="brown">
                   <span class="white--text text-h5">{{ check_roles.initials }}</span>
-                </v-avatar>
+                </v-avatar> -->
                 <h3>{{ check_roles.name }} {{ check_roles.lastname }}</h3>
                 <p class="text-caption mt-1">
                   {{ check_roles.email }}

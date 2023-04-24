@@ -54,6 +54,7 @@
     </template>
     <script>
     export default {
+      props: ['show_date'],
       data: () => ({
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         menu: false,
@@ -64,6 +65,13 @@
         this.getnewDate()
       },
       watch:{
+        show_date(){            
+            if(this.show_date){
+              console.log('===========');
+                this.date = this.show_date
+                
+            }
+        },
           date(){
               console.log(this.date);
             this.getnewDate()
@@ -74,7 +82,7 @@
 
       methods:{
         getnewDate(){
-            console.log('===========');
+          
               if (this.date){
                   var d = new Date(this.date);
                   this.newDate = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
