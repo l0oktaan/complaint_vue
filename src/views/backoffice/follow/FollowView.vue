@@ -2,6 +2,7 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
+
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
@@ -46,9 +47,6 @@
                 >
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </v-btn>
-                <!-- <router-link :to="{ name: 'backoffice-complaindetail', params: { id: item.id }}">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </router-link> -->
               </template>
           </v-data-table>
         </v-card>
@@ -70,11 +68,6 @@ import selectStatus from '@/components/selectStatus.vue';
         loading: true,
         datas: [],
         headers: [
-          // {
-          //   text: 'No',
-          //   align: 'start',
-          //   value: 'no',
-          // },
           {
             text: 'Call No',
             align: 'center',
@@ -134,13 +127,12 @@ import selectStatus from '@/components/selectStatus.vue';
         else return ''
       },
       formattedDate(create_date) {
-        // moment.locale('th'); // Set the locale to Thai
-        // return moment(this.datas.create_date).format('DD MMMM YYYY, HH:mm', { lang: 'th' });
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
       },
       async getListComplain(){
         let path = await `/api/backoffice/get/listFollow`
-        let response =  await axios.get(`${path}/`+ this.check_roles.id)
+        // let response =  await axios.get(`${path}/`+ this.check_roles.id)
+        let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
         this.datas = await response.data.data
         this.loading = await false
         console.log(response);

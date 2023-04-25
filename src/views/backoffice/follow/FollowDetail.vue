@@ -244,7 +244,7 @@
                           outlined
                           single-line
                           hide-details="auto" 
-                          @change="showDetailStatus(status_call)"
+                          @change="showDetailStatus('select', status_call)"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -272,9 +272,8 @@
                       </v-col>
         
                     </v-row>
-                    <v-card v-if="check_corrupt"
-                      class="mx-auto"
-                    >
+                    <v-card v-if="check_corrupt && show_detail_status" class="mx-auto">
+                  
                       <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
                       <v-card-text class="pt-5">
                         <v-row>
@@ -463,7 +462,7 @@
         { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
         { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
       ],
-      check_corrupt: null,
+      check_corrupt: false,
       corrupt: {},
       corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล'],
       corruptDetailfRules : [v => !!v || 'กรุณากรอกข้อมูล'],
@@ -489,6 +488,8 @@
       close(){
         this.dialog_status = false
         this.editedIndex = -1
+        this.show_detail_status = false
+        this.check_corrupt = false
         this.$refs.form.reset()
         this.$refs.form.resetValidation()
 
@@ -515,12 +516,23 @@
         else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
         else return ''
       },
-      showDetailStatus(v){
-        if(v == 2){
-          this.show_detail_status = true  
-        }else{
-          this.show_detail_status = false
+      showDetailStatus(type, v){
+        if(type == 'edit'){
+          this.corrupt.reference =  v.reference_code
+          this.corrupt.detail =  v.corrupt_detail
+          this.corrupt.date =  v.corrupt_date
+        } else{
+          if(v != 2){
+            this.show_detail_status = false
+
+          }else{
+            this.show_detail_status = true
+
+          }
+
+         
         }
+
 
       },
       dailogfiles(typeFile, v){
@@ -537,9 +549,9 @@
           this.check_corrupt = true
         }else{
           this.check_corrupt = false
-          this.corrupt.reference = ''
-          this.$refs.corrupt_date.date = ''
-          this.corrupt.detail = ''
+          // this.corrupt.reference = ''
+          // this.$refs.corrupt_date.date = ''
+          // this.corrupt.detail = ''
         }
       
       },
@@ -703,15 +715,28 @@
         this.status_call = await v.status_call
         this.complain_step_id = await v.id
         this.corrupt_id       = await v.corrupt_id
-         
-        if(v.status_call){
-          console.log('==============');
-          await this.showDetailStatus(v.status_call)
-          this.check_corrupt = await v.check_corrupt == 1 ? true : false
-          this.corrupt.reference = await v.reference_code
-          this.corrupt.detail = await v.corrupt_detail
-          this.corrupt.date = await v.corrupt_date
+        this.check_corrupt = await v.check_corrupt == 1 ? true : false
+
+        if (v.status_call == 2 ) {
+          this.show_detail_status = true
+          if(this.check_corrupt){
+            await this.showDetailStatus('edit',v)
+          }
+       
         }
+
+        // if(this.check_corrupt){
+        //   await this.showDetailStatus(v.status_call)
+        // }
+         
+        // if(v.status_call){
+        //   console.log('==============');
+        //   
+        //   this.check_corrupt = await v.check_corrupt == 1 ? true : false
+        //   this.corrupt.reference = await v.reference_code
+        //   this.corrupt.detail = await v.corrupt_detail
+        //   this.corrupt.date = await v.corrupt_date
+        // }
       },
       async editComplainStep(){
         if(this.$refs.form.validate()){

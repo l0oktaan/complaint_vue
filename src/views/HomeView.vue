@@ -85,7 +85,7 @@
         </router-link> -->
 
         <router-link 
-          v-if="check_roles.roles === 'admin'"
+          v-if="check_roles.roles === 'admin' || check_roles.roles === 'general'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/receive"
@@ -101,7 +101,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin'"
+          v-if="check_roles.roles === 'admin' || check_roles.roles === 'general'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/follow"
