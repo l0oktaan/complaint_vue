@@ -100,7 +100,9 @@
                       <v-list-item-content class="text-left">
                         <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                       </v-list-item-content>
-                      <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
+                      <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
+                      <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
+                      <!-- <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div> -->
   
                     </v-list-item>
                     
@@ -371,9 +373,8 @@
               </v-list-item-content>
 
               <v-list-item-action>
-                <v-btn icon @click="urlFiles('UrlFilesComplainStep',step_file.file_name, step_file.file_type)">
-                  <i class="fa-solid fa-file"></i>
-                </v-btn>
+                <div class="btn-files" v-if="step_file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplainStep',step_file.file_name)"><i class="fa-solid fa-file"></i></div>
+                <div class="btn-files" v-else @click="urlFiles('UrlFilesComplainStep',step_file.file_name)"><i class="fa-solid fa-image"></i></div>
               </v-list-item-action>
             </v-list-item>
           </div>
@@ -399,9 +400,8 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-btn icon @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name, corrupt_file.file_type)">
-              <i class="fa-solid fa-file"></i>
-            </v-btn>
+            <div class="btn-files" v-if="corrupt_file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesCorrupt',corrupt_file.file_name)"><i class="fa-solid fa-file"></i></div>
+            <div class="btn-files" v-else @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name)"><i class="fa-solid fa-image"></i></div>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -619,41 +619,65 @@
 
       },
 
-      async urlFiles(url,file_name, file_type){
+      // async urlFiles(file_name){
 
-        let path = null
+      //   let fd = await { "file_name"  : file_name}
 
-        if(file_type != 'application/pdf'){
-          path = await `/api/get/${url}?filename=${file_name}`
-        }else{
-          console.log('=======');
-          path = await `/api/get/pdf/${url}?filename=${file_name}`
-        }
+      //       let path        = await `/api/get/pdf/UrlFilesComplains`
+      //       let response    = await axios.post(`${path}`, fd,{ headers: {'Content-Type': 'multipart/form-data',},'responseType': 'blob' // responseType is a sibling of headers, not a child
+      //       })
 
+      //       console.log(response);
+      //       // .then(response=>{
+      //       //     if(response.status == 200){
+      //       //         const url = window.URL.createObjectURL(new Blob([response.data]));
+      //       //         const link = document.createElement('a');
+      //       //         link.href = url;
+      //       //         link.setAttribute('download', 'test.pdf');
+      //       //         document.body.appendChild(link);
+      //       //         link.click();
+      //       //     }
+      //       // })
+      //       // .catch(error=>{
+      //       //     console.log(error);
+      //       // })
+            
+
+       
+      // },
+
+      async urlPdfFiles(url,file_name){
+        axios({
+            url: `/api/get/pdf/${url}`,
+            params: {"filename":file_name},
+            method: 'GET',
+            responseType: 'blob',
+        }).then((response) => {
+              var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+              var fileLink = document.createElement('a');
+
+              fileLink.href = fileURL;
+              fileLink.setAttribute('download', file_name);
+              document.body.appendChild(fileLink);
+
+              window.open(fileLink, "_blank");
+
+            //  fileLink.click();
+        });
+      },
+
+
+
+      async urlFiles(url,file_name){
+
+       
+        let path = await `/api/get/${url}?filename=${file_name}`
+        
         let res = await axios.get(`${path}`)
 
         this.url = await res.data
 
-        console.log(this.url);
-
-        if(file_type == 'application/pdf'){
-
-          var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
-          var fileLink = await document.createElement('a');
-          
-          fileLink.href = await fileURL;
-
-          let filename = await file_name;
-
-          await fileLink.setAttribute('download', filename);
-
-          await document.body.appendChild(fileLink);
-          
-          await window.open(fileLink, "_blank");
-
-        }else{
-          this.overlayImg = await !this.overlayImg 
-        }
+        this.overlayImg = await !this.overlayImg 
       },
       async saveComplainStep(){
         if(this.editedIndex == -1){

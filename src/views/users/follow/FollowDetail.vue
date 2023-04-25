@@ -426,11 +426,12 @@ export default {
       let res = await axios.get(`${path}`)
 
       this.url = await res.data
-      console.log(this.url);
+      console.log(path);
 
       if(file_type == 'application/pdf'){
 
-        var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+        var fileURL = await window.URL.createObjectURL(new Blob([this.url]));
+        // var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
         var fileLink = await document.createElement('a');
         
         fileLink.href = await fileURL;
@@ -440,8 +441,10 @@ export default {
         await fileLink.setAttribute('download', filename);
 
         await document.body.appendChild(fileLink);
+
+        await  fileLink.click();
          
-        await window.open(fileLink, "_blank");
+        // await window.open(fileLink, "_blank");
 
       }else{
         this.overlayImg = await !this.overlayImg 
