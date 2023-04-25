@@ -105,10 +105,14 @@ const routes = [
     component: HomeView,
     beforeEnter (to, from, next) {
       store.dispatch('checkLogin')
-      if (store.state.user) {          
+      if (store.state.user) {     
           next()          
       } else {
+        if(store.state.user == 'user'){
           next('/user/login')
+        }else{
+          next('/backoffce/login')
+        } 
       }
     },
 
