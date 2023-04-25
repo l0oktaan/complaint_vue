@@ -398,19 +398,55 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
           await this.getRegisterDetail()
           await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         },
-       
+
         async urlFiles(url,file_name, file_type){
 
-        let path = await `/api/get/${url}?filename=${file_name}`
-        let res = await axios.get(`${path}`)
-        this.url = await res.data
-        if(file_type == 'pdf'){
-          console.log(file_type);
-          // await this.displayPdf(this.url)
-        }else{
-          this.overlayImg = await !this.overlayImg 
-        }
-      },
+          let path = null
+
+          if(file_type != 'application/pdf'){
+            path = await `/api/get/${url}?filename=${file_name}`
+          }else{
+            console.log('=======');
+            path = await `/api/get/pdf/${url}?filename=${file_name}`
+          }
+
+          let res = await axios.get(`${path}`)
+
+          this.url = await res.data
+          console.log(this.url);
+
+          if(file_type == 'application/pdf'){
+
+            var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+            var fileLink = await document.createElement('a');
+            
+            fileLink.href = await fileURL;
+
+            let filename = await file_name;
+
+            await fileLink.setAttribute('download', filename);
+
+            await document.body.appendChild(fileLink);
+            
+            await window.open(fileLink, "_blank");
+
+          }else{
+            this.overlayImg = await !this.overlayImg 
+          }
+        },
+       
+      //   async urlFiles(url,file_name, file_type){
+
+      //   let path = await `/api/get/${url}?filename=${file_name}`
+      //   let res = await axios.get(`${path}`)
+      //   this.url = await res.data
+      //   if(file_type == 'pdf'){
+      //     console.log(file_type);
+      //     // await this.displayPdf(this.url)
+      //   }else{
+      //     this.overlayImg = await !this.overlayImg 
+      //   }
+      // },
         async getRegisterDetail(){
           let path              = await `/api/get/registerDetail`
           let response          = await axios.get(`${path}/` + this.data.register_id)

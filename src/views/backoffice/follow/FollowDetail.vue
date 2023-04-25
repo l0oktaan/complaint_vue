@@ -225,7 +225,17 @@
                       </v-col>
                       <v-col cols="9">
                         
-                        <InputFiles  ref="status_files"/>
+                        <InputFiles  ref="status_files" :file="step_files"/>
+                        <div class="text-left">
+                          <v-chip         
+                          v-for="(step_file,index) in step_files" 
+                          :key="index"
+                          close @click:close="remove(index)"
+                          >
+                            {{step_file.file_original}}
+                        </v-chip>
+                        </div>
+                      
                       </v-col>
                     </v-row>
       
@@ -291,10 +301,23 @@
                           <v-col>
                             <DatePickers ref="corrupt_date" :show_date="corrupt.date"  label="วันที่ดำเนินการ"/>
                           </v-col>
+                        </v-row> 
+                        <v-row>
                           <v-col>
                             <InputFiles  ref="corrupt_file"/>
+                            <div class="text-left">
+                              <v-chip         
+                              v-for="(corrupt_file,index) in corrupt_files" 
+                              :key="index"
+                              close @click:close="removeCorrupt(index)"
+                              >
+                                {{corrupt_file.file_original}}
+                            </v-chip>
+                            </div>
+                           
                           </v-col>
                         </v-row>
+                       
                         <v-row>
                           <v-col>
                             <v-textarea
@@ -416,6 +439,8 @@
   export default {
     components: { loaderView, BreadcrumbsView, InputFiles, DatePickers},
     data: () => ({
+      chips: ['Programming', 'Playing video games', 'Watching movies', 'Sleeping'],
+        items: ['Streaming', 'Eating'],
       item: [
         {
           text: 'ติดตามเรื่องร้องเรียน',
@@ -485,6 +510,21 @@
       },
     },
     methods: {
+      checkCorrupt(){
+        if(this.check_corrupt){
+          this.check_corrupt = true
+        }else{
+          this.check_corrupt = false
+        }
+      },
+      remove (index) {
+          console.log(index,'====');
+          this.step_files.splice(index, 1)
+      },
+      removeCorrupt (index) {
+          console.log(index,'====');
+          this.corrupt_files.splice(index, 1)
+      },
       close(){
         this.dialog_status = false
         this.editedIndex = -1
@@ -518,6 +558,7 @@
       },
       showDetailStatus(type, v){
         if(type == 'edit'){
+          this.getCorruptFiles(v)
           this.corrupt.reference =  v.reference_code
           this.corrupt.detail =  v.corrupt_detail
           this.corrupt.date =  v.corrupt_date
@@ -544,17 +585,6 @@
           this.getCorruptFiles(v)
         }
       },
-      checkCorrupt(){
-        if(this.check_corrupt){
-          this.check_corrupt = true
-        }else{
-          this.check_corrupt = false
-          // this.corrupt.reference = ''
-          // this.$refs.corrupt_date.date = ''
-          // this.corrupt.detail = ''
-        }
-      
-      },
       async getComplainDetail(){
         let path              = await `/api/user/get/complainDetail`
         let response          =  await axios.get(`${path}/`+ this.$route.params.id)
@@ -576,6 +606,8 @@
         let response          = await axios.get(`${path}/`+ v.id)
         this.step_files    = await response.data.data
 
+        console.log(this.step_files);
+
       },
       async getCorruptFiles(v){
         console.log(v);
@@ -583,21 +615,58 @@
         let response          = await axios.get(`${path}/`+ v.id)
         this.corrupt_files    = await response.data.data
 
-        console.log(response);
+        console.log('===>',this.corrupt_files);
 
       },
+
       async urlFiles(url,file_name, file_type){
-        console.log('urlFiles');
-        let path = await `/api/get/${url}?filename=${file_name}`
+
+        let path = null
+
+        if(file_type != 'application/pdf'){
+          path = await `/api/get/${url}?filename=${file_name}`
+        }else{
+          console.log('=======');
+          path = await `/api/get/pdf/${url}?filename=${file_name}`
+        }
+
         let res = await axios.get(`${path}`)
+
         this.url = await res.data
-        if(file_type == 'pdf'){
-          console.log(file_type);
-          // await this.displayPdf(this.url)
+
+        console.log(this.url);
+
+        if(file_type == 'application/pdf'){
+
+          var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+          var fileLink = await document.createElement('a');
+          
+          fileLink.href = await fileURL;
+
+          let filename = await file_name;
+
+          await fileLink.setAttribute('download', filename);
+
+          await document.body.appendChild(fileLink);
+          
+          await window.open(fileLink, "_blank");
+
         }else{
           this.overlayImg = await !this.overlayImg 
         }
       },
+      // async urlFiles(url,file_name, file_type){
+      //   console.log('urlFiles');
+      //   let path = await `/api/get/${url}?filename=${file_name}`
+      //   let res = await axios.get(`${path}`)
+      //   this.url = await res.data
+      //   if(file_type == 'pdf'){
+      //     console.log(file_type);
+      //     await this.displayPdf(this.url)
+      //   }else{
+      //     this.overlayImg = await !this.overlayImg 
+      //   }
+      // },
       async saveComplainStep(){
         if(this.editedIndex == -1){
           this.createComplainStep()
@@ -708,6 +777,8 @@
         }
       },
       async dailogStatusEdit(v){
+
+        await this.getComplainStepFiles(v)
         console.log(v);
         this.editedIndex = await 1
         this.dialog_status = await true
@@ -750,48 +821,53 @@
               "status_call"       : this.status_call,
               "check_corrupt"     : this.check_corrupt,
             }
+
+            console.log(fd);
             let path        = await `/api/backoffice/edit/complainStep`
             let response    = await axios.post(`${path}`, fd)
-              
-            console.log(response);
+
             if(response){
 
-              // for (let i = 0; i < this.$refs.status_files.files.length; i++) {
+              for (let i = 0; i < this.$refs.status_files.files.length; i++) {
 
-              //   let number = await i + 1
+                console.log(this.$refs.status_files.files[i]);
 
-              //   let file = await this.$refs.status_files.files[i]
+                let number = await i + 1
 
-              //   let complain_step_id = await this.complain_step_id
+                let file = await this.$refs.status_files.files[i]
 
-              //   const arr_file = await file.name.split(".")
+                let complain_step_id = await this.complain_step_id
 
-              //   let file_name = await ''
+                const arr_file = await file.name.split(".")
+
+                let file_name = await ''
                 
-              //   if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+                if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-              //     file_name = await 'imgcid' + complain_step_id + '_' + number + '.' +arr_file[1] 
+                  file_name = await 'imgcid' + complain_step_id + '_' + number + '.' +arr_file[1] 
 
-              //   }else if(file.type === 'application/pdf'){
+                }else if(file.type === 'application/pdf'){
 
-              //     file_name = await 'pdfcid' + complain_step_id + '_' + number + '.' +arr_file[1] 
-              //   }
+                  file_name = await 'pdfcid' + complain_step_id + '_' + number + '.' +arr_file[1] 
+                }
 
-              //     let fd_upload = await {
-              //         "admin_id"            : this.check_roles.id,
-              //         // "register_id"         : this.data.register_id,
-              //         "complain_step_id"    : complain_step_id,
-              //         "file_original"       : file.name,
-              //         "file_name"           : file_name,
-              //         "file_type"           : file.type
-              //     }
+                  let fd_upload = await {
+                      "admin_id"            : this.check_roles.id,
+                      "register_id"         : this.data.register_id,
+                      "complain_step_id"    : complain_step_id,
+                      "file_original"       : file.name,
+                      "file_name"           : file_name,
+                      "file_type"           : file.type
+                  }
 
-              //     let path_api = await `/api/backoffice/complainStepFiles`
+                  console.log(fd_upload);
 
-              //     let path_upload = await  `/api/backoffice/uploadStepFiles`
+                  let path_api = await `/api/backoffice/complainStepFiles`
 
-              //   await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
-              // }
+                  let path_upload = await  `/api/backoffice/uploadStepFiles`
+
+                await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
+              }
 
               if(this.check_corrupt){
                 await this.saveComplainCorrupt(this.complain_step_id, this.corrupt_id)
@@ -814,6 +890,7 @@
           }
         } 
       },
+      
       async saveComplainCorrupt(complain_step_id, corrupt_id){
  
           let fd_corrupt = await {

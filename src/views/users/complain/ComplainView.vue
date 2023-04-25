@@ -97,7 +97,8 @@ export default {
               "register_id"   : register_id,
               "complain_id"   : complain_id,
               "file_original" : file.name,
-              "file_name"     : file_name
+              "file_name"     : file_name,
+              "file_type"     : file.type
           }
 
               let path = await `/api/user/files`

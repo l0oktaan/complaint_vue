@@ -117,7 +117,7 @@
         </router-link>
 
 
-        <router-link 
+        <!-- <router-link 
           v-if="check_roles.roles === 'admin'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
@@ -125,14 +125,13 @@
         >
           <v-list-item link>
             <i class="fa-solid fa-pen-to-square menu-icon"></i>
-            <!-- <i class="fa-solid fa-magnifying-glass menu-icon"></i> -->
             <v-list-item-content>
               <v-list-item-title class="menu-text">
                 รายงาน
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </router-link>
+        </router-link> -->
 
         <router-link 
           v-if="check_roles.roles === 'admin'"

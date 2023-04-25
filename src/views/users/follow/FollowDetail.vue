@@ -410,54 +410,39 @@ export default {
     formattedDate(create_date) {
       return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
     },
-    isBase64(str) {
-      try {
-        return btoa(atob(str)) == str;
-      } catch (error) {
-        return false;
-      }
-    },
-    base64ToBlob(base64String, contentType) {
-      // const byteCharacters = atob(base64String);
-      console.log(contentType);
-      const byteCharacters = this.isBase64(base64String);
-      const byteArrays = [];
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteArrays.push(byteCharacters.charCodeAt(i));
-      }
-      const blob = new Blob([new Uint8Array(byteArrays)], { type: contentType });
-      return blob;
-    },
-    displayPdf(base64String) {
-      const contentType = 'application/pdf';
-      try {
-        const blob = this.base64ToBlob(base64String, contentType);
+   
 
-        const fileUrl =  window.URL.createObjectURL(blob);
-
-        console.log(fileUrl);
-
-        // window.open(fileUrl, '_blank');
-      } catch (error) {
-        console.error(error);
-      }
-    },
     async urlFiles(url,file_name, file_type){
 
-      console.log(file_name);
-      console.log(file_type);
+      let path = null
 
+      if(file_type != 'application/pdf'){
+        path = await `/api/get/${url}?filename=${file_name}`
+      }else{
+        console.log('=======');
+        path = await `/api/get/pdf/${url}?filename=${file_name}`
+      }
 
-      let path = await `/api/get/${url}?filename=${file_name}`
-
-      console.log(path);
       let res = await axios.get(`${path}`)
 
       this.url = await res.data
+      console.log(this.url);
 
+      if(file_type == 'application/pdf'){
 
-      if(file_type == 'pdf'){
-        await this.displayPdf(this.url)
+        var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+        var fileLink = await document.createElement('a');
+        
+        fileLink.href = await fileURL;
+
+        let filename = await file_name;
+      
+        await fileLink.setAttribute('download', filename);
+
+        await document.body.appendChild(fileLink);
+         
+        await window.open(fileLink, "_blank");
+
       }else{
         this.overlayImg = await !this.overlayImg 
       }

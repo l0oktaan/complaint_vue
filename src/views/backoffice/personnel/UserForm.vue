@@ -180,12 +180,13 @@
             show1: false,
             valid: true,
             check_title :  true,
+            user_id: null,
             username: '',
             password: '',
             name: '',
             lastname: '',
             position: '',
-            userId: store.getters.user.id,
+            admin_id: store.getters.user.id,
             roles: { value: '', id: null },
             selectRoles: [
                 { value: 'ผู้ใช้งานทั่วไป', id: 'general' },
@@ -247,19 +248,17 @@
             if(this.$route.name == 'personnel_formedit'){
                 this.getEditUser()    
             }
-            
-            
         },
         computed:{
             formTitle () {
                 return this.$route.name == 'personnel_form' ? 'สร้างผู้ใช้งาน' : 'แก้ไขผู้ใช้งาน'
             },
         },
-     
         methods: {
             async getEditUser(){
                 let path                    = await `/api/backoffice/get/userDetail`
                 let response                = await axios.get(`${path}/`+ this.$route.params.id)
+                this.user_id                = await response.data.data[0].id
                 this.username               = await response.data.data[0].username
                 this.name                   = await response.data.data[0].name
                 this.lastname               = await response.data.data[0].lastname
@@ -276,7 +275,8 @@
             async saveUser(){ 
                 if(this.$refs.form.validate()){
                     let fd = {
-                        "userId"        : this.userId,
+                        "admin_id"      : this.admin_id,
+                        "user_id"       : this.user_id,
                         "username"      : this.username,
                         "password"      : this.password,
                         "name"          : this.name,
