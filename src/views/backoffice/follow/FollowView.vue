@@ -131,7 +131,6 @@ import selectStatus from '@/components/selectStatus.vue';
       },
       async getListComplain(){
         let path = await `/api/backoffice/get/listFollow`
-        // let response =  await axios.get(`${path}/`+ this.check_roles.id)
         let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
         this.datas = await response.data.data
         this.loading = await false

@@ -63,11 +63,6 @@
         loading: true,
         datas: [],
         headers: [
-          // {
-          //   text: 'No',
-          //   align: 'start',
-          //   value: 'no',
-          // },
           {
             text: 'Call No',
             align: 'center',
@@ -124,8 +119,6 @@
         else return ''
       },
       formattedDate(create_date) {
-        // moment.locale('th'); // Set the locale to Thai
-        // return moment(this.datas.create_date).format('DD MMMM YYYY, HH:mm', { lang: 'th' });
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
       },
       async getListComplain(){

@@ -655,18 +655,6 @@
           this.overlayImg = await !this.overlayImg 
         }
       },
-      // async urlFiles(url,file_name, file_type){
-      //   console.log('urlFiles');
-      //   let path = await `/api/get/${url}?filename=${file_name}`
-      //   let res = await axios.get(`${path}`)
-      //   this.url = await res.data
-      //   if(file_type == 'pdf'){
-      //     console.log(file_type);
-      //     await this.displayPdf(this.url)
-      //   }else{
-      //     this.overlayImg = await !this.overlayImg 
-      //   }
-      // },
       async saveComplainStep(){
         if(this.editedIndex == -1){
           this.createComplainStep()
@@ -822,9 +810,10 @@
               "check_corrupt"     : this.check_corrupt,
             }
 
-            console.log(fd);
             let path        = await `/api/backoffice/edit/complainStep`
             let response    = await axios.post(`${path}`, fd)
+
+            console.log(response);
 
             if(response){
 

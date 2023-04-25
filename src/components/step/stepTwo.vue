@@ -11,8 +11,8 @@
         </v-row>
 
        
-        <v-row justify="space-between">
-            <v-col cols="12" md="12">
+        <v-row justify="space-between" class="align-center">
+            <v-col cols="9" md="9">
                 <p class="style-label"><span>*</span>Email :</p>
                 <v-text-field
                     v-model="item.email"
@@ -23,20 +23,19 @@
                     dense
                     outlined
                     hide-details="auto"
-                    @input="checkMail"
+                 
                 ></v-text-field>
+                
             </v-col>
-            <!-- <v-col cols="12" md="2">
+             <v-col md="3">
                 <v-btn
-                    rounded
+                    depressed
                     color="primary"
-                    dark
-                   @click="checkMail"
+                    @click="checkMail"
                     >
                     ตรวจสอบอีเมล
                 </v-btn>
-            </v-col> -->
-
+             </v-col>
             <v-col cols="6" md="5">
                 <p class="style-label"><span>*</span>ชื่อ :</p>
                 <v-text-field
@@ -322,7 +321,6 @@
         },
         methods: {
             async checkMail(){
-                console.log(this.item.email);
                 try {
                     
                     let fd_mail = await { "email": this.item.email}

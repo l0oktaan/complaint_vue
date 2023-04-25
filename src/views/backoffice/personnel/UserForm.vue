@@ -246,7 +246,7 @@
         }),
         mounted(){
             if(this.$route.name == 'personnel_formedit'){
-                this.getEditUser()    
+                this.getuserDetail()    
             }
         },
         computed:{
@@ -255,7 +255,7 @@
             },
         },
         methods: {
-            async getEditUser(){
+            async getuserDetail(){
                 let path                    = await `/api/backoffice/get/userDetail`
                 let response                = await axios.get(`${path}/`+ this.$route.params.id)
                 this.user_id                = await response.data.data[0].id

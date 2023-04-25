@@ -20,29 +20,24 @@
               :loading="loading"
               loading-text="Loading... Please wait"
           >
-              <!-- <template v-slot:[`item.no`]="{ index }">{{ index + 1 }}</template> -->
-             
-              <template v-slot:[`item.call_no`]="{ item }">
-                <!-- <router-link :to="{ name: 'receive-detail', params: { id: item.id }}"> -->
-                  {{ item.call_no }}
-                <!-- </router-link> -->
-              </template>
-              <template v-slot:[`item.create_date`]="{ item }">
-                {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-              </template>
-              <template v-slot:[`item.status_call`]="{ item }">
-                  <v-chip
-                  :color="getColor(item.status_call)"
-                  dark
-                  >
-                  {{ item.status_call  == 0 ? 'รอรับเรื่อง' : '' }}
-                  </v-chip>
-              </template>
-              <template v-slot:[`item.action`]="{ item }">
-                <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </router-link>
-              </template>
+
+            <template v-slot:[`item.call_no`]="{ item }">{{ item.call_no }}</template>
+            <template v-slot:[`item.create_date`]="{ item }">
+              {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
+            </template>
+            <template v-slot:[`item.status_call`]="{ item }">
+                <v-chip
+                :color="getColor(item.status_call)"
+                dark
+                >
+                {{ item.status_call  == 0 ? 'รอรับเรื่อง' : '' }}
+                </v-chip>
+            </template>
+            <template v-slot:[`item.action`]="{ item }">
+              <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </router-link>
+            </template>
           </v-data-table>
         </v-card>
       </div>
@@ -61,12 +56,6 @@
         loading: true,
         datas: [],
         headers: [
-          // {
-          //   text: 'No',
-          //   align: 'start',
-          //   value: 'no',
-          // },
-          
           {
             text: 'Call No',
             align: 'center',

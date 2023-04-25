@@ -3,29 +3,28 @@
       <loaderView ref="loader"/>
       <BreadcrumbsView :items="item"/>
       <v-card>
+        <v-tabs
+            v-model="tab"
+            background-color="#003366"
+            class="style-tabs"
+            centered
+            dark
+            icons-and-text
+            >
+            <v-tabs-slider></v-tabs-slider>
 
-          <v-tabs
-              v-model="tab"
-              background-color="#003366"
-              class="style-tabs"
-              centered
-              dark
-              icons-and-text
-              >
-              <v-tabs-slider></v-tabs-slider>
+            <v-tab href="#tab-1">
+                รายละเอียดปัญหา
+                <i class="fa-solid fa-comment"></i>
+            </v-tab>
 
-              <v-tab href="#tab-1">
-                  รายละเอียดปัญหา
-                  <i class="fa-solid fa-comment"></i>
-              </v-tab>
+            <v-tab href="#tab-2">
+                รายละเอียดผู้เเจ้งปัญหา
+                <i class="fa-solid fa-user"></i>
+            </v-tab>
 
-              <v-tab href="#tab-2">
-                  รายละเอียดผู้เเจ้งปัญหา
-                  <i class="fa-solid fa-user"></i>
-              </v-tab>
-
-          </v-tabs>
-    
+        </v-tabs>
+  
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">   
             <v-card flat>
@@ -283,14 +282,13 @@
           </v-tab-item>
         </v-tabs-items>
 
-          <v-dialog
-            v-model="dialog"
-            persistent
-            max-width="500"
-          >
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="500"
+        >
           <v-card>
             <v-card-title class="text-h5">
-              <!-- Use Google's location service? -->
             </v-card-title>
             <v-card-text>
               <v-subheader>รายละเอียดปัญหา/สาเหตุ</v-subheader>
@@ -353,7 +351,6 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
       return {
         tab: null,
         data: {},
-        // data_register: {},
         user: {},
         files: {},
         complain_detail: '',
@@ -434,19 +431,6 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
             this.overlayImg = await !this.overlayImg 
           }
         },
-       
-      //   async urlFiles(url,file_name, file_type){
-
-      //   let path = await `/api/get/${url}?filename=${file_name}`
-      //   let res = await axios.get(`${path}`)
-      //   this.url = await res.data
-      //   if(file_type == 'pdf'){
-      //     console.log(file_type);
-      //     // await this.displayPdf(this.url)
-      //   }else{
-      //     this.overlayImg = await !this.overlayImg 
-      //   }
-      // },
         async getRegisterDetail(){
           let path              = await `/api/get/registerDetail`
           let response          = await axios.get(`${path}/` + this.data.register_id)
