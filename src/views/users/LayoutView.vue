@@ -6,10 +6,9 @@
                     <v-spacer />
                     <div class="head-menu">
                         <router-link class="mr-3" to="/">หน้าหลัก</router-link>
-                        <!-- <v-btn text  @click="login">หน้าหลัก</v-btn> -->
                         <router-link class="mr-3" to="/user/contact">ติดต่อเรา</router-link>
-                        <router-link to="/user/login">เข้าสู่ระบบ</router-link>
-                        <!-- <v-btn text  @click="login">เข้าสู่ระบบ</v-btn> -->
+                        <router-link class="mr-3" to="/user/login">เข้าสู่ระบบ</router-link>
+                        <router-link to="/backoffice/login">เจ้าหน้าที่กรมบัญชีกลาง</router-link>
                     </div>
                    
                 </v-row>
@@ -25,12 +24,7 @@
                 <p>หมายเลขโทรศัพท์กลาง 0-2127-7000 </p>
             </v-container>
         </v-footer>
-        <!-- <v-footer class="footer-main"> -->
-               
-        <!-- </v-footer> -->
     </div>
-  
-
 </template>
   
 <script>
@@ -73,15 +67,10 @@
         background: #003366!important;
         padding-bottom: 16px;
         padding-top: 16px;
-        /* position: absolute;
-        width: 100%;
-        bottom: 0; */
-        /* padding: 16px 0; */
     }
     .footer-main p {
-       color: white;
+        color: white;
         text-align: left;
-        /* margin-bottom: 4px; */
     }
    
 </style>
