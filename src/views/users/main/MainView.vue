@@ -145,6 +145,18 @@ import StepTree from '@/components/step/stepTree.vue'
                 this.user = this.$refs.user
                 try {
 
+                    let address = this.user.item.address !== undefined ? this.user.item.address : ''
+
+                    let province_th = this.user.province !== null ? ' จังหวัด' + this.user.province.value || this.user.province : ''
+
+                    let district_th = this.user.district !== null ?  ' เเขวง' + this.user.district.value || this.user.district : ''
+
+                    let subdistrict_th = this.user.subdistrict !== null ? ' เขต' + this.user.subdistrict.value  || this.user.subdistrict : ''
+                    
+                    let postcode = this.user.item.postcode !== undefined ? this.user.item.postcode : ''
+
+                    let all_address = address + province_th + district_th  + subdistrict_th + ' ' +postcode
+
                     let fd = await {
                         "email"                 : this.user.item.email,
                         "name"                  : this.user.item.name,
@@ -153,13 +165,17 @@ import StepTree from '@/components/step/stepTree.vue'
                         "age"                   : this.user.item.age,
                         "phone"                 : this.user.item.phone,
                         "phone_other"           : this.user.item.phone_other,
-                        "address"               : this.user.item.address,     
+                        "address"               : all_address,     
                         "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
+                        // "province_th"           : this.user.province !== null ? this.user.province.value || this.user.province : null,
                         "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
+                        // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
                         "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
+                        // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
                         "postcode"              : this.user.item.postcode,
                         "check_policy"          : this.step_one,
                     }
+
 
                     await Swal.fire({
                         title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',

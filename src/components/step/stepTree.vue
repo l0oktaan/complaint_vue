@@ -233,10 +233,9 @@
                     <div class="h2">เอกสารประกอบการร้องเรียน</div>
                 </v-col>
             </v-row>
-
             <v-row>
                 <v-col>
-                    <p class="style-label"><span>*</span>upload file : </p>
+                    <p class="style-label"><span>*</span>upload file : (เเนบไฟล์ png, jpeg, gif, pdf) </p>
                     <v-file-input v-model="files" 
                         small-chips 
                         :max-size="1000000"
@@ -249,7 +248,6 @@
                         clearable 
                         label="Add files"
                         single-line
-                       
                         @change="fileAdded">
                         <template v-slot:selection="{ text, index }">
                             <v-chip small text-color="white" color="#295671" close @click:close="remove(index)">

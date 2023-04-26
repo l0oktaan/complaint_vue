@@ -188,12 +188,14 @@
           </v-tab-item>
           
           <v-tab-item :value="'tab-2'">
+            <pre>    {{  user }}</pre>
+        
             <v-card flat>
               <v-card-text>
                 <v-container fluid>
                       <v-row>
                       <v-col class="d-flex">
-                          <v-subheader>*Email :</v-subheader>
+                          <v-subheader>Email :</v-subheader>
                           <v-text-field
                             v-model="user.email"
                             solo
@@ -307,6 +309,19 @@
                             class="input-gray"
                             ></v-text-field>
                         </v-col>
+                      </v-row>
+                      <v-row>
+                      <v-col class="d-flex">
+                          <v-subheader>ที่อยู่ :</v-subheader>
+                          <v-text-field
+                            v-model="user.address"
+                            solo
+                            readonly
+                            hide-details="auto"
+                            class="input-gray"
+                          ></v-text-field>
+                      </v-col>
+                    
                       </v-row>
                       
                   </v-container>
