@@ -140,11 +140,9 @@ import StepTree from '@/components/step/stepTree.vue'
         },
 
         async checkStepTwo(){
-
             if(this.$refs.formRegister.validate()){
 
                 this.user = this.$refs.user
-
                 try {
 
                     let fd = await {
@@ -165,6 +163,10 @@ import StepTree from '@/components/step/stepTree.vue'
 
                     await Swal.fire({
                         title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
+                        html:
+                            '<span>Email : </span> <b>' + this.user.item.email + '</b><br><br>' +
+                            '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br><br>' +
+                            '<span>นามสกุล : </span> <b>' + this.user.item.lastname +'</b>',
                         showDenyButton: false,
                         showCancelButton: true,
                         confirmButtonText: 'บันทึก',
@@ -191,27 +193,6 @@ import StepTree from '@/components/step/stepTree.vue'
                     console.log(error);
                 }
 
-                // try {
-                    
-                //     let fd_mail = await { "email": this.user.item.email}
-                    
-                //     let path = await `/api/user/checkMail`
-                //     let response = await axios.post(`${path}`, fd_mail)
-
-                //     if(response.data.status == 200){
-                //         await Swal.fire({
-                //             icon: 'error',
-                //             title: 'Oops...',
-                //             text: 'มีอีเมลนี่ในระบบเเล้ว',
-                //             // footer: '<a href="">Why do I have this issue?</a>'
-                //         })
-                //     }
-                
-                // } catch (error) {
-
-                //     this.e1 = await 3
-                // }
-
             }
         },
 
@@ -219,9 +200,7 @@ import StepTree from '@/components/step/stepTree.vue'
             if(this.$refs.formOfficer.validate()){
                 // this.e1 = 4
                 this.employee = await this.$refs.employee
-
                 try {
-  
                     let fd = await {
                         "name"              : this.employee.name,
                         "lastname"          : this.employee.lastname,
@@ -236,7 +215,6 @@ import StepTree from '@/components/step/stepTree.vue'
                         "create_by"         : this.register_id,
                         "modified_by"       : this.register_id,
                     }
-
                     await Swal.fire({
                         title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
                         showDenyButton: false,
@@ -250,8 +228,7 @@ import StepTree from '@/components/step/stepTree.vue'
                             let path = await `/api/user/complain`
 
                             let response = await axios.post(`${path}`, fd)
-
-
+                            
                             if(response){
 
                                 for (let i = 0; i < this.employee.files.length; i++) {
@@ -263,28 +240,11 @@ import StepTree from '@/components/step/stepTree.vue'
                                 
                                 }
                             }
+                            await Swal.fire('รับเรื่องร้องเรียนการทุจริตเรีบร้อยเเล้ว', '', 'success')
 
-                           
-                            await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                        // } else if (result.isDenied) {
-                        //     Swal.fire('Changes are not saved', '', 'info')
+                            await  this.$router.push("/user/login");
                         }
                     })
-
-                    // let path = await `/api/user/complain`
-                    // let response = await axios.post(`${path}`, fd)
-
-                    // if(response){
-
-                    //     for (let i = 0; i < this.employee.files.length; i++) {
-
-                    //         let number = await i + 1
-
-                    //         await this.insertFile(register_id, response.data.complain_id, this.employee.files[i], number)
-                            
-                        
-                    //     }
-                    // }
                     
                 } catch (error) {
                     console.log("insertcomplain", error );
@@ -486,5 +446,19 @@ import StepTree from '@/components/step/stepTree.vue'
     ::v-deep .v-icon{
         font-size: 14px!important;
     }
+    .swal2-title{
+        font-size: 26px;
+    }
+
+    .swal2-confirm{
+        border: 1px solid #003366!important;
+        background-color: #003366!important;
+        color: white!important;
+    }
+    .swal2-cancel{
+        color: #003366!important;
+        border: 1px solid #003366!important;
+        background-color: white!important;
+      }
    
 </style>

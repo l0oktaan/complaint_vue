@@ -13,7 +13,7 @@ export default {
        selectedStatus: 'ทั้งหมด', // Data property to store selected city
         itemsStatus: [
           { value: 'ทั้งหมด', id: null },
-          { value: 'รอรับเรื่อง', id: 0 },
+        //   { value: 'รอรับเรื่อง', id: 0 },
           { value: 'อยู่ระหว่างดำเนินการ', id: 1 },
           { value: 'เรื่องเสร็จ', id: 2 },
           { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },

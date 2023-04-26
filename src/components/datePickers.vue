@@ -2,9 +2,8 @@
 
     <template>
       <v-row>
-        <v-col
-
-        >
+        <v-col>
+        {{ show_date }}
           <v-menu
             ref="menu"
             v-model="menu"
@@ -67,14 +66,14 @@
       watch:{
         show_date(){            
             if(this.show_date){
-              console.log('===========');
-                this.date = this.show_date
+              this.date = this.show_date
                 
             }
         },
           date(){
               console.log(this.date);
             this.getnewDate()
+            this.$emit("change_date",this.date)
 
           }
       },  

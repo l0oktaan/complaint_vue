@@ -13,6 +13,24 @@
         dense 
         nav
       >  
+
+      <router-link 
+          v-if="check_roles.roles === 'user'"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/user/follow"
+        >
+          <v-list-item link>
+            <i class="fa-solid fa-eye menu-icon"></i>
+            <v-list-item-content>
+              <v-list-item-title class="menu-text">
+                ติดตามเรื่องร้องเรียน
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
+        
         <router-link 
           v-if="check_roles.roles === 'user'"
           class="d-flex align-center menu-link"
@@ -35,22 +53,7 @@
           active-class="activemenu"
           to="/user/complain"
         > -->
-        <router-link 
-          v-if="check_roles.roles === 'user'"
-          class="d-flex align-center menu-link"
-          active-class="activemenu"
-          to="/user/follow"
-        >
-          <v-list-item link>
-            <i class="fa-solid fa-eye menu-icon"></i>
-            <v-list-item-content>
-              <v-list-item-title class="menu-text">
-                ติดตามเรื่องร้องเรียน
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </router-link>
-
+        
 
         <!-- <router-link 
           v-if="check_roles.roles === 'admin'"

@@ -5,10 +5,43 @@
                 <v-row>
                     <v-spacer />
                     <div class="head-menu">
-                        <router-link class="mr-3" to="/">หน้าหลัก</router-link>
-                        <router-link class="mr-3" to="/user/contact">ติดต่อเรา</router-link>
-                        <router-link class="mr-3" to="/user/login">เข้าสู่ระบบ</router-link>
-                        <router-link to="/backoffice/login">เจ้าหน้าที่กรมบัญชีกลาง</router-link>
+                        <v-tooltip bottom color="#1976d2">
+                            <template v-slot:activator="{ on, attrs }">
+                                <router-link class="mr-5" to="/" >
+                                    <span v-bind="attrs" v-on="on" >
+                                        <i class="fa-solid fa-house" ></i>
+                                    </span>
+                                </router-link>
+                            </template>
+                            <span>Home</span>
+                        </v-tooltip>
+
+                        <v-tooltip bottom color="#1976d2">
+                            <template v-slot:activator="{ on, attrs }">
+                                <router-link class="mr-5" to="/user/contact" >
+                                    <span v-bind="attrs" v-on="on">
+                                        <i class="fa-solid fa-phone" ></i>
+                                    </span>
+                                </router-link>
+                            </template>
+                            <span>Contact</span>
+                        </v-tooltip>
+
+                        <v-tooltip bottom color="#1976d2">
+                            <template v-slot:activator="{ on, attrs }">
+                                <router-link  to="/user/login" >
+                                    <span v-bind="attrs" v-on="on">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                    </span>
+                                </router-link>
+                            </template>
+                            <span>Login</span>
+                        </v-tooltip>
+
+                        <!-- <router-link class="mr-3" to="/"><i class="fa-solid fa-house"></i></router-link> -->
+                        <!-- <router-link class="mr-3" to="/user/contact"><i class="fa-solid fa-phone" ></i></router-link>
+                        <router-link class="mr-3" to="/user/login"><i class="fa-solid fa-right-to-bracket"></i></router-link> -->
+                        <!-- <router-link to="/backoffice/login">เจ้าหน้าที่กรมบัญชีกลาง</router-link> -->
                     </div>
                    
                 </v-row>

@@ -14,6 +14,15 @@
         <v-row justify="space-between" class="align-center">
             <v-col cols="9" md="9">
                 <p class="style-label"><span>*</span>Email :</p>
+                <!-- <v-text-field
+                    v-model="item.email"
+                    :rules="emailRules"
+                    label="Name"
+                    required
+                    dense
+                    outlined
+                    single-line
+                ></v-text-field> -->
                 <v-text-field
                     v-model="item.email"
                     :rules="emailRules"
@@ -22,8 +31,7 @@
                     required
                     dense
                     outlined
-                    hide-details="auto"
-                 
+                   
                 ></v-text-field>
                 
             </v-col>
@@ -41,12 +49,11 @@
                 <v-text-field
                     v-model="item.name"
                     :rules="nameRules"
-                    single-line
                     label="กรอกชื่อ"
                     required
                     dense
                     outlined
-                    hide-details="auto"
+                    single-line
                 ></v-text-field>
             </v-col>
             <v-col cols="6" md="5">
@@ -55,11 +62,10 @@
                     v-model="item.lastname"
                     :rules="lastnameRules"
                     label="นามสกุล"
-                    single-line
                     required
                     dense
                     outlined
-                    hide-details="auto"
+                    single-line
                 ></v-text-field>
             </v-col>
             <!-- <v-col cols="3" md="3">
@@ -86,12 +92,11 @@
                 <v-text-field
                     v-model="item.age"
                     :rules="ageRules"
-                    single-line
                     label="อายุ"
                     required
                     dense
                     outlined
-                    hide-details="auto"
+                    single-line
                 ></v-text-field>
             </v-col>
        
@@ -106,7 +111,6 @@
                     required
                     dense
                     outlined
-                    hide-details="auto"
                 ></v-text-field>
             </v-col>
             <v-col cols="6" md="6">
@@ -114,12 +118,10 @@
                 <v-text-field
                     v-model="item.phone_other"
                     label="เบอร์ติดต่ออื่น ๆ"
-                 
                     :maxlength="10"
                     dense
                     outlined
                     single-line
-                    hide-details="auto"
                 ></v-text-field>
             </v-col>
 
@@ -132,7 +134,6 @@
                     dense
                     outlined
                     single-line
-                    hide-details="auto"
                 ></v-text-field>
             </v-col>
 
@@ -146,7 +147,6 @@
                     label="เลือกจังหวัด"
                     dense
                     outlined
-                    hide-details="auto"
                     density="compact"
                     return-object
                     single-line
@@ -162,7 +162,6 @@
                     label="เลือกเขต/อำเภอ"
                     dense
                     outlined
-                    hide-details="auto"
                     density="compact"
                     return-object
                     single-line
@@ -178,7 +177,6 @@
                     label="เลือกแขวง/ตำบล"
                     dense
                     outlined
-                    hide-details="auto"
                     density="compact"
                     return-object
                     single-line
@@ -257,9 +255,10 @@
                 v => !!v || 'กรุณากรอกข้อมูล',
                 v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
             ],
-            phoneOtherRules: [
-                v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
-            ],
+          
+            // phoneOtherRules: [
+            //     v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
+            // ],
             // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
          
         }),

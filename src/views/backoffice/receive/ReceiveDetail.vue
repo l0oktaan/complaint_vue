@@ -45,10 +45,12 @@
                             class="input-gray"
                           ></v-text-field>
                         </v-col>
+                      </v-row>
+                      <v-row>
                       <v-col cols="3">
                           <v-subheader>วันที่บันทึกปัญหา</v-subheader>
                       </v-col>
-                      <v-col cols="3">
+                      <v-col cols="9">
                           <v-text-field
                           v-model="data.create_date"
                           solo
@@ -57,7 +59,7 @@
                           class="input-gray"
                           ></v-text-field>
                       </v-col>
-                      <v-col cols="3">
+                      <!-- <v-col cols="3">
                           <v-subheader>วันที่พบปัญหา</v-subheader>
                       </v-col>
                       <v-col cols="3">
@@ -68,7 +70,7 @@
                           hide-details="auto"
                           class="input-gray"
                           ></v-text-field>
-                      </v-col>
+                      </v-col> -->
                       </v-row>
 
                       <v-row>
@@ -100,6 +102,37 @@
                           ></v-text-field>
                       </v-col>
                       </v-row>
+
+                      <v-row>
+                        <v-col cols="3">
+                          <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-text-field
+                            v-model="data.start_date"
+                            label="วันที่เริ่มต้น"
+                            append-icon="mdi-calendar"
+                            class="input-gray"
+                            readonly
+                            solo
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="1">
+                          <v-subheader>ถึง : </v-subheader>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-text-field
+                            v-model="data.end_date"
+                            label="วันที่สิ้นสุด"
+                            append-icon="mdi-calendar"
+                            readonly
+                            class="input-gray"
+                            solo
+                                  
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+
 
                       <v-row>
                       <v-col cols="3">
@@ -390,6 +423,7 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
           this.data             = await response.data.data[0]
           this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
           this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
+          this.data.end_date  = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
           this.files            = await response.data.data_files
 
           await this.getRegisterDetail()

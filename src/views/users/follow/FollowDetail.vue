@@ -12,11 +12,27 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container fluid>
+
+              <v-row>
+                <v-col cols="3">
+                  <v-subheader>Call No.</v-subheader>
+                </v-col>
+                <v-col cols="9">
+                  
+                  <v-text-field
+                    v-model="data.call_no"
+                    solo
+                    readonly
+                    hide-details="auto"
+                    class="input-gray"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
             <v-row>
               <v-col cols="3">
                 <v-subheader>วันที่บันทึกปัญหา</v-subheader>
               </v-col>
-              <v-col cols="3">
+              <v-col>
                 <v-text-field
                   v-model="data.create_date"
                   solo
@@ -25,7 +41,7 @@
                   class="input-gray"
                 ></v-text-field>
               </v-col>
-              <v-col cols="3">
+              <!-- <v-col cols="3">
                 <v-subheader>วันที่พบปัญหา</v-subheader>
               </v-col>
               <v-col cols="3">
@@ -36,7 +52,7 @@
                   hide-details="auto"
                   class="input-gray"
                 ></v-text-field>
-              </v-col>
+              </v-col> -->
             </v-row>
 
             <v-row>
@@ -68,6 +84,38 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+
+
+            <v-row>
+              <v-col cols="3">
+                <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="data.start_date"
+                  label="วันที่เริ่มต้น"
+                  append-icon="mdi-calendar"
+                  class="input-gray"
+                  readonly
+                  solo
+                ></v-text-field>
+              </v-col>
+              <v-col cols="1">
+                <v-subheader>ถึง : </v-subheader>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="data.end_date"
+                  label="วันที่สิ้นสุด"
+                  append-icon="mdi-calendar"
+                  readonly
+                  class="input-gray"
+                  solo
+                        
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
 
             <v-row>
               <v-col cols="3">
@@ -103,7 +151,8 @@
                     <v-list-item-content class="text-left">
                       <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                     </v-list-item-content>
-                    <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
+                      <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
+                      <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
 
                   </v-list-item>
                   
@@ -114,7 +163,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
 
-      <v-expansion-panel v-if="check_roles.roles == 'admin'">
+      <!-- <v-expansion-panel v-if="check_roles.roles == 'admin'">
         <v-expansion-panel-header>
           สถานะการดำเนินงานของเจ้าหน้าที่
         </v-expansion-panel-header>
@@ -181,7 +230,7 @@
           
           </v-container>
         </v-expansion-panel-content>
-      </v-expansion-panel>
+      </v-expansion-panel> -->
       
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -317,14 +366,14 @@ import moment from 'moment';
 import store from '../../../store/index.js';
 import loaderView from '@/components/loaderView.vue';
 import BreadcrumbsView from '@/components/breadcrumbsView.vue';
-import InputFiles from '@/components/inputFiles.vue';
+// import InputFiles from '@/components/inputFiles.vue';
 
 
 export default {
-  components: { loaderView, BreadcrumbsView, InputFiles},
+  components: { loaderView, BreadcrumbsView},
   data: () => ({
     check_roles: store.getters.user,
-    panel: [0],
+    panel: [0, 1],
     valid: true,
     data: {},
     files: {},
@@ -411,51 +460,83 @@ export default {
       return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
     },
    
+    async urlPdfFiles(url,file_name){
+        axios({
+            url: `/api/get/pdf/${url}`,
+            params: {"filename":file_name},
+            method: 'GET',
+            responseType: 'blob',
+        }).then((response) => {
+              var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+              var fileLink = document.createElement('a');
 
-    async urlFiles(url,file_name, file_type){
+              fileLink.href = fileURL;
+              fileLink.setAttribute('download', file_name);
+              document.body.appendChild(fileLink);
 
-      let path = null
+              window.open(fileLink, "_blank");
 
-      if(file_type != 'application/pdf'){
-        path = await `/api/get/${url}?filename=${file_name}`
-      }else{
-        console.log('=======');
-        path = await `/api/get/pdf/${url}?filename=${file_name}`
-      }
+            //  fileLink.click();
+        });
+      },
 
-      let res = await axios.get(`${path}`)
+      async urlFiles(url,file_name){
 
-      this.url = await res.data
-      console.log(path);
-
-      if(file_type == 'application/pdf'){
-
-        var fileURL = await window.URL.createObjectURL(new Blob([this.url]));
-        // var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
-        var fileLink = await document.createElement('a');
+       
+        let path = await `/api/get/${url}?filename=${file_name}`
         
-        fileLink.href = await fileURL;
+        let res = await axios.get(`${path}`)
 
-        let filename = await file_name;
-      
-        await fileLink.setAttribute('download', filename);
+        this.url = await res.data
 
-        await document.body.appendChild(fileLink);
-
-        await  fileLink.click();
-         
-        // await window.open(fileLink, "_blank");
-
-      }else{
         this.overlayImg = await !this.overlayImg 
-      }
-    },
+      },
+
+    // async urlFiles(url,file_name, file_type){
+
+    //   let path = null
+
+    //   if(file_type != 'application/pdf'){
+    //     path = await `/api/get/${url}?filename=${file_name}`
+    //   }else{
+    //     console.log('=======');
+    //     path = await `/api/get/pdf/${url}?filename=${file_name}`
+    //   }
+
+    //   let res = await axios.get(`${path}`)
+
+    //   this.url = await res.data
+    //   console.log(path);
+
+    //   if(file_type == 'application/pdf'){
+
+    //     var fileURL = await window.URL.createObjectURL(new Blob([this.url]));
+    //     // var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+    //     var fileLink = await document.createElement('a');
+        
+    //     fileLink.href = await fileURL;
+
+    //     let filename = await file_name;
+      
+    //     await fileLink.setAttribute('download', filename);
+
+    //     await document.body.appendChild(fileLink);
+
+    //     await  fileLink.click();
+         
+    //     // await window.open(fileLink, "_blank");
+
+    //   }else{
+    //     this.overlayImg = await !this.overlayImg 
+    //   }
+    // },
     async getComplainDetail(){
       let path              = await `/api/user/get/complainDetail`
       let response          =  await axios.get(`${path}/`+ this.$route.params.id)
       this.data             = await response.data.data[0]
       this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
       this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
+      this.data.end_date  = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
       this.files            = await response.data.data_files
 
 
@@ -516,5 +597,8 @@ export default {
     width: 500px;
     height: 500px;
     object-fit: contain;
+  }
+  .btn-files{
+    cursor: pointer;
   }
 </style>

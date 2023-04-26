@@ -18,7 +18,6 @@
                         dense
                         outlined
                         single-line
-                        hide-details="auto"
                     ></v-text-field>
                 </v-col>
                 <v-col>
@@ -31,7 +30,6 @@
                         dense
                         outlined
                         single-line
-                        hide-details="auto"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -56,7 +54,7 @@
                         dense
                         outlined
                         single-line
-                        hide-details="auto"
+                        
                     ></v-select> -->
                 </v-col>
                 <v-col>
@@ -92,7 +90,7 @@
                         dense
                         outlined
                         single-line
-                        hide-details="auto"
+                        
                     ></v-text-field>
                 </v-col>
                 <v-col>
@@ -105,7 +103,7 @@
                         dense
                         outlined
                         single-line
-                        hide-details="auto"
+                        
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -131,7 +129,7 @@
                             dense
                             outlined
                             single-line
-                            hide-details="auto"
+                            
                         ></v-text-field>
                         </template>
                         <v-date-picker
@@ -178,7 +176,7 @@
                                 dense
                                 outlined
                                 single-line
-                                hide-details="auto"
+                                
                         ></v-text-field>
                         </template>
                         <v-date-picker
@@ -212,6 +210,7 @@
                         outlined
                         label="รายละเอียดเรื่องร้องเรียน"
                         v-model="complain_detail"
+                        :rules="complainDetailRules"
                         clearable 
                         single-line
                     ></v-textarea>
@@ -250,7 +249,7 @@
                         clearable 
                         label="Add files"
                         single-line
-                        hide-details="auto"
+                       
                         @change="fileAdded">
                         <template v-slot:selection="{ text, index }">
                             <v-chip small text-color="white" color="#295671" close @click:close="remove(index)">
@@ -296,6 +295,9 @@ export default {
             v => !!v || 'กรุณากรอกข้อมูล',
         ],
         topicRules: [
+            v => !!v || 'กรุณากรอกข้อมูล',
+        ],
+        complainDetailRules: [
             v => !!v || 'กรุณากรอกข้อมูล',
         ],
         locationRules: [
