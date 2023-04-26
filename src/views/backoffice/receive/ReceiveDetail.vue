@@ -188,7 +188,6 @@
           </v-tab-item>
           
           <v-tab-item :value="'tab-2'">
-            <pre>    {{  user }}</pre>
         
             <v-card flat>
               <v-card-text>

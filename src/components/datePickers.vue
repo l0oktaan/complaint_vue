@@ -3,7 +3,6 @@
     <template>
       <v-row>
         <v-col>
-        {{ show_date }}
           <v-menu
             ref="menu"
             v-model="menu"
