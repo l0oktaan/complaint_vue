@@ -140,72 +140,77 @@ import StepTree from '@/components/step/stepTree.vue'
         },
 
         async checkStepTwo(){
-
-
             if(this.$refs.formRegister.validate()){
-
-                this.user = this.$refs.user
                 try {
+                    this.user = await this.$refs.user
 
-                    let address = this.user.item.address !== undefined ? this.user.item.address : ''
+                    let fd_mail = await { "email": this.user.item.email}
+                        
+                    let path = await `/api/user/checkMail`
+                    let response = await axios.post(`${path}`, fd_mail)
 
-                    let province_th = this.user.province !== null ? ' จังหวัด' + this.user.province.value || this.user.province : ''
+                    if(response.data.status == 200){
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'มีอีเมลนี่ในระบบเเล้ว',
+                        })
+                    }else{
 
-                    let district_th = this.user.district !== null ?  ' เเขวง' + this.user.district.value || this.user.district : ''
+                        let address = await this.user.item.address !== undefined ? this.user.item.address : ''
 
-                    let subdistrict_th = this.user.subdistrict !== null ? ' เขต' + this.user.subdistrict.value  || this.user.subdistrict : ''
-                    
-                    let postcode = this.user.item.postcode !== undefined ? this.user.item.postcode : ''
+                        let province_th = await this.user.province !== null ? ' จังหวัด' + this.user.province.value || this.user.province : ''
 
-                    let all_address = address + province_th + district_th  + subdistrict_th + ' ' +postcode
+                        let district_th = await this.user.district !== null ?  ' เเขวง' + this.user.district.value || this.user.district : ''
 
-                    let fd = await {
-                        "email"                 : this.user.item.email,
-                        "name"                  : this.user.item.name,
-                        "lastname"              : this.user.item.lastname,
-                        "gender"                : this.user.item.gender,
-                        "age"                   : this.user.item.age,
-                        "phone"                 : this.user.item.phone,
-                        "phone_other"           : this.user.item.phone_other,
-                        "address"               : all_address,     
-                        "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
-                        // "province_th"           : this.user.province !== null ? this.user.province.value || this.user.province : null,
-                        "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
-                        // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
-                        "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
-                        // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
-                        "postcode"              : this.user.item.postcode,
-                        "check_policy"          : this.step_one,
-                    }
+                        let subdistrict_th = await this.user.subdistrict !== null ? ' เขต' + this.user.subdistrict.value  || this.user.subdistrict : ''
 
+                        let postcode = await this.user.item.postcode !== undefined ? this.user.item.postcode : ''
 
-                    await Swal.fire({
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
-                        html:
-                            '<span>Email : </span> <b>' + this.user.item.email + '</b><br><br>' +
-                            '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br><br>' +
-                            '<span>นามสกุล : </span> <b>' + this.user.item.lastname +'</b>',
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: 'บันทึก',
-                        cancelButtonText: `ยกเลิก`,
-                    }).then(async (result)  => {
-                    /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
+                        let all_address = await address + province_th + district_th  + subdistrict_th + ' ' +postcode
 
-                            let path = await `/api/user/register`
-                            let response = await axios.post(`${path}`, fd)
-
-                            this.register_id = response.data.register_id
-
-                           
-                            await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                        // } else if (result.isDenied) {
-                        //     Swal.fire('Changes are not saved', '', 'info')
+                        let fd = await {
+                            "email"                 : this.user.item.email,
+                            "name"                  : this.user.item.name,
+                            "lastname"              : this.user.item.lastname,
+                            "gender"                : this.user.item.gender,
+                            "age"                   : this.user.item.age,
+                            "phone"                 : this.user.item.phone,
+                            "phone_other"           : this.user.item.phone_other,
+                            "address"               : all_address,     
+                            "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
+                            // "province_th"           : this.user.province !== null ? this.user.province.value || this.user.province : null,
+                            "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
+                            // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
+                            "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
+                            // "district_th"           : this.user.district !== null ? this.user.district.value || this.user.district : null,
+                            "postcode"              : this.user.item.postcode,
+                            "check_policy"          : this.step_one,
                         }
-                    })
 
-                    this.e1 = await 3
+                        await Swal.fire({
+                            title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
+                            html:
+                                '<span>Email : </span> <b>' + this.user.item.email + '</b><br><br>' +
+                                '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br><br>' +
+                                '<span>นามสกุล : </span> <b>' + this.user.item.lastname +'</b>',
+                            showDenyButton: false,
+                            showCancelButton: true,
+                            confirmButtonText: 'บันทึก',
+                            cancelButtonText: `ยกเลิก`,
+                        }).then(async (result)  => {
+                            if (result.isConfirmed) {
+                                let path = await `/api/user/register`
+                                let response = await axios.post(`${path}`, fd)
+                                this.register_id = response.data.register_id
+                                await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
+                            // } else if (result.isDenied) {
+                            //     Swal.fire('Changes are not saved', '', 'info')
+                            }
+                        })
+
+                        this.e1 = await 3
+                    }
 
                 } catch (error) {
                     console.log(error);
