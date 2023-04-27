@@ -93,8 +93,14 @@
               <v-col cols="4">
                 <v-text-field
                   v-model="data.start_date"
-                  label="วันที่เริ่มต้น"
                   append-icon="mdi-calendar"
+                  class="input-gray"
+                  readonly
+                  solo
+                ></v-text-field>
+                <v-text-field
+                  v-model="data.start_time"
+                  append-icon="mdi-clock-time-four-outline"
                   class="input-gray"
                   readonly
                   solo
@@ -112,6 +118,13 @@
                   class="input-gray"
                   solo
                         
+                ></v-text-field>
+                <v-text-field
+                  v-model="data.end_time"
+                  append-icon="mdi-clock-time-four-outline"
+                  class="input-gray"
+                  readonly
+                  solo
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -492,56 +505,16 @@ export default {
         this.overlayImg = await !this.overlayImg 
       },
 
-    // async urlFiles(url,file_name, file_type){
-
-    //   let path = null
-
-    //   if(file_type != 'application/pdf'){
-    //     path = await `/api/get/${url}?filename=${file_name}`
-    //   }else{
-    //     console.log('=======');
-    //     path = await `/api/get/pdf/${url}?filename=${file_name}`
-    //   }
-
-    //   let res = await axios.get(`${path}`)
-
-    //   this.url = await res.data
-    //   console.log(path);
-
-    //   if(file_type == 'application/pdf'){
-
-    //     var fileURL = await window.URL.createObjectURL(new Blob([this.url]));
-    //     // var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
-    //     var fileLink = await document.createElement('a');
-        
-    //     fileLink.href = await fileURL;
-
-    //     let filename = await file_name;
-      
-    //     await fileLink.setAttribute('download', filename);
-
-    //     await document.body.appendChild(fileLink);
-
-    //     await  fileLink.click();
-         
-    //     // await window.open(fileLink, "_blank");
-
-    //   }else{
-    //     this.overlayImg = await !this.overlayImg 
-    //   }
-    // },
     async getComplainDetail(){
       let path              = await `/api/user/get/complainDetail`
       let response          =  await axios.get(`${path}/`+ this.$route.params.id)
       this.data             = await response.data.data[0]
       this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
       this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
-      this.data.end_date  = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
+      this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
+      this.data.start_time  = await moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") : ''; 
+      this.data.end_time    = await moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") : ''; 
       this.files            = await response.data.data_files
-
-
-      console.log(this.files);
-      
       await setTimeout(() => (this.$refs.loader.overlay = false), 300);
     },
     async getComplainStep(){

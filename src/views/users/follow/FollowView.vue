@@ -2,6 +2,7 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
+
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
@@ -27,9 +28,14 @@
             <template v-slot:[`item.call_no`]="{ item }">
                 {{ item.call_no }}
             </template>
-            <template v-slot:[`item.create_date`]="{ item }">
+            <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
+            <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
+            <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
+            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template>
+            <!-- <template v-slot:[`item.create_date`]="{ item }">
+              
               {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-            </template>
+            </template> -->
             <template v-slot:[`item.status_call`]="{ item }">
                 <v-chip
                 :color="getColor(item.status_call)"
@@ -74,7 +80,10 @@
             sortable: false,
             value: 'topic',
           },
-          { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
+          { text: 'วันที่เริ่มต้น', value: 'start_date' },
+          { text: 'วันที่สิ้นสุด', value: 'end_date' },
+          { text: 'ตั้งเเต่เวลา', value: 'start_time' },
+          { text: 'ถึงเวลา', value: 'end_time' },
           { text: 'สถานะ Call', value: 'status_call' },
           {
             text: 'รายละเอียดเรื่องร้องเรียน',
@@ -118,15 +127,32 @@
         else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
         else return ''
       },
+      timeFormat:function(d){
+
+        let time =  moment(d).format('HH:mm') == '00:00' ? '' : moment(d).format('HH:mm') 
+       
+          return time;
+        
+       
+      },
+      getThaiDate(item){
+
+        if (item){
+          var d = new Date(item);
+          return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+        }else{
+          return "";
+        }            
+      },
       formattedDate(create_date) {
-        return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
+
+        return moment(create_date).add(543, 'year').format("DD/MM/YYYY");
       },
       async getListComplain(){
         let path = await `/api/user/get/listFollow`
         let response =  await axios.get(`${path}/`+ this.check_roles.id)
         this.datas = await response.data.data
         this.loading = await false
-        console.log(response);
       },
     },
   }

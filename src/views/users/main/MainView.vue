@@ -140,6 +140,8 @@ import StepTree from '@/components/step/stepTree.vue'
         },
 
         async checkStepTwo(){
+
+
             if(this.$refs.formRegister.validate()){
 
                 this.user = this.$refs.user
@@ -217,6 +219,12 @@ import StepTree from '@/components/step/stepTree.vue'
                 // this.e1 = 4
                 this.employee = await this.$refs.employee
                 try {
+
+                    let end_date =  `${moment(this.employee.end_date).format('YYYY-MM-DD')}`
+                    let end_time = this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '' 
+                    let start_time = this.employee.complain_start_time !== null ? `${this.employee.complain_start_time}` : '' 
+                
+                    console.log(this.employee.end_date);
                     let fd = await {
                         "name"              : this.employee.name,
                         "lastname"          : this.employee.lastname,
@@ -225,8 +233,10 @@ import StepTree from '@/components/step/stepTree.vue'
                         "description_face"  : this.employee.description_face,
                         "topic"             : this.employee.complain_topic,
                         "location"          : this.employee.complain_location,
-                        "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
-                        "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
+                        // "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
+                        // "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
+                        "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD') + ' ' + start_time}`,
+                        "end_date"          : `${end_date + ' ' + end_time}`,
                         "detail"            : this.employee.complain_detail,
                         "create_by"         : this.register_id,
                         "modified_by"       : this.register_id,

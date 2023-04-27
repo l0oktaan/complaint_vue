@@ -110,8 +110,8 @@
 
             <v-row>
                 <v-col>
-                    <p class="style-label"><span>*</span>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </p>
-                    <v-dialog
+                    <p class="style-label mb-3"><span>*</span>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </p>
+                    <!-- <v-dialog
                         ref="dialog_start"
                         v-model="modal"
                         :return-value.sync="start_date"
@@ -153,12 +153,108 @@
                             OK
                         </v-btn>
                         </v-date-picker>
-                    </v-dialog>
+                    </v-dialog> -->
+                    
+                    <v-menu
+                        ref="start_date"
+                        v-model="menu_start_date"
+                        :close-on-content-click="false"
+                        :return-value.sync="start_date"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"    
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field                                                        
+                                v-model="complain_start_date"
+                                label="ตั้งเเต่วันที่"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                dense
+                                outlined
+                                clearable
+                                prepend-icon="mdi-calendar"
+                                @click:clear="start_date=null"
+                            ></v-text-field>
+                        </template>
+
+                        <v-date-picker
+                            v-model="start_date"
+                            no-title
+                            scrollable
+                            locale="th-TH"
+                            >
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="menu_start_date = false"
+                            >
+                                ยกเลิก
+                            </v-btn>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.start_date.save(start_date)"
+                            >
+                                ตกลง
+                            </v-btn>
+                        </v-date-picker>
+                    </v-menu>
+
+                    <v-menu
+                        ref="start_time"
+                        v-model="menu_start_time"
+                        :close-on-content-click="false"
+                        :return-value.sync="complain_start_time"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                        v-model="complain_start_time"
+                        label="ตั้งเเต่เวลา"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        outlined
+                        clearable
+                        prepend-icon="mdi-clock-time-four-outline"
+                        @click:clear="complain_start_time=null"
+                        ></v-text-field>
+                    </template>
+                    <v-time-picker
+                        v-model="complain_start_time"
+                        format="24hr"
+                        full-width
+                        @click:minute="$refs.start_time.save(complain_start_time)"
+                    
+                    >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                    >
+                        ยกเลิก
+                    </v-btn>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(time)"
+                    >
+                        ตกลง
+                    </v-btn>
+                    </v-time-picker>
+                    </v-menu>
                 </v-col>
                 
                 <v-col>
-                    <p class="style-label"><span>*</span>ถึง : </p>
-                    <v-dialog
+                    <p class="style-label mb-3"><span>*</span>ถึง : </p>
+                    <!-- <v-dialog
                         ref="dialog_end"
                         v-model="modal2"
                         :return-value.sync="end_date"
@@ -199,7 +295,103 @@
                             OK
                         </v-btn>
                         </v-date-picker>
-                    </v-dialog>
+                    </v-dialog> -->
+
+                    <v-menu
+                        ref="end_date"
+                        v-model="menu_end_date"
+                        :close-on-content-click="false"
+                        :return-value.sync="end_date"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"    
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field                                                        
+                                v-model="complain_end_date"
+                                label="ตั้งเเต่วันที่"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                dense
+                                outlined
+                                clearable
+                                prepend-icon="mdi-calendar"
+                                @click:clear="end_date=null"
+                            ></v-text-field>
+                        </template>
+
+                        <v-date-picker
+                            v-model="end_date"
+                            no-title
+                            scrollable
+                            locale="th-TH"
+                            >
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="menu_end_date = false"
+                            >
+                                ยกเลิก
+                            </v-btn>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.end_date.save(end_date)"
+                            >
+                                ตกลง
+                            </v-btn>
+                        </v-date-picker>
+                    </v-menu>
+
+                    <v-menu
+                        ref="end_time"
+                        v-model="menu_end_time"
+                        :close-on-content-click="false"
+                        :return-value.sync="complain_end_time"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                        v-model="complain_end_time"
+                        label="ถึงเวลา"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        dense
+                        outlined
+                        clearable
+                        prepend-icon="mdi-clock-time-four-outline"
+                        @click:clear="complain_end_time=null"
+                        ></v-text-field>
+                    </template>
+                    <v-time-picker
+                        v-model="complain_end_time"
+                        format="24hr"
+                        full-width
+                        @click:minute="$refs.end_time.save(complain_end_time)"
+                    
+                    >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                    >
+                        ยกเลิก
+                    </v-btn>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(time)"
+                    >
+                        ตกลง
+                    </v-btn>
+                    </v-time-picker>
+                    </v-menu>
                 </v-col>
             </v-row>
 
@@ -271,8 +463,15 @@ export default {
         description_face: '',
         complain_topic: '',
         complain_location: '',
+        // startDate : new Date().toISOString().substr(0, 10),
         complain_start_date: null,
         complain_end_date: null,
+        complain_start_time: null,
+        complain_end_time: null,
+        menu_start_date: false,
+        menu_end_date: false,
+        menu_start_time: false,
+        menu_end_time: false,
         complain_detail: '',
         selectDivision: [],
         currFiles: [],
@@ -333,7 +532,7 @@ export default {
         
       }),
 
-      created(){
+      mounted(){
         this.getEndThaiDate()
     },
 
@@ -342,7 +541,10 @@ export default {
             this.getEndThaiDate()
         },
         end_date(){
-            this.getEndThaiDate()
+
+           this.getEndThaiDate()
+
+            
         },
         files(val) {
             this.previousFiles = val
@@ -356,6 +558,8 @@ export default {
                 var d_end = new Date(this.end_date);
                 this.complain_start_date = d_start.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
                 this.complain_end_date = d_end.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+                // this.complain_end_date = this.end_date == null ? null : d_end.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+
             }
         },
         remove (index) {
