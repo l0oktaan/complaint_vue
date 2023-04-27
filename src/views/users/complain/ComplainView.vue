@@ -76,6 +76,7 @@ export default {
           }).then( function(){
           });
           this.isActive =  await true
+          await this.$router.push({name:'complain-follow'})
         } catch (error) {
           console.log(error);
         }

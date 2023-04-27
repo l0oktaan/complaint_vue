@@ -434,11 +434,10 @@
                         :accept="acceptTypes"
                         :rules="fileRules"
                         outlined
-                        placeholder="Select your files"
                         multiple 
                         dense
                         clearable 
-                        label="Add files"
+                        label="เลือกไฟล์"
                         single-line
                         @change="fileAdded">
                         <template v-slot:selection="{ text, index }">
@@ -503,10 +502,10 @@ export default {
         fileRules: [
             value => {
             if (!value || value.length === 0) {
-                return "Please select at least one file";
+                return "กรุณ่เลือกไฟล์";
             }
             if (value.length > 5) {
-                return "Maximum 5 files allowed";
+                return "อัพโหลดไฟล์ได้ไม้เกิน 5 ไฟล์";
             }
             const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
             for (let i = 0; i < value.length; i++) {
