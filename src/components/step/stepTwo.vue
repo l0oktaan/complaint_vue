@@ -117,6 +117,7 @@
                 <p class="style-label">เบอร์ติดต่ออื่น ๆ :</p>
                 <v-text-field
                     v-model="item.phone_other"
+
                     label="เบอร์ติดต่ออื่น ๆ"
                     :maxlength="10"
                     dense
@@ -262,9 +263,7 @@
             // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
          
         }),
-        // created(){
-        //   this.getProvince()
-        // },
+      
         mounted(){
           
           
@@ -321,32 +320,26 @@
         methods: {
             async checkMail(){
                 try {
-                    
-                    let fd_mail = await { "email": this.item.email}
-                    
+                                 
                     let path = await `/api/user/checkMail`
-                    let response = await axios.post(`${path}`, fd_mail)
+                    await axios.post(`${path}`, { "email": this.item.email})
 
-                    if(response.data.status == 200){
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'มีอีเมลนี่ในระบบเเล้ว',
-                        })
-                        
-                        this.item.email = await ''
-                    }
-                
+                    await Swal.fire('กรุณากรอกอีเมล')
+
                 } catch (error) {
-                    console.log('checkmail', error);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'มีอีเมลนี่ในระบบเเล้ว',
+                    })
                 }
             },
             async getProvince(){
                 let path = await `/api/get/province`
                 let response = await axios.get(`${path}`)
 
-                this.selectDistrict = [];
-                this.selectSubDistrict = [];
+                this.selectDistrict = await [];
+                this.selectSubDistrict = await [];
               
                 await response.data.data.forEach(async item => {
                     await this.selectProvince.push({'id':item.id, 'value':item.name_th})

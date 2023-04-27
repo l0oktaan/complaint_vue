@@ -143,19 +143,13 @@ import StepTree from '@/components/step/stepTree.vue'
             if(this.$refs.formRegister.validate()){
                 try {
                     this.user = await this.$refs.user
-
-                    let fd_mail = await { "email": this.user.item.email}
-                        
+                    
                     let path = await `/api/user/checkMail`
-                    let response = await axios.post(`${path}`, fd_mail)
+                    let response_mail = await axios.post(`${path}`, { "email": this.user.item.email})
 
-                    if(response.data.status == 200){
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'มีอีเมลนี่ในระบบเเล้ว',
-                        })
-                    }else{
+                    console.log(response_mail);
+
+                    if(response_mail.data.status == await 200){
 
                         let address = await this.user.item.address !== undefined ? this.user.item.address : ''
 
@@ -187,7 +181,7 @@ import StepTree from '@/components/step/stepTree.vue'
                             "postcode"              : this.user.item.postcode,
                             "check_policy"          : this.step_one,
                         }
-
+                                    
                         await Swal.fire({
                             title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
                             html:
@@ -200,20 +194,27 @@ import StepTree from '@/components/step/stepTree.vue'
                             cancelButtonText: `ยกเลิก`,
                         }).then(async (result)  => {
                             if (result.isConfirmed) {
-                                let path = await `/api/user/register`
-                                let response = await axios.post(`${path}`, fd)
-                                this.register_id = response.data.register_id
+                                let path_regis = await `/api/user/register`
+                                let response = await axios.post(`${path_regis}`, fd)
+                                this.register_id = await response.data.register_id
                                 await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                            // } else if (result.isDenied) {
-                            //     Swal.fire('Changes are not saved', '', 'info')
+                            } else if (result.isDenied) {
+                                Swal.fire('Changes are not saved', '', 'info')
                             }
                         })
 
                         this.e1 = await 3
+                  
                     }
 
+            
+
                 } catch (error) {
-                    console.log(error);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'มีอีเมลนี่ในระบบเเล้ว',
+                    })
                 }
 
             }
@@ -313,6 +314,8 @@ import StepTree from '@/components/step/stepTree.vue'
                     }).then(async (result)  => {
                     /* Read more about isConfirmed, isDenied below */
                         if (result.isConfirmed) {
+
+                            console.log(result.isConfirmed);
 
                             let path = await `/api/user/register`
                             let response = await axios.post(`${path}`, fd)
