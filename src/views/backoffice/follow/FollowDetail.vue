@@ -2,6 +2,8 @@
   <div class="complain-detail"> 
     <loaderView ref="loader"/>
     <BreadcrumbsView :items="item"/>
+
+
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -82,6 +84,15 @@
                 readonly
                 solo
               ></v-text-field>
+              
+              <v-text-field
+                v-model="data.start_time"
+                append-icon="mdi-clock-time-four-outline"
+                class="input-gray"
+                readonly
+                solo
+                hide-details="auto"
+              ></v-text-field>
             </v-col>
             <v-col cols="1">
               <v-subheader>ถึง : </v-subheader>
@@ -95,6 +106,15 @@
                 class="input-gray"
                 solo
                       
+              ></v-text-field>
+
+              <v-text-field
+                v-model="data.end_time"
+                append-icon="mdi-clock-time-four-outline"
+                class="input-gray"
+                readonly
+                solo
+                hide-details="auto"
               ></v-text-field>
             </v-col>
           </v-row>

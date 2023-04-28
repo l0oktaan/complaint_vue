@@ -24,7 +24,6 @@
             </v-tab>
 
         </v-tabs>
-  
         <v-tabs-items v-model="tab">
           <v-tab-item :value="'tab-1'">   
             <v-card flat>
@@ -115,6 +114,15 @@
                             class="input-gray"
                             readonly
                             solo
+                          ></v-text-field> 
+
+                          <v-text-field
+                            v-model="data.start_time"
+                            append-icon="mdi-clock-time-four-outline"
+                            class="input-gray"
+                            readonly
+                            solo
+                            hide-details="auto"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="1">
@@ -129,6 +137,14 @@
                             class="input-gray"
                             solo
                                   
+                          ></v-text-field>
+                          <v-text-field
+                            v-model="data.end_time"
+                            append-icon="mdi-clock-time-four-outline"
+                            class="input-gray"
+                            readonly
+                            solo
+                            hide-details="auto"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -168,10 +184,13 @@
                           >
 
                               <v-list-item-content class="text-left">
-                              <v-list-item-title>{{ file.file_name }}</v-list-item-title>
+                              <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                               </v-list-item-content>
-                              <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div>
-                          </v-list-item>
+
+                              <!-- <div class="btn-files" @click="urlFiles('UrlFilesComplain',file.file_name, file.file_type)"><i class="fa-solid fa-file"></i></div> -->
+                              <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
+                              <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
+                            </v-list-item>
                           
                           </v-list>
                       </v-col>
@@ -438,47 +457,80 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
           this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
           this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
           this.data.end_date  = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
+          this.data.start_time  = await moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") : ''; 
+          this.data.end_time    = await moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") : ''; 
           this.files            = await response.data.data_files
 
           await this.getRegisterDetail()
           await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         },
 
-        async urlFiles(url,file_name, file_type){
+        async urlPdfFiles(url,file_name){
+          axios({
+              url: `/api/get/pdf/${url}`,
+              params: {"filename":file_name},
+              method: 'GET',
+              responseType: 'blob',
+          }).then((response) => {
+                var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+                var fileLink = document.createElement('a');
 
-          let path = null
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', file_name);
+                document.body.appendChild(fileLink);
 
-          if(file_type != 'application/pdf'){
-            path = await `/api/get/${url}?filename=${file_name}`
-          }else{
-            console.log('=======');
-            path = await `/api/get/pdf/${url}?filename=${file_name}`
-          }
+                window.open(fileLink, "_blank");
 
+              //  fileLink.click();
+          });
+        },
+        async urlFiles(url,file_name){
+
+        
+          let path = await `/api/get/${url}?filename=${file_name}`
+          
           let res = await axios.get(`${path}`)
 
           this.url = await res.data
-          console.log(this.url);
 
-          if(file_type == 'application/pdf'){
-
-            var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
-            var fileLink = await document.createElement('a');
-            
-            fileLink.href = await fileURL;
-
-            let filename = await file_name;
-
-            await fileLink.setAttribute('download', filename);
-
-            await document.body.appendChild(fileLink);
-            
-            await window.open(fileLink, "_blank");
-
-          }else{
-            this.overlayImg = await !this.overlayImg 
-          }
+          this.overlayImg = await !this.overlayImg 
         },
+
+        // async urlFiles(url,file_name, file_type){
+
+        //   let path = null
+
+        //   if(file_type != 'application/pdf'){
+        //     path = await `/api/get/${url}?filename=${file_name}`
+        //   }else{
+        //     console.log('=======');
+        //     path = await `/api/get/pdf/${url}?filename=${file_name}`
+        //   }
+
+        //   let res = await axios.get(`${path}`)
+
+        //   this.url = await res.data
+        //   console.log(this.url);
+
+        //   if(file_type == 'application/pdf'){
+
+        //     var fileURL = await window.URL.createObjectURL(new Blob([this.url], { type: 'application/pdf' }));
+        //     var fileLink = await document.createElement('a');
+            
+        //     fileLink.href = await fileURL;
+
+        //     let filename = await file_name;
+
+        //     await fileLink.setAttribute('download', filename);
+
+        //     await document.body.appendChild(fileLink);
+            
+        //     await window.open(fileLink, "_blank");
+
+        //   }else{
+        //     this.overlayImg = await !this.overlayImg 
+        //   }
+        // },
         async getRegisterDetail(){
           let path              = await `/api/get/registerDetail`
           let response          = await axios.get(`${path}/` + this.data.register_id)
