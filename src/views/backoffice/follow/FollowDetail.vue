@@ -172,6 +172,14 @@
                 >
                 <i class="fa-solid fa-file"></i>
               </v-btn>
+                <!-- <v-btn
+                  color="primary"
+                  dark
+                  icon
+                  @click="dailogfiles('complain_step', item)"
+                >
+                <i class="fa-solid fa-file"></i>
+              </v-btn> -->
               </div>
              
             </template>
@@ -381,13 +389,13 @@
       </v-card>
     </v-dialog> 
 
-      <v-overlay v-model="overlay_edit_status">
+      <!-- <v-overlay v-model="overlay_edit_status">
         <v-progress-circular
           :width="3"
           color="blue"
           indeterminate
       ></v-progress-circular>
-      </v-overlay>
+      </v-overlay> -->
 
       <v-dialog
         v-model="dialog_edit_status"
@@ -457,7 +465,7 @@
                     </v-col>
                   </v-row>
                 
-                  <v-row v-if="show_detail_status">
+                  <v-row v-if="status_call == 2">
                     <v-col cols="3">
                       <v-subheader>ประเภทการร้องเรียน</v-subheader>
                     </v-col>
@@ -480,7 +488,7 @@
       
                   </v-row>
               
-                  <v-card v-if="check_corrupt && show_detail_status" class="mx-auto">
+                  <v-card v-if="check_corrupt" class="mx-auto">
 
                     <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
                     <v-card-text class="pt-5">
@@ -508,7 +516,7 @@
                             <v-chip         
                             v-for="(corrupt_file,index) in corrupt_files" 
                             :key="index"
-                            close @click:close="removeCorrupt(index)"
+                            close @click:close="removeCorruptFiles(corrupt_file)"
                             @click="showFile(corrupt_file)"
                             >
                               {{corrupt_file.file_original}}
@@ -555,57 +563,22 @@
     </v-dialog>
 
     <!-- เเนบไฟล์ -->
-    <v-dialog v-model="dialog_files_step" max-width="500">
-      <v-toolbar color="#167dc2" dark>
-        <v-toolbar-title>ไฟล์เเนบ</v-toolbar-title>
-      </v-toolbar>
+    <DialogsFiles  
+      ref="dialog_files_step"
+      title="ไฟล์เเนบ" 
+      :files="step_files"
+      path_name="UrlFilesComplainStep"
+    />
 
-      <v-list  subheader two-line>
-        <div v-if="step_files.length">
-          <v-list-item
-              v-for="step_file in step_files"
-              :key="step_file.id"
-            >
-            <v-list-item-content class="text-left">
-              <v-list-item-title >{{ step_file.file_original }}</v-list-item-title>
-            </v-list-item-content>
+    <!-- เเนบไฟล์การทุจริต -->
+    <DialogsFiles
+      ref="dialog_files_corrupt"
+      title="ไฟล์เเนบการทุจริต" 
+      :files="corrupt_files"
+      path_name="UrlFilesCorrupt"
+    />
 
-            <v-list-item-action>
-              <div class="btn-files" v-if="step_file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplainStep',step_file.file_name)"><i class="fa-solid fa-file"></i></div>
-              <div class="btn-files" v-else @click="urlFiles('UrlFilesComplainStep',step_file.file_name)"><i class="fa-solid fa-image"></i></div>
-            </v-list-item-action>
-          </v-list-item>
-        </div>
-        <p v-else>ไม่มีข้อมูล</p>
-      </v-list> 
-    </v-dialog>
-
-  <!-- เเนบไฟล์การทุจริต -->
-  <v-dialog v-model="dialog_files_corrupt" max-width="500">
-    <v-toolbar color="#167dc2" dark>
-      <v-toolbar-title>ไฟล์เเนบการทุจริต</v-toolbar-title>
-    </v-toolbar>
-
-    <v-list subheader two-line
-    >
-      <v-list-item
-        v-for="corrupt_file in corrupt_files"
-        :key="corrupt_file.id"
-      >
-      
-        <v-list-item-content class="text-left">
-          <v-list-item-title >{{ corrupt_file.file_original }}</v-list-item-title>
-        </v-list-item-content>
-
-        <v-list-item-action>
-          <div class="btn-files" v-if="corrupt_file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesCorrupt',corrupt_file.file_name)"><i class="fa-solid fa-file"></i></div>
-          <div class="btn-files" v-else @click="urlFiles('UrlFilesCorrupt',corrupt_file.file_name)"><i class="fa-solid fa-image"></i></div>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-  </v-dialog>
-
-    <!-- โชว์รูป -->
+    <!-- โชว์รูป Complain -->
     <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
       <img :src="url" />
       <v-btn
@@ -630,13 +603,14 @@ import loaderView from '@/components/loaderView.vue';
 import BreadcrumbsView from '@/components/breadcrumbsView.vue';
 import InputFiles from '@/components/inputFiles.vue';
 import DatePickers from '@/components/datePickers.vue';
+import DialogsFiles from '@/components/step/dialogsFiles.vue';
 
 
 export default {
-  components: { loaderView, BreadcrumbsView, InputFiles, DatePickers},
+  components: { loaderView, BreadcrumbsView, InputFiles, DatePickers, DialogsFiles},
   data: () => ({
     chips: ['Programming', 'Playing video games', 'Watching movies', 'Sleeping'],
-      items: ['Streaming', 'Eating'],
+    items: ['Streaming', 'Eating'],
     item: [
       {
         text: 'รายการที่ต้องดำเนินการ',
@@ -698,6 +672,7 @@ export default {
     corrupt_id: null,
     corrupt_files: {},
     get_corrupt_date: null,
+    // get_new_dialog: false,
   }),
   mounted() {
     this.getComplainDetail()
@@ -709,11 +684,21 @@ export default {
     },
   },
   methods: {
+    dailogfiles(typeFile, v){
+      if(typeFile == 'complain_step'){
+        this.$refs.dialog_files_step.open()
+        this.getComplainStepFiles(v)
+      }else if(typeFile == 'corrupt'){
+        this.$refs.dialog_files_corrupt.open()
+        // this.dialog_files_corrupt = true
+        this.getCorruptFiles(v)
+      }
+    },
 
     change_corrupt_date(date){
       this.get_corrupt_date = date
     },
-  
+
     formattedDate(create_date) {
       return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
     },
@@ -736,6 +721,54 @@ export default {
       else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
       else return ''
     },
+    async removeCorruptFiles (v) {
+
+      try {
+        await Swal.fire({
+          title: 'คำเตือน',
+          text: "คุณต้องการลบไฟล์เเนบใช่หรือไม่ ?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'ใช่',
+          cancelButtonText: 'ยกเลิก',
+          }).then(async (result) => {
+              if (result.isConfirmed) {              
+                  const payload = {
+                      id : v.id,
+                      admin_id : this.check_roles.id,
+                      check_remove : true,
+                  }
+
+                  console.log(payload);
+
+                  let path =  await `/api/update/deleteCorruptFiles`
+                  let response = await axios.post(`${path}`, payload)
+
+                  console.log(response);
+                  
+                  if(response){
+                      await Swal.fire({
+                          icon: 'success',
+                          text: 'ลบข้อมูลสำเร็จ',
+                      })
+                  } 
+
+                 await this.getCorruptFiles(v.corrupt_id)
+              }
+          })
+      } catch (error) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'บันทึกไม่สำเร็จ',
+            text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
+        })
+      }
+      
+        // console.log(index);
+        // this.corrupt_files.splice(index, 1)
+    },
     async close(){
       this.dialog_edit_status = await false
       this.editedIndex = await -1
@@ -748,41 +781,43 @@ export default {
 
     },
     async dailogStatusEdit(v){
-
-      this.dialog_edit_status = await true
-      await setTimeout(() => (this.overlay_edit_status = true), 500);
+      console.log(v);
       this.editedIndex = await 1
+      this.dialog_edit_status = await true
       this.status_detail = await v.detail
+      await this.getComplainStepFiles(v)
       this.status_call = await v.status_call
       this.complain_step_id = await v.id
-      this.corrupt_id       = await v.corrupt_id
+
       this.check_corrupt = await v.check_corrupt == 1 ? true : false
 
-      await this.getComplainStepFiles(v)
-
-      if (this.check_corrupt ) {
-          this.show_detail_status = await true
-          this.corrupt.reference =  await v.reference_code
-          this.corrupt.detail =  await v.corrupt_detail
-          this.corrupt.date =  await v.corrupt_date
-            console.log(this.corrupt.date);
-          await this.getCorruptFiles(v)
-
-          this.overlay_edit_status = await false
+      if(this.check_corrupt){
+        this.corrupt_id       = await v.corrupt_id
+        this.corrupt.reference =  await v.reference_code
+        this.corrupt.detail =  await v.corrupt_detail
+        this.corrupt.date =  await v.corrupt_date
+        await this.getCorruptFiles(v)
+        this.corrupt.detail =  await v.corrupt_detail
 
       }
+
+
+
+      // if (this.check_corrupt ) {
+      //     this.show_detail_status = await true
+      //     this.corrupt.reference =  await v.reference_code
+      //     this.corrupt.detail =  await v.corrupt_detail
+      //     this.corrupt.date =  await v.corrupt_date
+      //       console.log(this.corrupt.date);
+      //     await this.getCorruptFiles(v)
+
+      //     this.overlay_edit_status = await false
+
+      // }
 
     
     },
-    dailogfiles(typeFile, v){
-      if(typeFile == 'complain_step'){
-        this.dialog_files_step = true
-        this.getComplainStepFiles(v)
-      }else if(typeFile == 'corrupt'){
-        this.dialog_files_corrupt = true
-        this.getCorruptFiles(v)
-      }
-    },
+   
     showDetailStatus( v){
       
         if(v != 2){
@@ -819,9 +854,12 @@ export default {
 
     },
     async getCorruptFiles(v){
+      console.log(v);
       let path              = await `/api/backoffice/get/CorruptFiles`
-      let response          = await axios.get(`${path}/`+ v.id)
+      let response          = await axios.get(`${path}/`+ v.corrupt_id)
       this.corrupt_files    = await response.data.data
+
+      console.log(this.corrupt_files );
 
 
     },
@@ -920,7 +958,7 @@ export default {
             }
 
             if(this.check_corrupt){
-              await this.saveComplainCorrupt(this.complain_step_id)
+              await this.saveComplainCorrupt(response.data.complain_step_id)
             }
           }
           await Swal.fire({
@@ -940,7 +978,6 @@ export default {
         }
       } 
     },
-
     async editComplainStep(){
       if(this.$refs.formEdit.validate()){
         try {
@@ -1026,7 +1063,6 @@ export default {
         }
       } 
     },
-
     async insertFile(fd, path_api, file_name, file, path_upload){
       try {
         let response = await axios.post(`${path_api}`, fd )
@@ -1038,7 +1074,6 @@ export default {
       }
 
     },
-
     async myUpload(file_name, files, path_upload){
       try {
 
@@ -1055,7 +1090,6 @@ export default {
           console.log(error);
       }
     },
-
     async saveComplainCorrupt(complain_step_id, corrupt_id){
 
       let fd_corrupt = await {
@@ -1070,17 +1104,13 @@ export default {
 
       let path = null
 
-      if(this.corrupt_id != null){
+      if(corrupt_id != null){
         path        = await `/api/backoffice/edit/complainCorrupt`
       }else{
         path        = await `/api/backoffice/create/complainCorrupt`
       }
    
-
-        let response    = await axios.post(`${path}`, fd_corrupt)
-
-        
-        console.log(response);
+      let response    = await axios.post(`${path}`, fd_corrupt)
 
       if(response){
 
@@ -1090,7 +1120,7 @@ export default {
 
           let file = await this.$refs.corrupt_file.files[i]
 
-          let complain_corrupt_id = await response.data.complain_corrupt_id
+          let corrupt_id = await response.data.corrupt_id
 
           const arr_file = await file.name.split(".")
 
@@ -1098,18 +1128,19 @@ export default {
             
           if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-            file_name = await 'imgcid' + complain_corrupt_id + '_' + number + '.' +arr_file[1] 
+            file_name = await 'imgcid' + corrupt_id + '_' + number + '.' +arr_file[1] 
 
           }else if(file.type === 'application/pdf'){
 
-            file_name = await 'pdfcid' + complain_corrupt_id + '_' + number + '.' +arr_file[1] 
+            file_name = await 'pdfcid' + corrupt_id + '_' + number + '.' +arr_file[1] 
           }
 
           let fd_upload = await {
-            "complain_step_id"    : complain_step_id,
+            "corrupt_id"          : corrupt_id,
             "file_original"       : file.name,
             "file_name"           : file_name,
             "file_type"           : file.type,
+            "check_remove"        : false,
             "admin_id"            : this.check_roles.id,
           }
 
@@ -1122,9 +1153,7 @@ export default {
       } 
 
     },
-
   }
-
 }
 </script>
 
