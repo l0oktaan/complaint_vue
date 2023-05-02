@@ -26,6 +26,8 @@ import PersonnelFormEdit from '../views/backoffice/personnel/UserForm.vue'
 import BackofficeFollowView from '../views/backoffice/follow/FollowView.vue'
 import BackofficeFollowDetail from '../views/backoffice/follow/FollowDetail.vue'
 import ReportView from '../views/backoffice/report/ReportView.vue'
+import RegisterComplain from '../views/backoffice/register/RegisterViews.vue'
+import Registerform from '../views/backoffice/register/RegisterForm.vue'
 
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
@@ -44,14 +46,14 @@ const routes = [
     path: '/backoffice/login',
     name: 'login',
     component: LoginView,
-    beforeEnter (to, from, next) {
-      store.dispatch('checkLogin')
-      if (store.state.user) {         
-        next({ name: 'about' })
-      } else {
-          next()
-      }
-    },
+    // beforeEnter (to, from, next) {
+    //   store.dispatch('checkLogin')
+    //   if (store.state.user) {         
+    //     next({ name: 'about' })
+    //   } else {
+    //       next()
+    //   }
+    // },
   },
 
   // user
@@ -109,10 +111,9 @@ const routes = [
           next()          
       } else {
         if(store.state.user == 'user'){
+          console.log('========>','user');
           next('/user/login')
-        }else{
-          next('/backoffce/login')
-        } 
+        }
       }
     },
 
@@ -183,6 +184,18 @@ const routes = [
         name: 'personnel_formedit',
         component: PersonnelFormEdit
       },
+      {
+        path: '/backoffice/register',
+        name: 'register_complain',
+        component: RegisterComplain
+      },
+      {
+        path: '/backoffice/register/form/:id',
+        name: 'register_form',
+        component: Registerform
+      },
+
+      
       {
         path: '/backoffice/report',
         name: 'report_view',

@@ -2,9 +2,19 @@
     <div class="page-layout">
         <v-app-bar app class="navbar">
             <v-container>
-                <v-row>
+                <v-row class="align-center">
+                    
+                    <v-avatar  size="56">
+                        <img 
+                            src="@/assets/images/logo-yellow.png"
+                            alt="logo"
+                        />
+                    </v-avatar>
+
+                  
                     <v-spacer />
                     <div class="head-menu">
+                     
                         <v-tooltip bottom color="#1976d2">
                             <template v-slot:activator="{ on, attrs }">
                                 <router-link class="mr-5" to="/" >

@@ -12,7 +12,7 @@
 
        
         <v-row justify="space-between" class="align-center">
-            <v-col cols="9" md="9">
+            <v-col>
                 <p class="style-label"><span>*</span>Email :</p>
                 <!-- <v-text-field
                     v-model="item.email"
@@ -24,6 +24,7 @@
                     single-line
                 ></v-text-field> -->
                 <v-text-field
+                    v-if="!check_page"
                     v-model="item.email"
                     :rules="emailRules"
                     single-line
@@ -31,11 +32,19 @@
                     required
                     dense
                     outlined
-                   
+                ></v-text-field>
+                <v-text-field
+                    v-else
+                    v-model="item.email"
+                    single-line
+                    required
+                    dense
+                    outlined
+                    :disabled="disabled == true"
                 ></v-text-field>
                 
             </v-col>
-             <v-col md="3">
+             <v-col md="3" v-if="!check_page">
                 <v-btn
                     depressed
                     color="primary"
@@ -44,6 +53,8 @@
                     ตรวจสอบอีเมล
                 </v-btn>
              </v-col>
+        </v-row>
+        <v-row>
             <v-col cols="6" md="5">
                 <p class="style-label"><span>*</span>ชื่อ :</p>
                 <v-text-field
@@ -68,6 +79,7 @@
                     single-line
                 ></v-text-field>
             </v-col>
+        
             <!-- <v-col cols="3" md="3">
                 <p class="style-label"><span>*</span>เพศ : </p>
                 <v-select
@@ -99,7 +111,9 @@
                     single-line
                 ></v-text-field>
             </v-col>
-       
+        </v-row>
+
+         <v-row>
             <v-col cols="6" md="6">
                 <p class="style-label"><span>*</span>เบอร์โทรศัพท์มือถือ : </p>
                 <v-text-field
@@ -125,7 +139,8 @@
                     single-line
                 ></v-text-field>
             </v-col>
-
+        </v-row>
+        <v-row>
             <v-col cols="12" md="12">
                 <p class="style-label">ที่อยู่ :</p>
                 <v-text-field
@@ -137,7 +152,8 @@
                     single-line
                 ></v-text-field>
             </v-col>
-
+        </v-row>
+        <v-row>
             <v-col cols="3" md="3">
                 <p class="style-label">จังหวัด</p>
                 <v-autocomplete
@@ -209,7 +225,7 @@
         //     }
         // },
         data: () => ({
-        
+            disabled: true,
             maxLength: 10,
             item: {},
             email: '',
@@ -264,17 +280,19 @@
          
         }),
       
+      
         mounted(){
           
+            // console.log(this.datas);
           
-            if (this.datas) {
+            // if (this.datas) {
 
-                this.item = this.datas
-                this.province = this.datas.province_id
-                this.district = this.datas.district_id
-                this.subdistrict = this.datas.subdistrict_id
+            //     this.item = this.datas
+            //     this.province = this.datas.province_id
+            //     this.district = this.datas.district_id
+            //     this.subdistrict = this.datas.subdistrict_id
             //     // this.item.postcode = this.datas.postcode
-            }
+            // }
             this.getProvince()
 
         },
@@ -316,6 +334,25 @@
                 this.item.postcode = v_subdistrict.postcode       
 
             },
+            datas(){
+                console.log(this.datas);
+                if(this.datas){
+                    
+                    this.item = this.datas
+
+                    if(this.datas.province_id){
+                        this.province = this.datas.province_id
+                    }
+                    if(this.datas.district_id){
+                        this.district = this.datas.district_id
+                    }
+                    if(this.datas.subdistrict_id){
+                        this.subdistrict = this.datas.subdistrict_id
+                        this.item.postcode  = this.datas.postcode
+                    }
+
+                }
+            }
         },
         methods: {
             async checkMail(){

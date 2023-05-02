@@ -177,7 +177,7 @@ export default {
 
                     await this.$router.push({name:"complain-follow"});
 
-                    Swal.fire({
+                    await Swal.fire({
                         position: 'center',
                         icon: 'success',
                         title: 'เข้าสู่ระบบสำเร็จ',
@@ -186,7 +186,7 @@ export default {
                     })
                 } catch (error) {
                     console.log('error', error);
-                    Swal.fire({
+                    await Swal.fire({
                         title: 'Error!',
                         text: 'รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
                         icon: 'error',

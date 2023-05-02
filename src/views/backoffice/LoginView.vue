@@ -70,12 +70,12 @@ export default {
       disabled: false,
       username: '',
       usernameRules: [
-        v => !!v || 'Username is required',
+        v => !!v || 'กรุณากรอกข้อมูล',
         // v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
       password: '',
       passwordRules: [
-        v => !!v || 'Password is required',
+        v => !!v || 'กรุณากรอกข้อมูล',
       ],
     }),
 
@@ -90,8 +90,8 @@ export default {
                     })
 
                     await this.$router.push({name:"receive"});
-                    this.disabled =  await false
-                    Swal.fire({
+                
+                    await Swal.fire({
                         position: 'center',
                         icon: 'success',
                         title: 'เข้าสู่ระบบสำเร็จ',
@@ -100,7 +100,7 @@ export default {
                     })
                 } catch (error) {
                     console.log('error', error);
-                    Swal.fire({
+                    await Swal.fire({
                         title: 'Error!',
                         text: 'รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
                         icon: 'error',
@@ -108,6 +108,7 @@ export default {
                     })
                    
                 } 
+                this.disabled =  await false
             }
         },
     },

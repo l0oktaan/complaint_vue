@@ -74,13 +74,13 @@ export default new Vuex.Store({
 
     },
 
-    async setName({ commit }, newValue) {
+    // async setName({ commit }, newValue) {
 
-      console.log(newValue, '=======');
+    //   console.log(newValue, '=======');
 
-      await commit("authUser", newValue);
+    //   await commit("authUser", newValue);
 
-    },
+    // },
 
 
 

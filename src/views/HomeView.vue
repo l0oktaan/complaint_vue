@@ -4,6 +4,12 @@
   
     <v-navigation-drawer app v-model="drawer" class="sidebar">
       <v-list-item >
+        <v-avatar  size="50">
+        <img 
+            src="@/assets/images/logo-yellow.png"
+            alt="logo"
+        />
+      </v-avatar>
           <v-list-item-title class="head">
             ระบบรับเรื่องร้องเรียนทุจริต
           </v-list-item-title>
@@ -152,6 +158,23 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
+
+        <router-link 
+          v-if="check_roles.roles === 'admin'"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/backoffice/register"
+        >
+          <v-list-item link>
+            <i class="fa-solid fa-user menu-icon"></i>
+            <!-- <i class="fa-solid fa-magnifying-glass menu-icon"></i> -->
+            <v-list-item-content>
+              <v-list-item-title class="menu-text">
+                รายการผู้ร้องเรียน
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
 
     </v-navigation-drawer>
@@ -172,11 +195,14 @@
         >
           <template v-slot:activator="{ on }">
             <v-btn icon x-large v-on="on">
-              <v-avatar color="brown" size="36">
+              <v-avatar  color="brown" size="36">
                 <i class="fa-solid fa-user"></i>
-                <!-- <span class="white--text text-h5">{{ check_roles.initials }}</span> -->
-                <!-- <span class="white--text text-h5"> <i class="fa-solid fa-user"></i></span> -->
               </v-avatar>
+              <!-- <v-avatar color="brown" size="36">
+                
+                <i class="fa-solid fa-user"></i>
+
+              </v-avatar> -->
             </v-btn>
           </template>
           <v-card>
@@ -300,7 +326,7 @@ import store from '../store/index.js';
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 18px;
+    font-size: 15px;
 
   }
   .navbar{

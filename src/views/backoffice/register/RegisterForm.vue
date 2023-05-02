@@ -1,42 +1,62 @@
 <template>
-  <div class="edit-profile">
-    <div class="style-page">
-      <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-      >
-        <stepTwo ref="user" :datas="data" check_page="edit-profile"/>
-        <v-btn class="btn-submit" @click="editProfile">บันทึก</v-btn>
-      </v-form>
+    <div class="register-form">
+        <LoaderView ref="loader"/>
+        <breadcrumbsView :items="item"/>
+        <div class="style-page">
+            <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+            >
+
+            <stepTwo ref="user" :datas="data" check_page="edit-profile"/>
+                <!-- <stepTwo ref="register" :datas="check_roles" check_page="edit-profile"/> -->
+                <v-btn class="btn-submit" @click="editProfile">บันทึก</v-btn>
+            </v-form>
+        </div>
     </div>
-  </div>
+  
 </template>
 
 <script>
-import axios  from "axios"
+import  axios  from "axios"
 import Swal from 'sweetalert2'
-import store from '../store/index.js'
+// import store from '../../../store/index.js'
 import stepTwo from '@/components/step/stepTwo.vue'
-
+import LoaderView from '@/components/loaderView.vue'
+import breadcrumbsView from "@/components/breadcrumbsView.vue"
 export default {
-  components: { stepTwo },
+  components: { stepTwo, LoaderView, breadcrumbsView },
+  
   data: () => ({
+
     valid: true,
-    check_roles: store.getters.user,
-    data : []
+    data : {},
+    item: [
+        {
+            text: 'รายการผู้ร้องเรียน',
+            disabled: false,
+            href: '/backoffice/register',
+        },
+        {
+            text: 'ข้อมูลผู้ร้อง',
+            disabled: true,
+            href: '/backoffice/register/form',
+        },
+        
+    ],
   }),
   mounted(){
     this.getRegister()
   },
-  methods:{
+  methods: {
     async getRegister () {
         try {
             let path        = await `/api/backoffice/get/registerDetail`
-            let response    = await axios.get(`${path}/`+ this.check_roles.id )
+            let response    = await axios.get(`${path}/`+ this.$route.params.id )
             this.data       = await response.data.data[0]
             this.loadTable = await false;
-
+            await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         } catch (error) {
             console.log('error :' + error)
         }
@@ -44,7 +64,6 @@ export default {
     async editProfile(){
       if(this.$refs.form.validate()){
           const user = await this.$refs.user
-
           try {
             let fd = await {
                 "id"                    : user.item.id,
@@ -85,20 +104,10 @@ export default {
     } 
 
   }
- 
-}
 
+}
 </script>
 
-<style scoped>
-.form-register{
-    box-shadow: none!important;
-}
-
-.btn-submit{
-    border: 1px solid #003366;
-    background-color: #003366!important;
-    color: white;
-}
+<style>
 
 </style>
