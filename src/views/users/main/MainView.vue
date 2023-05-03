@@ -51,6 +51,12 @@
                             </v-stepper-content>
 
                             <v-stepper-content step="3">
+
+                                <v-alert type="success">
+                                คุณ : {{ name }} ลงทะเบียนสำเร็จ 
+                                </v-alert>
+
+                             
                                 <v-form
                                     ref="formOfficer"
                                     v-model="validOne"
@@ -122,6 +128,8 @@ import StepTree from '@/components/step/stepTree.vue'
   components: { stepOne, StepTwo, StepTree },
     data: () => ({
         e1: 1,
+        email: '',
+        name: '',
         user: {},
         employee: {},
         isOkay: false,
@@ -140,9 +148,14 @@ import StepTree from '@/components/step/stepTree.vue'
         },
 
         async checkStepTwo(){
+            
             if(this.$refs.formRegister.validate()){
                 try {
                     this.user = await this.$refs.user
+
+                    this.email = await this.user.item.email
+                    this.name = await this.user.item.name + this.user.item.lastname
+
                     
                     let path = await `/api/user/checkMail`
                     let response_mail = await axios.post(`${path}`, { "email": this.user.item.email})
