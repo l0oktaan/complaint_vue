@@ -3,168 +3,11 @@
     <loaderView ref="loader"/>
     <BreadcrumbsView :items="item"/>
 
+    <v-card class="mb-3">
+      <DetailComplain ref="data"/>
+    </v-card>
 
     <v-expansion-panels v-model="panel" multiple>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          รายละเอียดปัญหา
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-container fluid>
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>Call No.</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                
-                <v-text-field
-                  v-model="data.call_no"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>วันที่บันทึกปัญหา</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                <v-text-field
-                  v-model="data.create_date"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>หัวเรื่อง</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                <v-text-field
-                  v-model="data.topic"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>สถานที่เกิดเหตุ</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                <v-text-field
-                  v-model="data.location"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-            <v-col cols="3">
-              <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                v-model="data.start_date"
-                label="วันที่เริ่มต้น"
-                append-icon="mdi-calendar"
-                class="input-gray"
-                readonly
-                solo
-              ></v-text-field>
-              
-              <v-text-field
-                v-model="data.start_time"
-                append-icon="mdi-clock-time-four-outline"
-                class="input-gray"
-                readonly
-                solo
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="1">
-              <v-subheader>ถึง : </v-subheader>
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                v-model="data.end_date"
-                label="วันที่สิ้นสุด"
-                append-icon="mdi-calendar"
-                readonly
-                class="input-gray"
-                solo
-                      
-              ></v-text-field>
-
-              <v-text-field
-                v-model="data.end_time"
-                append-icon="mdi-clock-time-four-outline"
-                class="input-gray"
-                readonly
-                solo
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>รายละเอียดเรื่องร้องเรียน</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                <v-textarea
-                  v-model="data.detail"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3">
-                <v-subheader>เอกสารประกอบการร้องเรียน</v-subheader>
-              </v-col>
-              <v-col cols="9">
-                <v-list subheader>
-                  <div class="d-flex justify-space-between">
-                    <v-subheader>ชื่อไฟล์</v-subheader>
-                    <v-subheader>ไฟล์เเนบ</v-subheader>
-                  </div>
-
-                  <v-list-item
-                    v-for="file in files"
-                    :key="file.id"
-                  >
-
-                    <v-list-item-content class="text-left">
-                      <v-list-item-title>{{ file.file_original }}</v-list-item-title>
-                    </v-list-item-content>
-                    <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
-                    <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
-
-                  </v-list-item>
-                  
-                </v-list>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-
       <v-expansion-panel>
         <v-expansion-panel-header>
           ขั้นตอนการเเก้ปัญหา
@@ -248,168 +91,168 @@
     
     </v-expansion-panels>
 
-      <!-- สถานะการดำเนินงานของเจ้าหน้าที่ -->
-      <v-dialog
-        v-model="dialog_status"
-        persistent
-        max-width="900px"
-      >
-        <v-card>
-          <v-toolbar color="#167dc2" dark>
-            <v-toolbar-title>{{formTitle}}</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-container fluid>
-                <v-form
-                    ref="form"
-                    v-model="valid"
-                    lazy-validation
-                >
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>รายละเอียดข้อมูล</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-textarea
-                        outlined
-                        hide-details="auto"
-                        single-line
-                        name="input-7-4"
-                        v-model="status_detail"
-                        :rules="detailRules"
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-    
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>ไฟล์เเนบ</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      
-                      <InputFiles  ref="status_files" :file="step_files"/>
-                      
+    <!-- สถานะการดำเนินงานของเจ้าหน้าที่ -->
+    <v-dialog
+      v-model="dialog_status"
+      persistent
+      max-width="900px"
+    >
+      <v-card>
+        <v-toolbar color="#167dc2" dark>
+          <v-toolbar-title>{{formTitle}}</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-container fluid>
+              <v-form
+                  ref="form"
+                  v-model="valid"
+                  lazy-validation
+              >
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>รายละเอียดข้อมูล</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-textarea
+                      outlined
+                      hide-details="auto"
+                      single-line
+                      name="input-7-4"
+                      v-model="status_detail"
+                      :rules="detailRules"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+  
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>ไฟล์เเนบ</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
                     
-                    </v-col>
-                  </v-row>
+                    <InputFiles  ref="status_files" :file="step_files"/>
+                    
+                  
+                  </v-col>
+                </v-row>
+  
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>สถานะการดำเนินงาน</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-select
+                      v-model="status_call"
+                      :items="selectStatus"
+                      item-text="value"
+                      item-value="id"
+                      label="สถานะการดำเนินงาน"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto" 
+                      @change="showDetailStatus(status_call)"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              
+                <v-row v-if="show_detail_status">
+                  <v-col cols="3">
+                    <v-subheader>ประเภทการร้องเรียน</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-radio-group
+                      v-model="check_corrupt"
+                      row
+                    >
+                      <v-radio
+                        label="ไม่ทุจริต"
+                        :value=false
+                        @click="check_corrupt = false"
+                      ></v-radio>
+                      <v-radio
+                        label="ทุจริต"
+                        :value=true
+                        @click="check_corrupt = true"
+                      ></v-radio>
+                    </v-radio-group>
+                  </v-col>
     
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>สถานะการดำเนินงาน</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-select
-                        v-model="status_call"
-                        :items="selectStatus"
-                        item-text="value"
-                        item-value="id"
-                        label="สถานะการดำเนินงาน"
-                        dense
-                        outlined
-                        single-line
-                        hide-details="auto" 
-                        @change="showDetailStatus(status_call)"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                
-                  <v-row v-if="show_detail_status">
-                    <v-col cols="3">
-                      <v-subheader>ประเภทการร้องเรียน</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-radio-group
-                        v-model="check_corrupt"
-                        row
-                      >
-                        <v-radio
-                          label="ไม่ทุจริต"
-                          :value=false
-                          @click="check_corrupt = false"
-                        ></v-radio>
-                        <v-radio
-                          label="ทุจริต"
-                          :value=true
-                          @click="check_corrupt = true"
-                        ></v-radio>
-                      </v-radio-group>
-                    </v-col>
+                </v-row>
+                <v-card v-if="check_corrupt && show_detail_status" class="mx-auto">
+                  {{ corrupt.date }}
+                  <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
+                  <v-card-text class="pt-5">
+                    <v-row>
+                      <v-col>
+                        <v-text-field
+                          v-model="corrupt.reference"
+                          :rules="corruptRefRules"
+                          hide-details="auto"
+                          label="เลขที่หนังสือ"
+                          outlined
+                          dense
+                        ></v-text-field>
+                      </v-col>
       
-                  </v-row>
-                  <v-card v-if="check_corrupt && show_detail_status" class="mx-auto">
-                    {{ corrupt.date }}
-                    <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
-                    <v-card-text class="pt-5">
-                      <v-row>
-                        <v-col>
-                          <v-text-field
-                            v-model="corrupt.reference"
-                            :rules="corruptRefRules"
-                            hide-details="auto"
-                            label="เลขที่หนังสือ"
-                            outlined
-                            dense
-                          ></v-text-field>
-                        </v-col>
-        
-                        <v-col>
+                      <v-col>
 
-                          <DatePickers ref="corrupt_date" :show_date="corrupt.date"  label="วันที่ดำเนินการ"/>
-                        </v-col>
-                      </v-row> 
-                      <v-row>
-                        <v-col>
-                          <InputFiles  ref="corrupt_file"/>
-                          <!-- <div class="text-left">
-                            <v-chip         
-                            v-for="(corrupt_file,index) in corrupt_files" 
-                            :key="index"
-                            close @click:close="removeCorrupt(index)"
-                            >
-                              {{corrupt_file.file_original}}
-                          </v-chip>
-                          </div> -->
-                        
-                        </v-col>
-                      </v-row>
-                    
-                      <v-row>
-                        <v-col>
-                          <v-textarea
-                            v-model="corrupt.detail"
-                            :rules="corruptDetailfRules"
-                            label="รายละเอียดการทุจริต"
-                            hide-details="auto"
-                            outlined
-                          ></v-textarea>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-form>
-              </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              class="btn btn-submit"
-              text
-              @click="saveComplainStep"
-            >
-              บันทึก
-            </v-btn>
-            <v-btn
-              class="btn btn-cancel"
-              text
-              @click="dialog_status = false"
-            >
-              ยกเลิก
-            </v-btn>
-          </v-card-actions>
-      </v-card>
+                        <DatePickers ref="corrupt_date" :show_date="corrupt.date"  label="วันที่ดำเนินการ"/>
+                      </v-col>
+                    </v-row> 
+                    <v-row>
+                      <v-col>
+                        <InputFiles  ref="corrupt_file"/>
+                        <!-- <div class="text-left">
+                          <v-chip         
+                          v-for="(corrupt_file,index) in corrupt_files" 
+                          :key="index"
+                          close @click:close="removeCorrupt(index)"
+                          >
+                            {{corrupt_file.file_original}}
+                        </v-chip>
+                        </div> -->
+                      
+                      </v-col>
+                    </v-row>
+                  
+                    <v-row>
+                      <v-col>
+                        <v-textarea
+                          v-model="corrupt.detail"
+                          :rules="corruptDetailfRules"
+                          label="รายละเอียดการทุจริต"
+                          hide-details="auto"
+                          outlined
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-form>
+            </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="btn btn-submit"
+            text
+            @click="saveComplainStep"
+          >
+            บันทึก
+          </v-btn>
+          <v-btn
+            class="btn btn-cancel"
+            text
+            @click="dialog_status = false"
+          >
+            ยกเลิก
+          </v-btn>
+        </v-card-actions>
+    </v-card>
     </v-dialog> 
 
-      <!-- <v-overlay v-model="overlay_edit_status">
+    <!-- <v-overlay v-model="overlay_edit_status">
         <v-progress-circular
           :width="3"
           color="blue"
@@ -417,169 +260,169 @@
       ></v-progress-circular>
       </v-overlay> -->
 
-      <v-dialog
-        v-model="dialog_edit_status"
-        persistent
-        max-width="900px"
-      >
-        <v-card>
-          <v-toolbar color="#167dc2" dark>
-            <v-toolbar-title>{{formTitle}}</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <v-container fluid>
-                <v-form
-                    ref="formEdit"
-                    v-model="valid"
-                    lazy-validation
-                >
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>รายละเอียดข้อมูล</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-textarea
-                        filled
-                        readonly
-                        hide-details="auto"
-                        single-line
-                        name="input-7-4"
-                        v-model="status_detail"
-                        :rules="detailRules"
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-    
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>ไฟล์เเนบ</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                    
-                      <div class="text-left">
-                        <v-chip v-for="(step_file,index) in step_files" :key="index">
-                          {{step_file.file_original}}
-                      </v-chip>
-                      </div>
-                    
-                    </v-col>
-                  </v-row>
-    
-                  <v-row>
-                    <v-col cols="3">
-                      <v-subheader>สถานะการดำเนินงาน</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-select
-                        filled
-                        readonly
-                        v-model="status_call"
-                        :items="selectStatus"
-                        item-text="value"
-                        item-value="id"
-                        dense
-                       
-                        single-line
-                        hide-details="auto" 
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                
-                  <v-row v-if="status_call == 2">
-                    <v-col cols="3">
-                      <v-subheader>ประเภทการร้องเรียน</v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-radio-group
-                        v-model="check_corrupt"
-                        row
-                        disabled
-                      >
-                        <v-radio
-                          label="ไม่ทุจริต"
-                          :value=false
-                        ></v-radio>
-                        <v-radio
-                          label="ทุจริต"
-                          :value=true
-                        ></v-radio>
-                      </v-radio-group>
-                    </v-col>
-      
-                  </v-row>
+    <v-dialog
+      v-model="dialog_edit_status"
+      persistent
+      max-width="900px"
+    >
+      <v-card>
+        <v-toolbar color="#167dc2" dark>
+          <v-toolbar-title>{{formTitle}}</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-container fluid>
+              <v-form
+                  ref="formEdit"
+                  v-model="valid"
+                  lazy-validation
+              >
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>รายละเอียดข้อมูล</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-textarea
+                      filled
+                      readonly
+                      hide-details="auto"
+                      single-line
+                      name="input-7-4"
+                      v-model="status_detail"
+                      :rules="detailRules"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+  
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>ไฟล์เเนบ</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                  
+                    <div class="text-left">
+                      <v-chip v-for="(step_file,index) in step_files" :key="index">
+                        {{step_file.file_original}}
+                    </v-chip>
+                    </div>
+                  
+                  </v-col>
+                </v-row>
+  
+                <v-row>
+                  <v-col cols="3">
+                    <v-subheader>สถานะการดำเนินงาน</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-select
+                      filled
+                      readonly
+                      v-model="status_call"
+                      :items="selectStatus"
+                      item-text="value"
+                      item-value="id"
+                      dense
+                      
+                      single-line
+                      hide-details="auto" 
+                    ></v-select>
+                  </v-col>
+                </v-row>
               
-                  <v-card v-if="check_corrupt" class="mx-auto">
+                <v-row v-if="status_call == 2">
+                  <v-col cols="3">
+                    <v-subheader>ประเภทการร้องเรียน</v-subheader>
+                  </v-col>
+                  <v-col cols="9">
+                    <v-radio-group
+                      v-model="check_corrupt"
+                      row
+                      disabled
+                    >
+                      <v-radio
+                        label="ไม่ทุจริต"
+                        :value=false
+                      ></v-radio>
+                      <v-radio
+                        label="ทุจริต"
+                        :value=true
+                      ></v-radio>
+                    </v-radio-group>
+                  </v-col>
+    
+                </v-row>
+            
+                <v-card v-if="check_corrupt" class="mx-auto">
 
-                    <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
-                    <v-card-text class="pt-5">
-                      <v-row>
-                        <v-col>
-                          <v-text-field
-                            v-model="corrupt.reference"
-                            :rules="corruptRefRules"
-                            hide-details="auto"
-                            label="เลขที่หนังสือ"
-                            outlined
-                            dense
-                          ></v-text-field>
-                        </v-col>
-        
-                        <v-col>
-                          <DatePickers ref="corrupt_date" :show_date="corrupt.date" @change_date="change_corrupt_date"  label="วันที่ดำเนินการ"/>
-                        </v-col>
-                      </v-row> 
-                      <v-row>
-                        <v-col>
-                          <InputFiles  ref="corrupt_file" />
-                       
-                          <div class="text-left pl-6 mt-3">
-                            <v-chip         
-                            v-for="(corrupt_file,index) in corrupt_files" 
-                            :key="index"
-                            close @click:close="removeCorruptFiles(corrupt_file)"
-                            @click="showFile(corrupt_file)"
-                            >
-                              {{corrupt_file.file_original}}
-                          </v-chip>
-                          </div>
-                        
-                        </v-col>
-                      </v-row>
-                    
-                      <v-row>
-                        <v-col>
-                          <v-textarea
-                            v-model="corrupt.detail"
-                            :rules="corruptDetailfRules"
-                            label="รายละเอียดการทุจริต"
-                            hide-details="auto"
-                            outlined
-                          ></v-textarea>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-form>
-              </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              class="btn btn-submit"
-              text
-              @click="editComplainStep"
-            >
-              บันทึก
-            </v-btn>
-            <v-btn
-              class="btn btn-cancel"
-              text
-              @click="close"
-            >
-              ยกเลิก
-            </v-btn>
-          </v-card-actions>
-      </v-card>
+                  <v-card-title class="head-corrupt">รายละเอียดการทุจริต</v-card-title>
+                  <v-card-text class="pt-5">
+                    <v-row>
+                      <v-col>
+                        <v-text-field
+                          v-model="corrupt.reference"
+                          :rules="corruptRefRules"
+                          hide-details="auto"
+                          label="เลขที่หนังสือ"
+                          outlined
+                          dense
+                        ></v-text-field>
+                      </v-col>
+      
+                      <v-col>
+                        <DatePickers ref="corrupt_date" :show_date="corrupt.date" @change_date="change_corrupt_date"  label="วันที่ดำเนินการ"/>
+                      </v-col>
+                    </v-row> 
+                    <v-row>
+                      <v-col>
+                        <InputFiles  ref="corrupt_file" />
+                      
+                        <div class="text-left pl-6 mt-3">
+                          <v-chip         
+                          v-for="(corrupt_file,index) in corrupt_files" 
+                          :key="index"
+                          close @click:close="removeCorruptFiles(corrupt_file)"
+                          @click="showFile(corrupt_file)"
+                          >
+                            {{corrupt_file.file_original}}
+                        </v-chip>
+                        </div>
+                      
+                      </v-col>
+                    </v-row>
+                  
+                    <v-row>
+                      <v-col>
+                        <v-textarea
+                          v-model="corrupt.detail"
+                          :rules="corruptDetailfRules"
+                          label="รายละเอียดการทุจริต"
+                          hide-details="auto"
+                          outlined
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-form>
+            </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="btn btn-submit"
+            text
+            @click="editComplainStep"
+          >
+            บันทึก
+          </v-btn>
+          <v-btn
+            class="btn btn-cancel"
+            text
+            @click="close"
+          >
+            ยกเลิก
+          </v-btn>
+        </v-card-actions>
+    </v-card>
     </v-dialog>
 
     <!-- เเนบไฟล์ -->
@@ -624,10 +467,12 @@ import BreadcrumbsView from '@/components/breadcrumbsView.vue';
 import InputFiles from '@/components/inputFiles.vue';
 import DatePickers from '@/components/datePickers.vue';
 import DialogsFiles from '@/components/step/dialogsFiles.vue';
+import DetailComplain from '@/components/detailComplain.vue';
+
 
 
 export default {
-  components: { loaderView, BreadcrumbsView, InputFiles, DatePickers, DialogsFiles},
+  components: { loaderView, BreadcrumbsView, InputFiles, DatePickers, DialogsFiles, DetailComplain},
   data: () => ({
     chips: ['Programming', 'Playing video games', 'Watching movies', 'Sleeping'],
     items: ['Streaming', 'Eating'],
@@ -645,8 +490,6 @@ export default {
     ],
     overlay_edit_status: false,
     panel: [0, 1],
-    data: {},
-    files: {},
     overlayImg: false,
     opacity: 1,
     absolute: false,
@@ -692,10 +535,8 @@ export default {
     corrupt_id: null,
     corrupt_files: {},
     get_corrupt_date: null,
-    // get_new_dialog: false,
   }),
   mounted() {
-    this.getComplainDetail()
     this.getComplainStep()
   },
   computed: {
@@ -821,23 +662,7 @@ export default {
 
       }
 
-
-
-      // if (this.check_corrupt ) {
-      //     this.show_detail_status = await true
-      //     this.corrupt.reference =  await v.reference_code
-      //     this.corrupt.detail =  await v.corrupt_detail
-      //     this.corrupt.date =  await v.corrupt_date
-      //       console.log(this.corrupt.date);
-      //     await this.getCorruptFiles(v)
-
-      //     this.overlay_edit_status = await false
-
-      // }
-
-    
     },
-   
     showDetailStatus( v){
       
         if(v != 2){
@@ -846,17 +671,6 @@ export default {
         }else{
           this.show_detail_status = true
         }   
-    },
-    async getComplainDetail(){
-      let path              = await `/api/user/get/complainDetail`
-      let response          =  await axios.get(`${path}/`+ this.$route.params.id)
-      this.data             = await response.data.data[0]
-      this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
-      this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
-      this.data.end_date  = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
-      this.files            = await response.data.data_files
-
-      await setTimeout(() => (this.$refs.loader.overlay = false), 300);
     },
     async getComplainStep(){
       let path              = await `/api/backoffice/get/complainStep`
@@ -878,11 +692,8 @@ export default {
       let path              = await `/api/backoffice/get/CorruptFiles`
       let response          = await axios.get(`${path}/`+ v.corrupt_id)
       this.corrupt_files    = await response.data.data
-
-      console.log(this.corrupt_files );
-
-
     },
+
     async urlPdfFiles(url,file_name){
       axios({
           url: `/api/get/pdf/${url}`,
@@ -902,6 +713,7 @@ export default {
           //  fileLink.click();
       });
     },
+
     async urlFiles(url,file_name){
 
      
@@ -920,16 +732,15 @@ export default {
       }else{
         this.urlFiles('UrlFilesCorrupt', v.file_name)
       }
-      console.log(v);
     },
 
     async saveComplainStep(){
       if(this.$refs.form.validate()){
         try {
           let fd = await {
-            "complain_id"       : this.data.id,
+            "complain_id"       : this.$refs.data.data.id,
             "admin_id"          : this.check_roles.id,
-            "register_id"       : this.data.register_id,
+            "register_id"       : this.$refs.data.data.register_id,
             "detail"            : this.status_detail,
             "status_call"       : this.status_call,
             "check_corrupt"     : this.check_corrupt,
@@ -963,7 +774,7 @@ export default {
               }
 
                 let fd_upload = await {
-                    "register_id"         : this.data.register_id,
+                    "register_id"         : this.$refs.data.data.register_id,
                     "complain_step_id"    : complain_id,
                     "file_original"       : file.name,
                     "file_name"           : file_name,
@@ -1005,62 +816,7 @@ export default {
           if(this.check_corrupt){
             await this.saveComplainCorrupt(this.complain_step_id, this.corrupt_id)
           }
- 
-          // let fd = await {
-          //   "complain_id"       : this.data.id,
-          //   "admin_id"          : this.check_roles.id,
-          //   "register_id"       : this.data.register_id,
-          //   "detail"            : this.status_detail,
-          //   "status_call"       : this.status_call,
-          //   "check_corrupt"     : this.check_corrupt,
-          //   "create_by"         : this.check_roles.id,
-          //   "modified_by"       : this.check_roles.id,
-          // }
-          // let path        = await `/api/backoffice/create/complainStep`
-          // let response    = await axios.post(`${path}`, fd)
-            
-          // if(response){
 
-          //   for (let i = 0; i < this.$refs.status_files.files.length; i++) {
-
-          //     let number = await i + 1
-
-          //     let file = await this.$refs.status_files.files[i]
-
-          //     let complain_id = await response.data.complain_step_id
-
-          //     const arr_file = await file.name.split(".")
-
-          //     let file_name = await ''
-              
-          //     if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
-
-          //       file_name = await 'imgcid' + complain_id + '_' + number + '.' +arr_file[1] 
-
-          //     }else if(file.type === 'application/pdf'){
-
-          //       file_name = await 'pdfcid' + complain_id + '_' + number + '.' +arr_file[1] 
-          //     }
-
-          //       let fd_upload = await {
-          //           "register_id"         : this.data.register_id,
-          //           "complain_step_id"    : complain_id,
-          //           "file_original"       : file.name,
-          //           "file_name"           : file_name,
-          //           "file_type"           : file.type
-          //       }
-
-          //       let path_api = await `/api/backoffice/complainStepFiles`
-
-          //       let path_upload = await  `/api/backoffice/uploadStepFiles`
-
-          //     await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
-          //   }
-
-          //   if(this.check_corrupt){
-          //     await this.saveComplainCorrupt(response.data.complain_step_id)
-          //   }
-          // }
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
@@ -1072,7 +828,7 @@ export default {
 
         
           await this.getComplainStep()
-          await this.getComplainDetail()
+          // await this.getComplainDetail()
         } catch (error) {
           Swal.fire({
               icon: 'error',
@@ -1188,12 +944,12 @@ export default {
     color: white!important;
   } */
  
-  .input-gray ::v-deep .v-input__slot{
+  /* .input-gray ::v-deep .v-input__slot{
     background: #ebe9e9!important;
   }
   .input-gray ::v-deep input{
     color: gray!important;
-  }
+  } */
 
   /* .v-subheader{
     justify-content: right;
