@@ -237,7 +237,7 @@
             phone_other: '',
             address: '',
             postcode: '',
-            
+          
             // selectGender:[
             //     { value: 'ชาย', id: 'male' },
             //     { value: 'หญิง', id: 'female' },
@@ -279,7 +279,11 @@
             // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
          
         }),
-      
+        // computed: { 
+        //     isPasswordMatch() {
+        //         return this.newPassword === this.confirmPassword;
+        //     }
+        // },
       
         mounted(){
           
@@ -356,12 +360,15 @@
         },
         methods: {
             async checkMail(){
+               if(this.item.email){
                 try {
-                                 
+                                
                     let path = await `/api/user/checkMail`
-                    await axios.post(`${path}`, { "email": this.item.email})
+                    let response = await axios.post(`${path}`, { "email": this.item.email})
 
-                    await Swal.fire('กรุณากรอกอีเมล')
+                    if(response.data.status == 200){
+                        await Swal.fire('ยังไม่มีอีเมลนี้ในระบบ')
+                    }             
 
                 } catch (error) {
                     await Swal.fire({
@@ -370,6 +377,11 @@
                         text: 'มีอีเมลนี่ในระบบเเล้ว',
                     })
                 }
+               }else{
+                    await Swal.fire('กรุณากรอกอีเมล')
+               }
+                
+
             },
             async getProvince(){
                 let path = await `/api/get/province`
