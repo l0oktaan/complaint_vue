@@ -44,7 +44,7 @@
                                     <StepTwo ref="user"/>
 
                                     <div class="text-right">
-                                        <v-btn  class="btn-back" @click="e1 = 1">ย้อนกลับ</v-btn>
+                                        <!-- <v-btn  class="btn-back" @click="e1 = 1">ย้อนกลับ</v-btn> -->
                                         <v-btn color="#003366" class="btn-next text-white"  @click="checkStepTwo">บันทึก</v-btn>
                                     </div>
                                 </v-form>
