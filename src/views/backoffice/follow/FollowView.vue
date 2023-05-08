@@ -60,9 +60,9 @@
 <script>
   import axios from "axios";
   import moment from 'moment';
-  import 'moment/locale/th'; // Import the Thai locale
+  // import 'moment/locale/th'; // Import the Thai locale
   import store from '../../../store/index.js';
-import selectStatus from '@/components/selectStatus.vue';
+  import selectStatus from '@/components/selectStatus.vue';
   export default {
   components: { selectStatus },
     data () {
@@ -124,9 +124,7 @@ import selectStatus from '@/components/selectStatus.vue';
         }            
       },
       timeFormat:function(d){
-
         console.log(moment(d).format('HH:mm'));
-
         let time =  moment(d).format('HH:mm') == '00:00' ? '' : moment(d).format('HH:mm') 
 
           return time;
