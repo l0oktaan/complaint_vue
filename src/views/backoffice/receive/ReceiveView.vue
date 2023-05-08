@@ -22,9 +22,13 @@
           >
 
             <template v-slot:[`item.call_no`]="{ item }">{{ item.call_no }}</template>
-            <template v-slot:[`item.create_date`]="{ item }">
+            <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
+            <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
+            <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
+            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template>
+            <!-- <template v-slot:[`item.create_date`]="{ item }">
               {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-            </template>
+            </template> -->
             <template v-slot:[`item.status_call`]="{ item }">
                 <v-chip
                 :color="getColor(item.status_call)"
@@ -67,7 +71,11 @@
             sortable: false,
             value: 'topic',
           },
-          { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
+          { text: 'วันที่เริ่มต้น', value: 'start_date' },
+          { text: 'วันที่สิ้นสุด', value: 'end_date' },
+          { text: 'ตั้งเเต่เวลา', value: 'start_time' },
+          { text: 'ถึงเวลา', value: 'end_time' },
+          // { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
           {
             text: 'Action',
@@ -82,6 +90,22 @@
       this.getListComplain()
     },
     methods: {
+      getThaiDate(item){
+        if (item){
+          var d = new Date(item);
+          return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+        }else{
+          return "";
+        }            
+      },
+      timeFormat:function(d){
+
+        let time =  moment(d).format('HH:mm') == '00:00' ? '' : moment(d).format('HH:mm') 
+
+          return time;
+
+
+      },
       getColor (status_call) {
         if (status_call > 400) return 'red'
         else if (status_call > 200) return 'orange'
