@@ -62,6 +62,11 @@ const routes = [
         name: 'contact',
         component: ContactView,
       },
+      {
+        path: '/user/login',
+        name: 'userLogin',
+        component: UserLoginView
+      },
     ]
   },
 
@@ -151,11 +156,7 @@ const routes = [
 
   },
 
-  {
-    path: '/user/login',
-    name: 'userLogin',
-    component: UserLoginView
-  },
+  
 
   { 
     path: '/',

@@ -64,7 +64,7 @@
                                 >
                                     <StepTree ref="employee"/>
                                     <div class="text-right">
-                                        <v-btn class="btn-back"  @click="e1 = 2">ย้อนกลับ</v-btn>
+                                        <!-- <v-btn class="btn-back"  @click="e1 = 2">ย้อนกลับ</v-btn> -->
                                         <v-btn color="#003366" class="btn-next text-white" @click="checkStepTree">บันทึก</v-btn>
                                     </div>
                                 </v-form>
@@ -211,12 +211,12 @@ import StepTree from '@/components/step/stepTree.vue'
                                 let response = await axios.post(`${path_regis}`, fd)
                                 this.register_id = await response.data.register_id
                                 await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
+                                
+                                this.e1 = await 3
                             } else if (result.isDenied) {
                                 Swal.fire('Changes are not saved', '', 'info')
                             }
                         })
-
-                        this.e1 = await 3
                   
                     }
 
