@@ -154,7 +154,7 @@ import StepTree from '@/components/step/stepTree.vue'
                     this.user = await this.$refs.user
 
                     this.email = await this.user.item.email
-                    this.name = await this.user.item.name + this.user.item.lastname
+                    this.name = await this.user.item.name + ' ' + this.user.item.lastname
 
                     
                     let path = await `/api/user/checkMail`
@@ -478,8 +478,8 @@ import StepTree from '@/components/step/stepTree.vue'
     }
     .btn-next{
         width: 100px;
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
+        /* border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px; */
     }
     .btn-back{
         width: 100px;
