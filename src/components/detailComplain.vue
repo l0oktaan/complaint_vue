@@ -337,7 +337,8 @@
 
 <script>
 import axios from "axios";
-import moment from 'moment';
+import moment  from 'moment-timezone';
+// import moment from 'moment';
 export default {
     data: () => ({
         tab: null,
@@ -354,15 +355,21 @@ export default {
     },
     methods: {
         async getComplainDetail(){
+
           let path              = await `/api/user/get/complainDetail`
           let response          =  await axios.get(`${path}/`+ this.$route.params.id)
           this.data             = await response.data.data[0]
+
           this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
-          this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
-          this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
-          this.data.start_time  = await moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].start_date, "HH:mm").format("hh:mm") : ''; 
-          this.data.end_time    = await moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") !== 'Invalid date' ? moment(response.data.data[0].end_time, "HH:mm").format("hh:mm") : ''; 
+
+            this.data.start_time  = await moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00' ? moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
+            this.data.end_time    = await moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00'? moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
+            this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
+            this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
+      
           this.files            = await response.data.data_files
+          
+
 
           await this.getRegisterDetail()
         //   await setTimeout(() => (this.$refs.loader.overlay = false), 300);
