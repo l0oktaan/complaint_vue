@@ -35,6 +35,7 @@ import Registerform from '../views/backoffice/register/RegisterForm.vue'
 
 import HomeView from '../views/HomeView.vue'
 import HomeUserView from '../views/HomeView.vue'
+import PageNotFound from '../views/NotFound.vue'
 // import AboutView from '../views/AboutView.vue'
 
 
@@ -194,7 +195,19 @@ const routes = [
     ]
 
   },
- 
+
+  { path: '/:pathMatch(.*)*', component: PageNotFound },
+
+  // {
+  //   path: '/:pathMatch(.*)',
+  //   redirect: '/page-not-found'
+  // },
+  // // Define the "Page Not Found" route
+  // {
+  //   path: '/page-not-found',
+  //   component: PageNotFound
+  // }
+
 ]
 
 // const routes = [
@@ -390,8 +403,15 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // routes: [
+  //     // ... other routes ...
+  //     // and finally the default route, when none of the above matches:
+  //     { path: "*", component: PageNotFound }
+  // ]
+  // base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router
