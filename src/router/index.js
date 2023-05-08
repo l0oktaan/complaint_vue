@@ -88,9 +88,10 @@ const routes = [
     component: HomeView,
     beforeEnter (to, from, next) {
       store.dispatch('checkLogin')
-      if (store.state.user.roles != 'user') {   
-          next()          
+      if (store.state.user && store.state.user.roles !== 'user') {   
+        next()    
       }else{
+        // next('/backoffice/login')
         next({ name: 'login' })
       }
     },
@@ -161,9 +162,11 @@ const routes = [
     component: HomeUserView,
     beforeEnter (to, from, next) {
       store.dispatch('checkLogin')
-      if (store.state.user.roles == 'user') {   
-        next()          
+      if(store.state.user && store.state.user.roles == 'user'){
+        next()      
       }else{
+        // console.log('==========');
+        // next('/user/login')
         next({ name: 'userLogin' })
       }
     },
