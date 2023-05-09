@@ -372,8 +372,8 @@ export default {
             // this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
             // this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
 
-                 this.data.start_time  = await moment(response.data.data[0].start_date).format('HH:mm')
-                this.data.end_time    = await moment(response.data.data[0].end_date).format('HH:mm')
+                 this.data.start_time  = await moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm')
+                this.data.end_time    = await moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm')
       
           this.files            = await response.data.data_files
           
