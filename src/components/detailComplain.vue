@@ -360,23 +360,15 @@ export default {
             let response          =  await axios.get(`${path}/`+ this.$route.params.id)
             this.data             = await response.data.data[0]
 
-            this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss")
+            this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY') + ' ' + moment(response.data.data[0].create_date).utcOffset("+00:00").format('HH:mm')
+             
+            // this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format("DD/MM/YYYY HH:mm:ss")
 
-            // this.data.start_time  = await moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00' ? moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
-            // this.data.end_time    = await moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00'? moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
-            // this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').format("DD/MM/YYYY")
-            // this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').format("DD/MM/YYYY")
-            // this.data.start_time  = await moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00' ? moment(response.data.data[0].start_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
-            // this.data.end_time    = await moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') !== '00:00'? moment(response.data.data[0].end_date).tz("Asia/Bangkok").format('HH:mm') : '-'; 
-            
-            // this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
-            // this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
 
             this.data.start_time  = await moment(response.data.data[0].start_date).utcOffset("+00:00").format('HH:mm')
             this.data.end_time  = await moment(response.data.data[0].end_date).utcOffset("+00:00").format('HH:mm')
             this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
             this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
-        
             this.files            = await response.data.data_files
           
 

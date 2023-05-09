@@ -459,7 +459,8 @@
 </template>
 <script>
 import axios from "axios";
-import moment from 'moment';
+// import moment from 'moment';
+import moment  from 'moment-timezone'
 import Swal from 'sweetalert2';
 import store from '../../../store/index.js';
 import loaderView from '@/components/loaderView.vue';
@@ -561,7 +562,7 @@ export default {
     },
 
     formattedDate(create_date) {
-      return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
+      return moment(create_date).add(543, 'year').utcOffset("+00:00").format("DD/MM/YYYY HH:mm:ss");
     },
     getColor (status_call) {
       if (status_call == 0) return '#FFA000'
