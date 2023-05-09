@@ -132,7 +132,7 @@
         console.log(moment(d).format('HH:mm'));
 
 
-        let time =  moment(d).format('HH:mm') == '00:00' ? '' : moment(d).utcOffset("+00:00").format('HH:mm') 
+        let time =  moment(d).utcOffset("+00:00").format('HH:mm') == '00:00' ? '' : moment(d).utcOffset("+00:00").format('HH:mm') 
        
 
           return time;
