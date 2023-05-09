@@ -54,21 +54,44 @@ export default {
             "modified_by"       : this.check_roles.id,
           }
 
-          console.log(fd);
-
           let path = await `/api/user/complain`
           let response = await axios.post(`${path}`, fd)
 
        
           if(response){
 
-            for (let i = 0; i < this.employee.files.length; i++) {
+            let timerInterval
+              await Swal.fire({
+                title: 'กำลังอัพโหลดไฟล์',
+                html: 'I will success in <b></b> milliseconds.',
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: () => {
+                  Swal.showLoading()
+                  const b = Swal.getHtmlContainer().querySelector('b')
+                  timerInterval = setInterval(() => {
+                    b.textContent = Swal.getTimerLeft()
+                  }, 100)
+                    for (let i = 0; i < this.employee.files.length; i++) {
 
-            let number = await i + 1
+                      let number = i + 1 
 
-            await this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)
-            }
+
+                      this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)
+
+                    }
+
+                },
+                willClose: () => {
+                  clearInterval(timerInterval)
+                
+  
+                }
+              })
+
+           
           }
+        
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
@@ -114,7 +137,28 @@ export default {
               let response = await axios.post(`${path}`, fd_upload )
 
               if(response){
-                  setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
+                // let timerInterval
+                // await Swal.fire({
+                //   title: 'กำลังอัพโหลดไฟล์',
+                //   html: 'I will success in <b></b> milliseconds.',
+                //   timer: 2000,
+                //   timerProgressBar: true,
+                //   didOpen: () => {
+                //     Swal.showLoading()
+                //     const b = Swal.getHtmlContainer().querySelector('b')
+                //     timerInterval = setInterval(() => {
+                //       b.textContent = Swal.getTimerLeft()
+                //     }, 100)
+                //   },
+                //   willClose: () => {
+                //     clearInterval(timerInterval)
+                //     this.myUpload(file_name,  file)
+                //   }
+                // })
+
+                await this.myUpload(file_name,  file)
+
+                  // setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
               }
 
       } catch (error) {

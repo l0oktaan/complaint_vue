@@ -56,12 +56,16 @@ export default {
           let path = await `/api/user/forgot-password`
           let response = await axios.post(`${path}`, {email: this.email})
 
-          console.log(response);
-
-          console.log(response);
           // If the server returned a successful response
           if (response.status === 200) {
-            alert("Password reset email sent! Please check your inbox.");
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Password reset email sent! Please check your inbox.',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            // alert("Password reset email sent! Please check your inbox.");
           }
         }
       } catch (error) {
