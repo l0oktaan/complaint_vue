@@ -445,9 +445,9 @@ export default {
 
       await this.getComplainStepFiles(v)
     },
-    async dailogDetail(v){
+    async dailogDetail(){
       this.dialog_detail        = await true
-      console.log(v);
+
      
     },
     getColor (status_call) {
@@ -527,7 +527,6 @@ export default {
       console.log(response );
     }, 
     async getComplainStepFiles(v){
-        console.log(v);
         let path              = await `/api/backoffice/get/ComplainStepFiles`
         let response          = await axios.get(`${path}/`+ v.id)
         this.step_files    = await response.data.data
