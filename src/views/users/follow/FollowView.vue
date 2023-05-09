@@ -6,7 +6,7 @@
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
-              <selectStatus  ref="filter_status"/>
+              <selectStatus  ref="filter_status" :itemsStatus="itemsStatus"/>
             </v-col>
             <v-col cols>
               <v-text-field
@@ -64,34 +64,43 @@
     components: {selectStatus},
     data () {
       return {
-        check_roles: store.getters.user,
-        search: '',
-        loading: true,
-        datas: [],
-        headers: [
-          {
-            text: 'Call No',
-            align: 'center',
-            value: 'call_no',
-          },
-          {
-            text: 'หัวข้อปัญหา',
-            align: 'start',
-            sortable: false,
-            value: 'topic',
-          },
-          { text: 'วันที่เริ่มต้น', value: 'start_date' },
-          { text: 'วันที่สิ้นสุด', value: 'end_date' },
-          { text: 'ตั้งเเต่เวลา', value: 'start_time' },
-          { text: 'ถึงเวลา', value: 'end_time' },
-          { text: 'สถานะ Call', value: 'status_call' },
-          {
-            text: 'รายละเอียดเรื่องร้องเรียน',
-            align: 'center',
-            value: 'detail',
-          },
-        ],
-        desserts: [],
+          check_roles: store.getters.user,
+          search: '',
+          loading: true,
+          datas: [],
+          headers: [
+            {
+              text: 'Call No',
+              align: 'center',
+              value: 'call_no',
+            },
+            {
+              text: 'หัวข้อปัญหา',
+              align: 'start',
+              sortable: false,
+              value: 'topic',
+            },
+            { text: 'วันที่เริ่มต้น', value: 'start_date' },
+            { text: 'วันที่สิ้นสุด', value: 'end_date' },
+            { text: 'ตั้งเเต่เวลา', value: 'start_time' },
+            { text: 'ถึงเวลา', value: 'end_time' },
+            { text: 'สถานะ Call', value: 'status_call' },
+            {
+              text: 'รายละเอียดเรื่องร้องเรียน',
+              align: 'center',
+              value: 'detail',
+            },
+          ],
+          desserts: [],
+          itemsStatus: [
+            { value: 'ทั้งหมด', id: null },
+            { value: 'รอรับเรื่อง', id: 0 },
+            { value: 'อยู่ระหว่างดำเนินการ', id: 1 },
+            { value: 'เรื่องเสร็จ', id: 2 },
+            { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
+            { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
+            { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
+          ],
         }
     },
     mounted(){
@@ -128,16 +137,8 @@
         else return ''
       },
       timeFormat:function(d){
-
-        console.log(moment(d).format('HH:mm'));
-
-
         let time =  moment(d).utcOffset("+00:00").format('HH:mm') == '00:00' ? '' : moment(d).utcOffset("+00:00").format('HH:mm') 
-       
-
-          return time;
-        
-       
+          return time;      
       },
       getThaiDate(item){
 

@@ -6,7 +6,7 @@
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
-              <selectStatus  ref="filter_status"/>
+              <selectStatus  ref="filter_status" :itemsStatus="itemsStatus"/>
             </v-col>
             <v-col cols>
               <v-text-field
@@ -96,6 +96,14 @@
           },
         ],
         desserts: [],
+        itemsStatus: [
+          { value: 'ทั้งหมด', id: null },
+          { value: 'อยู่ระหว่างดำเนินการ', id: 1 },
+          { value: 'เรื่องเสร็จ', id: 2 },
+          { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
+          { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
+          { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
+        ],
       }
     },
     mounted(){

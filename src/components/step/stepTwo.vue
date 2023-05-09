@@ -339,7 +339,6 @@
 
             },
             datas(){
-                console.log(this.datas);
                 if(this.datas){
                     
                     this.item = this.datas

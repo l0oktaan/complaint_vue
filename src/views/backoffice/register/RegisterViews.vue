@@ -80,10 +80,6 @@
               let response    = await axios.get(`${path}`)
               this.datas = await response.data.data
 
-              console.log( this.datas );
-    
-              // await this.checkState(this.datas_user)
-              
               this.loadTable = await false;
     
             } catch (error) {
