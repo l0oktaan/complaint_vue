@@ -156,9 +156,9 @@ export default {
                 //   }
                 // })
 
-                await this.myUpload(file_name,  file)
+                // await this.myUpload(file_name,  file)
 
-                  // setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
+                  setTimeout(() => {this.myUpload(file_name,  file)}, 3000);
               }
 
       } catch (error) {
