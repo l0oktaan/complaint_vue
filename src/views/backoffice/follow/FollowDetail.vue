@@ -845,7 +845,7 @@ export default {
         let response = await axios.post(`${path_api}`, fd )
         console.log(response);
         if(response){
-            setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 5000);
+            setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 10000);
         }
       } catch (error) {
           console.log(error);
