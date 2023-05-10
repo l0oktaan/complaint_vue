@@ -786,7 +786,7 @@ export default {
 
                 let path_upload = await  `/api/backoffice/uploadStepFiles`
 
-              await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
+                setTimeout(async ()  => { await this.insertFile(fd_upload, path_api, file_name, file, path_upload)}, 2000);
             }
 
             if(this.check_corrupt){
@@ -843,6 +843,7 @@ export default {
     async insertFile(fd, path_api, file_name, file, path_upload){
       try {
         let response = await axios.post(`${path_api}`, fd )
+        console.log(response);
         if(response){
             setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 5000);
         }
