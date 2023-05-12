@@ -32,12 +32,12 @@ export default {
     async insertComplain(){
       if(this.$refs.formComplain.validate()){
         try {
-          this.employee = await this.$refs.employee
+          this.employee   = await this.$refs.employee
 
-          let end_date =  `${moment(this.employee.end_date).format('YYYY-MM-DD')}`
-          let end_time = this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '00:00:00' 
-          let start_time = this.employee.complain_start_time !== null ? `${this.employee.complain_start_time}` : '00:00:00'  
-          let fd = await {
+          let end_date    = await `${moment(this.employee.end_date).format('YYYY-MM-DD')}`
+          let end_time    = await this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '00:00:00' 
+          let start_time  = await this.employee.complain_start_time !== null ? `${this.employee.complain_start_time}` : '00:00:00'  
+          let fd          = await {
             "name"              : this.employee.name,
             "lastname"          : this.employee.lastname,
             "register_id"       : this.check_roles.id,
@@ -54,42 +54,21 @@ export default {
             "modified_by"       : this.check_roles.id,
           }
 
-          let path = await `/api/user/complain`
-          let response = await axios.post(`${path}`, fd)
+          let path        = await `/api/user/complain`
+          let response    = await axios.post(`${path}`, fd)
 
        
           if(response){
 
-            let timerInterval
-              await Swal.fire({
-                title: 'กำลังอัพโหลดไฟล์',
-                html: 'I will success in <b></b> milliseconds.',
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: () => {
-                  Swal.showLoading()
-                  const b = Swal.getHtmlContainer().querySelector('b')
-                  timerInterval = setInterval(() => {
-                    b.textContent = Swal.getTimerLeft()
-                  }, 100)
-                    for (let i = 0; i < this.employee.files.length; i++) {
+    
+            for (let i = 0; i < this.employee.files.length; i++) {
 
-                      let number = i + 1 
+              let number = await i + 1 
 
+              setTimeout(async ()  => { await this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)}, 2000);
 
-                      this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)
-
-                    }
-
-                },
-                willClose: () => {
-                  clearInterval(timerInterval)
-                
-  
-                }
-              })
-
-           
+            }
+ 
           }
         
           await Swal.fire({
@@ -109,19 +88,18 @@ export default {
     async insertFile(register_id, complain_id, file, id){
       try {
 
-        console.log(file);
-
-          const arr_file = await file.name.split(".")
-
+          // const arr_file = await file.name.split(".")
+          const arr_file  = file.type.split("/")
+        
           let file_name = await ''
           
           if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-            file_name = await 'imgcid' + complain_id + '_' + id + '.' +arr_file[1] 
+            file_name = await 'imgComplain' + complain_id + '_' + id + '.' + arr_file[1] 
 
           }else if(file.type === 'application/pdf'){
 
-            file_name = await 'pdfcid' + complain_id + '_' + id + '.' +arr_file[1] 
+            file_name = await 'pdfComplain' + complain_id + '_' + id + '.' + arr_file[1] 
           }
 
           let fd_upload = await {
@@ -137,32 +115,18 @@ export default {
               let response = await axios.post(`${path}`, fd_upload )
 
               if(response){
-                // let timerInterval
-                // await Swal.fire({
-                //   title: 'กำลังอัพโหลดไฟล์',
-                //   html: 'I will success in <b></b> milliseconds.',
-                //   timer: 2000,
-                //   timerProgressBar: true,
-                //   didOpen: () => {
-                //     Swal.showLoading()
-                //     const b = Swal.getHtmlContainer().querySelector('b')
-                //     timerInterval = setInterval(() => {
-                //       b.textContent = Swal.getTimerLeft()
-                //     }, 100)
-                //   },
-                //   willClose: () => {
-                //     clearInterval(timerInterval)
-                //     this.myUpload(file_name,  file)
-                //   }
-                // })
 
-                // await this.myUpload(file_name,  file)
+                await this.myUpload(file_name,  file)
+              
+                  // setTimeout(async () => { await this.myUpload(file_name,  file)}, 10000);
 
-                  setTimeout(() => {this.myUpload(file_name,  file)}, 3000);
+                  await setTimeout(() => {
+                    console.log('....');
+                  }, 2000);
               }
 
       } catch (error) {
-          console.log(error);
+          console.log('myUpload',error);
       }
     },
     async myUpload(file_name, files){

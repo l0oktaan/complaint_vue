@@ -510,7 +510,6 @@ export default {
             const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
             for (let i = 0; i < value.length; i++) {
                 const file = value[i];
-                console.log(file);
                 if (!allowedTypes.includes(file.type)) {
                 return "File type not allowed";
                 }
@@ -562,7 +561,6 @@ export default {
             }
         },
         remove (index) {
-            console.log(index);
             this.files.splice(index, 1)
         },
         fileAdded () {

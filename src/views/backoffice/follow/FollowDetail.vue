@@ -143,6 +143,7 @@
                   <v-col cols="9">
                     <v-select
                       v-model="status_call"
+
                       :items="selectStatus"
                       item-text="value"
                       item-value="id"
@@ -514,6 +515,7 @@ export default {
     dialog_edit_status : false,
     valid: true,
     detailRules: [v => !!v || 'กรุณากรอกข้อมูล'],
+    statusCallRules: [(v) =>  v.length> 0 || "เลือกสถานะการดำเนินงาน"],
     check_roles: store.getters.user,
     status_detail: '',
     status_call: { value: '', id: null },
@@ -631,13 +633,13 @@ export default {
         // console.log(index);
         // this.corrupt_files.splice(index, 1)
     },
-    async close(){
-      this.dialog_edit_status = await false
-      this.editedIndex = await -1
-      this.show_detail_status = await false
-      this.check_corrupt = await false
-      this.overlay_edit_status = await false
-      this.corrupt = await {}
+    close(){
+      this.dialog_edit_status = false
+      this.editedIndex = -1
+      this.show_detail_status = false
+      this.check_corrupt = false
+      this.overlay_edit_status = false
+      this.corrupt = {}
       this.$refs.formEdit.reset()
       this.$refs.formEdit.resetValidation()
 
@@ -748,30 +750,35 @@ export default {
             "create_by"         : this.check_roles.id,
             "modified_by"       : this.check_roles.id,
           }
+
+
           let path        = await `/api/backoffice/create/complainStep`
           let response    = await axios.post(`${path}`, fd)
             
           if(response){
 
+
+
             for (let i = 0; i < this.$refs.status_files.files.length; i++) {
 
               let number = await i + 1
 
-              let file = await this.$refs.status_files.files[i]
-
               let complain_id = await response.data.complain_step_id
 
-              const arr_file = await file.name.split(".")
+              let file = await this.$refs.status_files.files[i]
+
+              // const arr_file = await file.name.split(".")
+              const arr_file = await file.type.split("/")
 
               let file_name = await ''
               
               if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-                file_name = await 'imgcid' + complain_id + '_' + number + '.' +arr_file[1] 
+                file_name = await 'imgComplainStep' + complain_id + '_' + number + '.' +arr_file[1] 
 
               }else if(file.type === 'application/pdf'){
 
-                file_name = await 'pdfcid' + complain_id + '_' + number + '.' +arr_file[1] 
+                file_name = await 'pdfComplainStep' + complain_id + '_' + number + '.' +arr_file[1] 
               }
 
                 let fd_upload = await {
@@ -781,18 +788,31 @@ export default {
                     "file_name"           : file_name,
                     "file_type"           : file.type
                 }
-
+ 
                 let path_api = await `/api/backoffice/complainStepFiles`
 
-                let path_upload = await  `/api/backoffice/uploadStepFiles`
+                let res_complainStepfiles =  await axios.post(`${path_api}`, fd_upload )
 
-                setTimeout(async ()  => { await this.insertFile(fd_upload, path_api, file_name, file, path_upload)}, 2000);
+                if(res_complainStepfiles){
+
+                  let path_upload = await  `/api/backoffice/uploadStepFiles`
+
+                  await this.myUpload(file_name,  file, path_upload)
+
+                  await setTimeout(() => {
+                    console.log('....');
+                  }, 2000);
+                }
+
+                // setTimeout(async ()  => { await this.insertFile(fd_upload, path_api, file_name, file, path_upload)}, 2000);
             }
 
             if(this.check_corrupt){
               await this.saveComplainCorrupt(response.data.complain_step_id)
             }
+       
           }
+       
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
@@ -840,18 +860,18 @@ export default {
         }
       } 
     },
-    async insertFile(fd, path_api, file_name, file, path_upload){
-      try {
-        let response = await axios.post(`${path_api}`, fd )
-        console.log(response);
-        if(response){
-            setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 10000);
-        }
-      } catch (error) {
-          console.log(error);
-      }
+    // async insertFile(fd, path_api, file_name, file, path_upload){
+    //   try {
+    //     let response = await axios.post(`${path_api}`, fd )
+    //     console.log(response);
+    //     if(response){
+    //         setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 10000);
+    //     }
+    //   } catch (error) {
+    //       console.log(error);
+    //   }
 
-    },
+    // },
     async myUpload(file_name, files, path_upload){
       try {
 
@@ -924,9 +944,22 @@ export default {
 
           let path_api = await `/api/backoffice/complainCorruptFiles`
 
-          let path_upload = await  `/api/backoffice/uploadCorruptFiles`
-          
-          await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
+          let res_complainCorruptFiles =  await axios.post(`${path_api}`, fd_upload )
+
+          if(res_complainCorruptFiles){
+
+            let path_upload = await  `/api/backoffice/uploadCorruptFiles`
+
+            await this.myUpload(file_name,  file, path_upload)
+
+            await setTimeout(() => {
+              console.log('....');
+            }, 2000);
+          }
+
+
+       
+          // await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
         }
       } 
 
