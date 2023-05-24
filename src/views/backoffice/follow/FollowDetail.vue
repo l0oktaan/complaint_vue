@@ -514,7 +514,10 @@ export default {
     dialog_status : false,
     dialog_edit_status : false,
     valid: true,
-    detailRules: [v => !!v || 'กรุณากรอกข้อมูล'],
+    detailRules: [
+      v => !!v || 'กรุณากรอกข้อมูล',
+      v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
+  ],
     statusCallRules: [(v) =>  v.length> 0 || "เลือกสถานะการดำเนินงาน"],
     check_roles: store.getters.user,
     status_detail: '',
@@ -527,7 +530,10 @@ export default {
     ],
     check_corrupt: false,
     corrupt: {},
-    corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล'],
+    corruptRefRules : [
+      v => !!v || 'กรุณากรอกข้อมูล',
+      v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร'
+    ],
     corruptDetailfRules : [v => !!v || 'กรุณากรอกข้อมูล'],
     show_detail_status : false,
     editedIndex: -1,
@@ -642,6 +648,8 @@ export default {
       this.corrupt = {}
       this.$refs.formEdit.reset()
       this.$refs.formEdit.resetValidation()
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
 
     },
     async dailogStatusEdit(v){
