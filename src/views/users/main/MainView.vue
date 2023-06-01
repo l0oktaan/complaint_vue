@@ -413,7 +413,13 @@ import StepTree from '@/components/step/stepTree.vue'
                     let response = await axios.post(`${path}`, fd_upload )
 
                     if(response){
-                        setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
+
+                        await this.myUpload(file_name,  file)
+
+                        await setTimeout(() => {
+                            console.log('....');
+                        }, 2000);
+                        // setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
                     }
 
             } catch (error) {
