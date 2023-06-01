@@ -58,13 +58,17 @@ export default {
 
           // If the server returned a successful response
           if (response.status === 200) {
-            Swal.fire({
+            await Swal.fire({
               position: 'center',
               icon: 'success',
               title: 'Password reset email sent! Please check your inbox.',
               showConfirmButton: false,
               timer: 1500
             })
+
+            this.email = await ''
+            await this.$refs.formForgot.reset()
+            await this.$refs.formForgot.resetValidation()
             // alert("Password reset email sent! Please check your inbox.");
           }
         }

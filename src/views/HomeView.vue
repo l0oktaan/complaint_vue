@@ -234,7 +234,7 @@
                 </v-btn>
                 <v-divider v-if="check_roles.roles != 'user'" class="my-3"></v-divider>
                
-                <v-btn
+                <!-- <v-btn
                   v-if="check_roles.roles != 'user'"
                   depressed
                   rounded
@@ -243,7 +243,7 @@
 
                 >
                   หน้าบ้าน
-                </v-btn>
+                </v-btn> -->
               </div>
             </v-list-item-content>
           </v-card>

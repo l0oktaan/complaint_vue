@@ -2,10 +2,7 @@
   <div class="complain-detail"> 
     <loaderView ref="loader"/>
     <BreadcrumbsView :items="item"/>
-    <v-expansion-panels
-      v-model="panel"
-      multiple
-    >
+    <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel>
         <v-expansion-panel-header>
           รายละเอียดปัญหา
@@ -18,7 +15,6 @@
                   <v-subheader>Call No.</v-subheader>
                 </v-col>
                 <v-col cols="9">
-                  
                   <v-text-field
                     v-model="data.call_no"
                     solo
@@ -54,7 +50,6 @@
                 ></v-text-field>
               </v-col> -->
             </v-row>
-
             <v-row>
               <v-col cols="3">
                 <v-subheader>หัวเรื่อง</v-subheader>
@@ -84,8 +79,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-
-
             <v-row>
               <v-col cols="3">
                 <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>

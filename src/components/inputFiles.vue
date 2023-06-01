@@ -56,13 +56,13 @@ export default {
             //     return "Please select at least one file";
             // }
             if (value.length > 10) {
-                return "Maximum 10 files allowed";
+                return "อัพโหลดไฟล์ได้ไม้เกิน 10 ไฟล์";
             }
 
-            const maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+            const maxFileSize = 10 * 1024 * 1024; // 2MB in bytes
             for (let i = 0; i < value.length; i++) {
                 if (value[i].size > maxFileSize) {
-                    return 'File size should not exceed 2MB.';
+                    return 'อัพโหลดไฟล์ขนาดไม้เกิน 10 mb';
                 }else{
                     return true;
                 }
@@ -73,7 +73,7 @@ export default {
                 const file = value[i];
                 console.log(file);
                 if (!allowedTypes.includes(file.type)) {
-                return "File type not allowed";
+                return "ประเภทไฟล์ที่อัพโหลดไม่ถูกต้อง";
                 }
             }
             return true;

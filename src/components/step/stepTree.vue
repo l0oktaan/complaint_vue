@@ -502,16 +502,25 @@ export default {
         fileRules: [
             value => {
             if (!value || value.length === 0) {
-                return "กรุณ่เลือกไฟล์";
+                return "กรุณาเลือกไฟล์";
             }
             if (value.length > 5) {
                 return "อัพโหลดไฟล์ได้ไม้เกิน 5 ไฟล์";
+            }
+            
+            const maxFileSize = 10 * 1024 * 1024; // 2MB in bytes
+            for (let i = 0; i < value.length; i++) {
+                if (value[i].size > maxFileSize) {
+                    return 'อัพโหลดไฟล์ขนาดไม้เกิน 10 mb';
+                }else{
+                    return true;
+                }
             }
             const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
             for (let i = 0; i < value.length; i++) {
                 const file = value[i];
                 if (!allowedTypes.includes(file.type)) {
-                return "File type not allowed";
+                return "ประเภทไฟล์ที่อัพโหลดไม่ถูกต้อง";
                 }
             }
             return true;

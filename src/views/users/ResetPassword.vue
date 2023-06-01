@@ -20,21 +20,10 @@
       >
 
           <v-card-text>
-              <!-- <p class="style-label">รหัสผ่านปัจจุบัน <span>*</span></p>
-              <v-text-field
-                  v-model="password"
-                  :rules="passwordRules"
-                  label="รหัสผ่านปัจจุบัน"
-                  required
-                  dense
-                  outlined
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                  autocomplete="on"
-              
-              ></v-text-field> -->
-              <p class="style-label">รหัสผ่านใหม่ <span>*</span></p>
+            <resetPassword ref="pass"/>
+           
+              <!-- <p class="style-label">รหัสผ่านใหม่ <span>*</span></p>
+
               <v-text-field
                   v-model="newPassword"
                   :rules="newPasswordRules"
@@ -61,28 +50,14 @@
                   :append-icon="showPassword3 ? 'mdi-eye' : 'mdi-eye-off'"
                   @click:append="showPassword3 = !showPassword3"
                   autocomplete="on"
-              ></v-text-field>
+              ></v-text-field> -->
               <p v-if="errorMessage" class="error_message">{{ errorMessage }}</p>
           </v-card-text>
-
-          <v-divider></v-divider>
-
           <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-              color="blue darken-1"
-              text
-              @click="closeDialog"
-          >
-          ยกเลิก
-        </v-btn>
-          <v-btn
-              color="primary"
-              text
-              type="submit"
-          >
-              บันทึก
-          </v-btn>
+          <v-btn class="btn btn-submit" text type="submit">บันทึก</v-btn>
+          <v-btn class="btn btn-cancel" text @click="closeDialog">ยกเลิก</v-btn>
+       
           </v-card-actions>
       </v-form>
     
@@ -95,34 +70,36 @@
   // import store from '../store/index.js';
   import axios from "axios";
   import Swal from 'sweetalert2';
+import resetPassword from '@/components/resetPassword.vue';
 
   export default {
+  components: { resetPassword },
 
       data: () => ({
           valid:false,
           dialog: true,
-          newPassword: '',
-          confirmPassword: '',
-          showPassword2: false,
-          showPassword3: false,
+        //   newPassword: '',
+        //   confirmPassword: '',
+        //   showPassword2: false,
+        //   showPassword3: false,
           errorMessage:'',
-          newPasswordRules: [
-            v => !!v || 'กรุณากรอกข้อมูล',
-            // v => (v && v.length >= 8) || 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
-            v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'Minimum 8 characters, One capital latter, Special charater, Number',
-          ],
-          confirmPasswordRules: [
-            v => !!v || 'กรุณากรอกข้อมูล',
-            v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'Minimum 8 characters, One capital latter, Special charater, Number',
-            // v => (v && v.length >= 8) || 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
-          ],
+        //   newPasswordRules: [
+        //     v => !!v || 'กรุณากรอกข้อมูล',
+        //     // v => (v && v.length >= 8) || 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+        //     v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'Minimum 8 characters, One capital latter, Special charater, Number',
+        //   ],
+        //   confirmPasswordRules: [
+        //     v => !!v || 'กรุณากรอกข้อมูล',
+        //     v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'Minimum 8 characters, One capital latter, Special charater, Number',
+        //     // v => (v && v.length >= 8) || 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+        //   ],
       }),
       created(){
         console.log(this.$route.query.token)
       },
         computed: { 
             isPasswordMatch() {
-                return this.newPassword === this.confirmPassword;
+                return this.$refs.pass.newPassword === this.$refs.pass.confirmPassword;
             }
         },
       methods:{
@@ -138,7 +115,7 @@
                         } else {
                             let fd = await {
                                 "forgot_token"  : this.$route.query.token,
-                                "password"      : this.newPassword,
+                                "password"      : this.$refs.pass.newPassword,
                             }
 
                             let path = await `/api/user/forgot/reset-password`
