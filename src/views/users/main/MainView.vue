@@ -394,11 +394,11 @@ import StepTree from '@/components/step/stepTree.vue'
                 
                 if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-                  file_name = await 'imgcid' + complain_id + '_' + id + '.' +arr_file[1] 
+                  file_name = await 'imgComplain' + complain_id + '_' + id + '.' +arr_file[1] 
 
                 }else if(file.type === 'application/pdf'){
 
-                   file_name = await 'pdfcid' + complain_id + '_' + id + '.' +arr_file[1] 
+                   file_name = await 'pdfComplain' + complain_id + '_' + id + '.' +arr_file[1] 
                 }
 
                 let fd_upload = await {
@@ -494,7 +494,7 @@ import StepTree from '@/components/step/stepTree.vue'
         font-size: 14px!important;
     }
     .swal2-title{
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .swal2-confirm{
