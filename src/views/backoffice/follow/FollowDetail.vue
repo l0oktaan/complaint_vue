@@ -473,6 +473,7 @@ import DetailComplain from '@/components/detailComplain.vue';
 
 
 
+
 export default {
   components: { loaderView, BreadcrumbsView, InputFiles, DatePickers, DialogsFiles, DetailComplain},
   data: () => ({
@@ -764,9 +765,6 @@ export default {
           let response    = await axios.post(`${path}`, fd)
             
           if(response){
-
-
-
             for (let i = 0; i < this.$refs.status_files.files.length; i++) {
 
               let number = await i + 1
@@ -800,7 +798,7 @@ export default {
                 let path_api = await `/api/backoffice/complainStepFiles`
 
                 let res_complainStepfiles =  await axios.post(`${path_api}`, fd_upload )
-
+                
                 if(res_complainStepfiles){
 
                   let path_upload = await  `/api/backoffice/uploadStepFiles`
@@ -934,11 +932,11 @@ export default {
             
           if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-            file_name = await 'imgcid' + corrupt_id + '_' + number + '.' +arr_file[1] 
+            file_name = await 'imgCorrupt' + corrupt_id + '_' + number + '.' +arr_file[1] 
 
           }else if(file.type === 'application/pdf'){
 
-            file_name = await 'pdfcid' + corrupt_id + '_' + number + '.' +arr_file[1] 
+            file_name = await 'pdfCorrupt' + corrupt_id + '_' + number + '.' +arr_file[1] 
           }
 
           let fd_upload = await {
