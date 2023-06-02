@@ -649,8 +649,8 @@ export default {
       this.corrupt = {}
       this.$refs.formEdit.reset()
       this.$refs.formEdit.resetValidation()
-      this.$refs.form.reset()
-      this.$refs.form.resetValidation()
+      // this.$refs.form.reset()
+      // this.$refs.form.resetValidation()
 
     },
     async dailogStatusEdit(v){
@@ -661,7 +661,6 @@ export default {
       await this.getComplainStepFiles(v)
       this.status_call = await v.status_call
       this.complain_step_id = await v.id
-
       this.check_corrupt = await v.check_corrupt == 1 ? true : false
 
       if(this.check_corrupt){
@@ -798,6 +797,10 @@ export default {
                 let path_api = await `/api/backoffice/complainStepFiles`
 
                 let res_complainStepfiles =  await axios.post(`${path_api}`, fd_upload )
+
+                await setTimeout(() => {
+                    console.log('.... complainStepFiles');
+                  }, 3200);
                 
                 if(res_complainStepfiles){
 
@@ -806,7 +809,7 @@ export default {
                   await this.myUpload(file_name,  file, path_upload)
 
                   await setTimeout(() => {
-                    console.log('....');
+                    console.log('.... uploadStepFiles');
                   }, 2000);
                 }
 
