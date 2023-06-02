@@ -63,7 +63,7 @@
                     @click:append="showPassword3 = !showPassword3"
                     autocomplete="on"
                 ></v-text-field>
-                <p v-if="errorMessage" class="error_message">{{ errorMessage }}</p>
+                <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
             </v-card-text>
             <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
             <!-- <v-divider></v-divider> -->
@@ -156,7 +156,7 @@
                             console.log(response);
                          
                         } else {
-                            this.errorMessage = await 'Password does not match'
+                            this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
                             
                         }
                     }

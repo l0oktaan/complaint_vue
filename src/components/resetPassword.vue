@@ -28,7 +28,6 @@
             @click:append="showConfirmPassword = !showConfirmPassword"
             autocomplete="on"
         ></v-text-field>
-        <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
     </div>
 </template>
 
@@ -58,4 +57,9 @@ export default {
     .valid-text{
         color: red;
     }
+    .not-match{
+        background: #e7e7e7;
+        text-align: center;
+    }
+
 </style>

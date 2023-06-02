@@ -51,7 +51,7 @@
                   @click:append="showPassword3 = !showPassword3"
                   autocomplete="on"
               ></v-text-field> -->
-              <p v-if="errorMessage" class="error_message">{{ errorMessage }}</p>
+              <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
           </v-card-text>
           <v-card-actions>
           <v-spacer></v-spacer>
@@ -130,7 +130,7 @@ import resetPassword from '@/components/resetPassword.vue';
                             console.log(response);
                        
                         } else {
-                          this.errorMessage = await 'Password does not match'
+                          this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
                         }
                   }
               } catch (error) {
@@ -150,5 +150,9 @@ import resetPassword from '@/components/resetPassword.vue';
 .dialog-reset{
   background-color: #1e1e1ecc!important;
 }
+.not-match{
+        background: #e7e7e7;
+        text-align: center;
+    }
 
 </style>

@@ -103,13 +103,14 @@
                     >
                         <v-card-text>
                         <ResetPassword ref="pass"/>
-                            <p v-if="errorMessage" class="error_message">{{ errorMessage }}</p>
+                            <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
+                            <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
                         </v-card-text>   
                             <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn class="btn btn-submit" text type="submit">บันทึก</v-btn>
-                            <v-btn class="btn btn-cancel" text @click="dialog == false">ยกเลิก</v-btn>
-                         
+                            <v-btn class="btn btn-cancel" @click="closeReset">ยกเลิก</v-btn>
+                           
                         </v-card-actions>
                     </v-form>
                 </v-card>
@@ -151,7 +152,11 @@ export default {
         }
     },
     methods: {
-      
+        closeReset(){
+            this.dialog = false
+            this.$refs.formReset.reset()
+            this.$refs.formReset.resetValidation() 
+        },
         async login () {
             if( this.$refs.form.validate()){
                 try { 
@@ -216,10 +221,12 @@ export default {
                         showConfirmButton: false,
                         timer: 1000
                     })
+
+                    this.dialog = await false
                     
                 }else{
                   
-                    this.errorMessage = await 'Password does not match'
+                    this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
                     // this.email = await ''
                     // this.password = await ''
                      
@@ -228,7 +235,7 @@ export default {
                 this.email = await ''
                 this.password = await ''
                 await this.$refs.form.resetValidation()
-                this.dialog = await false
+
               
             }
           
@@ -306,6 +313,10 @@ export default {
     }
     .w-100{
         width: 100%;
+    }
+    .not-match{
+        background: #e7e7e7;
+        text-align: center;
     }
 
     
