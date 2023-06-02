@@ -772,7 +772,6 @@ export default {
 
               let file = await this.$refs.status_files.files[i]
 
-              // const arr_file = await file.name.split(".")
               const arr_file = await file.type.split("/")
 
               let file_name = await ''

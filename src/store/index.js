@@ -89,6 +89,11 @@ export default new Vuex.Store({
 
     async logout({commit}){
 
+      let path = await '/api/user/logout'
+      let response =  await axios.put(path)
+
+      console.log(response);
+
       commit('clearAuthUser')
     },
 
