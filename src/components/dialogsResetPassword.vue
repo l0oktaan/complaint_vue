@@ -65,7 +65,7 @@
                 ></v-text-field>
                 <p v-if="errorMessage" class="error_message">{{ errorMessage }}</p>
             </v-card-text>
-
+            <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
             <!-- <v-divider></v-divider> -->
 
             <v-card-actions>
@@ -100,11 +100,11 @@
             ],
             newPasswordRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข',
+                v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'กรุณาตั้งค่ารหัสผ่านตาม *หมายเหตุ',
             ],
             confirmPasswordRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v => (v && v.length >= 8) || 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+                v => (v && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v)) || 'กรุณาตั้งค่ารหัสผ่านตาม *หมายเหตุ',
             ],
          
         }),
@@ -137,10 +137,7 @@
                  
                     if(this.$refs.formReset.validate()){
 
-                        if (!this.isPasswordMatch) {
-                            this.errorMessage = await 'Password does not match'
-                        } else {
-
+                        if (this.isPasswordMatch) {
                             let fd = await {
                                 "id"            : this.userId,
                                 "password"      : this.newPassword,
@@ -157,6 +154,10 @@
                             this.dialog = await false
                             await this.$refs.formReset.reset()
                             console.log(response);
+                         
+                        } else {
+                            this.errorMessage = await 'Password does not match'
+                            
                         }
                     }
                 } catch (error) {
@@ -187,4 +188,7 @@ v-deep.v-icon.v-icon{
     border: 1px solid #003366;
     background: #003366;
 }
+.valid-text{
+        color: red;
+    }
 </style>

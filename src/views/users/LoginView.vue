@@ -202,9 +202,7 @@ export default {
         },
         async resetPassword(){
             if(this.$refs.formReset.validate()){
-                if(!this.isPasswordMatch){
-                    this.errorMessage = await 'Password does not match'
-                }else{
+                if(this.isPasswordMatch){
                     let path_update = await `/api/user/resetePasswordLogin`
                     await axios.post(path_update,{
                         email       : this.email,
@@ -218,6 +216,10 @@ export default {
                         showConfirmButton: false,
                         timer: 1000
                     })
+                    
+                }else{
+                  
+                    this.errorMessage = await 'Password does not match'
                     // this.email = await ''
                     // this.password = await ''
                      

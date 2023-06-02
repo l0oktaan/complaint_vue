@@ -888,9 +888,9 @@ export default {
           await fd_upload.append('image_name', file_name);
           await fd_upload.append('images', files);
 
-          let res2  = await axios.post(`${path_upload}`, fd_upload)
+          await axios.post(`${path_upload}`, fd_upload)
           
-          console.log(res2);
+
 
       } catch (error) {
 

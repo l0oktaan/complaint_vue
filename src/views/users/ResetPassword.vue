@@ -110,9 +110,7 @@ import resetPassword from '@/components/resetPassword.vue';
                 try {
                     if(this.$refs.formReset.validate()){
 
-                        if (!this.isPasswordMatch) {
-                            this.errorMessage = await 'Password does not match'
-                        } else {
+                        if (this.isPasswordMatch) {
                             let fd = await {
                                 "forgot_token"  : this.$route.query.token,
                                 "password"      : this.$refs.pass.newPassword,
@@ -130,6 +128,9 @@ import resetPassword from '@/components/resetPassword.vue';
 
                             await this.$router.push('/user/login')
                             console.log(response);
+                       
+                        } else {
+                          this.errorMessage = await 'Password does not match'
                         }
                   }
               } catch (error) {

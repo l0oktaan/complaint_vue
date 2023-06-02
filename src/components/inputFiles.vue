@@ -56,13 +56,13 @@ export default {
             //     return "Please select at least one file";
             // }
             if (value.length > 10) {
-                return "อัพโหลดไฟล์ได้ไม้เกิน 10 ไฟล์";
+                return "อัพโหลดไฟล์ได้ไม่เกิน 10 ไฟล์";
             }
 
             const maxFileSize = 10 * 1024 * 1024; // 2MB in bytes
             for (let i = 0; i < value.length; i++) {
                 if (value[i].size > maxFileSize) {
-                    return 'อัพโหลดไฟล์ขนาดไม้เกิน 10 mb';
+                    return 'อัพโหลดไฟล์ขนาดไม่เกิน 10 mb';
                 }else{
                     return true;
                 }
