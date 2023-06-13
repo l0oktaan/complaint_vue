@@ -89,8 +89,10 @@ export default new Vuex.Store({
 
     async logout({commit}){
 
-      let path = await '/api/user/logout'
-      let response =  await axios.put(path)
+      let path = await '/api/logout'
+      // let response =  await axios.post(path)
+      // let response =  await axios.post(path,{user_id: authData.user_id})
+      let response =  await axios.post(path)
 
       console.log(response);
 
