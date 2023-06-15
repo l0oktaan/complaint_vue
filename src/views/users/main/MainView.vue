@@ -69,47 +69,8 @@
                                     </div>
                                 </v-form>
                             </v-stepper-content>
-                            <!-- <v-stepper-content step="4">
-                                <v-form
-                                    ref="formSubmit"
-                                    v-model="validOne"
-                                    lazy-validation
-                                >
-                                <v-row justify="space-between">
-                                    <v-col v-if="user.item" cols="12" md="6" class="text-left">
-                                        <div class="h2 mb-2">ข้อมูลผู้ร้อง / ข้อมูลติดต่อ</div>
-                                        <p>อีเมล : {{ user.item.email }}</p>
-                                        <p>ชื่อ-สกุล : {{ user.item.name }} {{ user.item.lastname }}</p>
-                                        <p>เพศ : {{ user.item.gender }}</p>
-                                        <p>อายุ : {{ user.item.age }} ปี</p>
-                                        <p>โทรศัพท์มือถือ : {{ user.item.phone }}</p>
-                                        <p>เบอร์ติดต่ออื่น ๆ : {{ user.item.phone_other }}</p>
-                                        <p>ที่อยู่ : {{ user.item.address }}</p>
-                                    </v-col>
-                                    <v-col v-if="employee" cols="12" md="6" class="text-left">
-                                        <div class="h2 mb-2">เจ้าหน้าที่ / หน่วยงาน </div>
-                                        <p>ชื่อ-สกุล : {{ employee.name }} {{ employee.lastname }}</p>
-                                        <p>หน่วยงาน : {{ employee.division }}</p>
-                                        <p>รูปพรรณสันฐาน : {{ employee.description_face }}</p>
-                                        <p>เรื่องร้องเรียน : {{ employee.complain_topic }}</p>
-                                        <p>สถานที่เกิดเหตุ : {{ employee.complain_location }}</p>
-                                        <p>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ : {{ employee.complain_start_date }} - {{ employee.complain_end_date }}</p>
-                                        <p>รายละเอียดเรื่องร้องเรียน : {{ employee.complain_detail }}</p>
-                                        <p>เอกสารประกอบ : </p>
-                                        <div v-for="(item, i) in employee.files" :key="i" @click="dataUrl(item)">{{  item.name }}</div>
-                                    </v-col>
-                                </v-row>
-                                    
-                                    <div class="text-right">
-                                        <v-btn class="btn-back"  @click="e1 = 3">ย้อนกลับ</v-btn>
-                                        <v-btn color="#003366" class="btn-next text-white" @click="submit">บันทึก</v-btn>
-                                    </div>
-                                </v-form>
-                            </v-stepper-content> -->
-
                         </v-stepper-items>
                     </v-stepper>
-
             </v-container>
         </div>
     </div>
@@ -252,8 +213,6 @@ import StepTree from '@/components/step/stepTree.vue'
                         "description_face"  : this.employee.description_face,
                         "topic"             : this.employee.complain_topic,
                         "location"          : this.employee.complain_location,
-                        // "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
-                        // "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
                         "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD') + ' ' + start_time}`,
                         "end_date"          : `${end_date + ' ' + end_time}`,
                         "detail"            : this.employee.complain_detail,
@@ -331,19 +290,12 @@ import StepTree from '@/components/step/stepTree.vue'
                             console.log(result.isConfirmed);
 
                             let path = await `/api/user/register`
-                            let response = await axios.post(`${path}`, fd)
+                            await axios.post(`${path}`, fd)
 
-                            console.log(response);
 
-                            // if(response){
-
-                            //     await this.insertComplain(response.data.register_id)
-                                
-                            // }
-
+                          
                             await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
-                        // } else if (result.isDenied) {
-                        //     Swal.fire('Changes are not saved', '', 'info')
+                     
                         }
                     })
 
@@ -374,72 +326,70 @@ import StepTree from '@/components/step/stepTree.vue'
 
             if(response){
 
-                   for (let i = 0; i < this.employee.files.length; i++) {
+                const formData = await new FormData();    
+
+                await formData.append('id', response.data.complain_id);
+
+                await formData.append('types', 'Complain');
+            
+
+                for (let i = 0; i < this.employee.files.length; i++) {
+
+                    await formData.append('files', this.employee.files[i]);
 
                     let number = await i + 1
 
-                    await this.insertFile(register_id, response.data.complain_id, this.employee.files[i], number)
+                    const complain_id = await response.data.complain_id
+
+                    const file = await this.employee.files[i]
+
+                    const arr_file = await file.name.split("/")
+
+                    let file_name = await ''
+
+                    if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+
+                    file_name = await 'imgComplain' + complain_id + '_' + number + '.' +arr_file[1] 
+
+                    }else if(file.type === 'application/pdf'){
+
+                    file_name = await 'pdfComplain' + complain_id + '_' + number + '.' +arr_file[1] 
                     
-                  
-                }
-            }
-        },
-        async insertFile(register_id, complain_id, file, id){
+                    }
 
-            try {
-
-                const arr_file = await file.name.split(".")
-
-                let file_name = await ''
-                
-                if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
-
-                  file_name = await 'imgComplain' + complain_id + '_' + id + '.' +arr_file[1] 
-
-                }else if(file.type === 'application/pdf'){
-
-                   file_name = await 'pdfComplain' + complain_id + '_' + id + '.' +arr_file[1] 
-                }
-
-                let fd_upload = await {
-                    "register_id"   : register_id,
-                    "complain_id"   : complain_id,
-                    "file_original" : file.name,
-                    "file_name"     : file_name
-                }
+                    let fd_upload = await {
+                        "register_id"   : register_id,
+                        "complain_id"   : complain_id,
+                        "file_original" : file.name,
+                        "file_name"     : file_name
+                    }
 
                     let path = await `/api/user/files`
 
-                    let response = await axios.post(`${path}`, fd_upload )
+                    await axios.post(`${path}`, fd_upload )
 
-                    if(response){
 
-                        await this.myUpload(file_name,  file)
+                }
+                
+                await this.myUpload(formData)
 
-                        await setTimeout(() => {
-                            console.log('....');
-                        }, 2000);
-                        // setTimeout(() => {this.myUpload(file_name,  file)}, 2000);
-                    }
-
-            } catch (error) {
-                console.log(error);
+                   
             }
-
         },
-
-        async myUpload(file_name, files){
+    
+        async myUpload(files){
 
             try {
 
-                let fd_upload =  await new FormData();
-                await fd_upload.append('image_name', file_name);
-                await fd_upload.append('images', files);
-
-           
-                let res2  = await axios.post(`/api/user/uploadFiles`, fd_upload)
-                
-                console.log(res2);
+                await axios.post('/api/uploadsFile', files)
+                    .then(response => {
+                        // Handle the response
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        // Handle the error
+                        console.error(error);
+                });
 
             } catch (error) {
 

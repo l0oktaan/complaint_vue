@@ -6,6 +6,7 @@
         ref="formComplain"
         v-model="valid"
         lazy-validation
+     
       >
         <stepTree ref="employee"/>
         <v-btn class="btn-submit mt-3" :disabled="isActive" @click="insertComplain">บันทึก</v-btn>
@@ -33,7 +34,6 @@ export default {
       if(this.$refs.formComplain.validate()){
         try {
           this.employee   = await this.$refs.employee
-
           let end_date    = await `${moment(this.employee.end_date).format('YYYY-MM-DD')}`
           let end_time    = await this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '00:00:00' 
           let start_time  = await this.employee.complain_start_time !== null ? `${this.employee.complain_start_time}` : '00:00:00'  
@@ -45,32 +45,63 @@ export default {
             "description_face"  : this.employee.description_face,
             "topic"             : this.employee.complain_topic,
             "location"          : this.employee.complain_location,
-            // "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
-            // "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
             "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD') + ' ' + start_time}`,
             "end_date"          : `${end_date + ' ' + end_time}`,
             "detail"            : this.employee.complain_detail,
             "create_by"         : this.check_roles.id,
             "modified_by"       : this.check_roles.id,
           }
-
           let path        = await `/api/user/complain`
           let response    = await axios.post(`${path}`, fd)
 
-       
           if(response){
+        
+            const formData = await new FormData();        
+            await formData.append('id', response.data.complain_id);
 
-    
+            await formData.append('types', 'Complain');
+         
             for (let i = 0; i < this.employee.files.length; i++) {
 
-              let number = await i + 1 
+            
+              await formData.append('files', this.employee.files[i]);
 
-              setTimeout(async ()  => { await this.insertFile(this.check_roles.id, response.data.complain_id, this.employee.files[i], number)}, 2000);
+              const complain_id = await response.data.complain_id
 
+              const number = await i + 1 
+   
+              const file = await this.employee.files[i]
+              
+              const arr_file = await file.type.split("/")
+
+              let file_name = await ''
+
+
+              if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+
+                file_name = await 'imgComplain' + complain_id + '_' + number + '.' + arr_file[1] 
+
+              }else if(file.type === 'application/pdf'){
+
+                file_name = await 'pdfComplain' + complain_id + '_' + number + '.' + arr_file[1] 
+              }
+
+              let fd_upload = await {
+                "register_id"   : this.check_roles.id,
+                "complain_id"   : complain_id,
+                "file_original" : file.name,
+                "file_name"     : file_name,
+                "file_type"     : file.type
+              }
+
+              let path = await `/api/user/files`
+
+              await axios.post(`${path}`, fd_upload )
             }
- 
-          }
-        
+
+            await this.myUpload(formData)
+
+          } 
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
@@ -85,68 +116,24 @@ export default {
       }
     },
 
-    async insertFile(register_id, complain_id, file, id){
+    async myUpload(files){
       try {
 
-          // const arr_file = await file.name.split(".")
-          const arr_file  = file.type.split("/")
-        
-          let file_name = await ''
-          
-          if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
-
-            file_name = await 'imgComplain' + complain_id + '_' + id + '.' + arr_file[1] 
-
-          }else if(file.type === 'application/pdf'){
-
-            file_name = await 'pdfComplain' + complain_id + '_' + id + '.' + arr_file[1] 
-          }
-
-          let fd_upload = await {
-              "register_id"   : register_id,
-              "complain_id"   : complain_id,
-              "file_original" : file.name,
-              "file_name"     : file_name,
-              "file_type"     : file.type
-          }
-
-              let path = await `/api/user/files`
-
-              let response = await axios.post(`${path}`, fd_upload )
-
-              if(response){
-
-                await this.myUpload(file_name,  file)
-              
-                  // setTimeout(async () => { await this.myUpload(file_name,  file)}, 10000);
-
-                  await setTimeout(() => {
-                    console.log('....');
-                  }, 2000);
-              }
-
-      } catch (error) {
-          console.log('myUpload',error);
-      }
-    },
-    async myUpload(file_name, files){
-
-      try {
-
-          let fd_upload =  await new FormData();
-          await fd_upload.append('image_name', file_name);
-          await fd_upload.append('images', files);
-
-
-          let res2  = await axios.post(`/api/user/uploadFiles`, fd_upload)
-          
-          console.log(res2);
+        await axios.post('/api/uploadsFile', files)
+        .then(response => {
+            // Handle the response
+            console.log(response.data);
+        })
+        .catch(error => {
+            // Handle the error
+            console.error(error);
+        });
 
       } catch (error) {
 
           console.log(error);
       }
-    },
+    }
   }
 
 }

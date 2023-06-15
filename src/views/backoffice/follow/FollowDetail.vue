@@ -35,14 +35,6 @@
                 >
                 <i class="fa-solid fa-file"></i>
               </v-btn>
-                <!-- <v-btn
-                  color="primary"
-                  dark
-                  icon
-                  @click="dailogfiles('complain_step', item)"
-                >
-                <i class="fa-solid fa-file"></i>
-              </v-btn> -->
               </div>
              
             </template>
@@ -764,8 +756,16 @@ export default {
           let response    = await axios.post(`${path}`, fd)
             
           if(response){
-            for (let i = 0; i < this.$refs.status_files.files.length; i++) {
 
+            const formData = await new FormData();  
+
+            await formData.append('id', response.data.complain_step_id);
+            await formData.append('types', 'ComplainStep');
+
+            for (let i = 0; i < this.$refs.status_files.files.length; i++) {
+             
+              await formData.append('files', this.$refs.status_files.files[i]);
+              
               let number = await i + 1
 
               let complain_id = await response.data.complain_step_id
@@ -795,25 +795,10 @@ export default {
  
                 let path_api = await `/api/backoffice/complainStepFiles`
 
-                let res_complainStepfiles =  await axios.post(`${path_api}`, fd_upload )
-
-                await setTimeout(() => {
-                    console.log('.... complainStepFiles');
-                  }, 3200);
-                
-                if(res_complainStepfiles){
-
-                  let path_upload = await  `/api/backoffice/uploadStepFiles`
-
-                  await this.myUpload(file_name,  file, path_upload)
-
-                  await setTimeout(() => {
-                    console.log('.... uploadStepFiles');
-                  }, 2000);
-                }
-
-                // setTimeout(async ()  => { await this.insertFile(fd_upload, path_api, file_name, file, path_upload)}, 2000);
+                await axios.post(`${path_api}`, fd_upload )
             }
+
+            await this.myUpload(formData)
 
             if(this.check_corrupt){
               await this.saveComplainCorrupt(response.data.complain_step_id)
@@ -838,6 +823,7 @@ export default {
         }
       } 
     },
+
     async editComplainStep(){
       if(this.$refs.formEdit.validate()){
         try {
@@ -868,28 +854,18 @@ export default {
         }
       } 
     },
-    // async insertFile(fd, path_api, file_name, file, path_upload){
-    //   try {
-    //     let response = await axios.post(`${path_api}`, fd )
-    //     console.log(response);
-    //     if(response){
-    //         setTimeout(async ()  => { await this.myUpload(file_name,  file, path_upload)}, 10000);
-    //     }
-    //   } catch (error) {
-    //       console.log(error);
-    //   }
 
-    // },
-    async myUpload(file_name, files, path_upload){
+    async myUpload(files){
       try {
-
-          let fd_upload =  await new FormData();
-          await fd_upload.append('image_name', file_name);
-          await fd_upload.append('images', files);
-
-          await axios.post(`${path_upload}`, fd_upload)
-          
-
+        await axios.post('/api/uploadsFile', files)
+        .then(response => {
+            // Handle the response
+            console.log(response.data);
+        })
+        .catch(error => {
+            // Handle the error
+            console.error(error);
+        });
 
       } catch (error) {
 
@@ -920,7 +896,15 @@ export default {
 
       if(response){
 
+        const formData = await new FormData();  
+
+        await formData.append('id', response.data.corrupt_id);
+
+        await formData.append('types', 'Corrupt');
+
         for (let i = 0; i < this.$refs.corrupt_file.files.length; i++) {
+
+          await formData.append('files', this.$refs.corrupt_file.files[i]);
 
           let number = await i + 1
 
@@ -928,7 +912,7 @@ export default {
 
           let corrupt_id = await response.data.corrupt_id
 
-          const arr_file = await file.name.split(".")
+          const arr_file = await file.name.split("/")
 
           let file_name = await ''
             
@@ -952,23 +936,12 @@ export default {
 
           let path_api = await `/api/backoffice/complainCorruptFiles`
 
-          let res_complainCorruptFiles =  await axios.post(`${path_api}`, fd_upload )
-
-          if(res_complainCorruptFiles){
-
-            let path_upload = await  `/api/backoffice/uploadCorruptFiles`
-
-            await this.myUpload(file_name,  file, path_upload)
-
-            await setTimeout(() => {
-              console.log('....');
-            }, 2000);
-          }
-
-
-       
-          // await this.insertFile(fd_upload, path_api, file_name, file, path_upload)
+          await axios.post(`${path_api}`, fd_upload )
+        
         }
+        
+        await this.myUpload(formData)
+
       } 
 
     },
@@ -983,20 +956,6 @@ export default {
     color: white;
   }
 
-  /* ::v-deep .v-icon {
-    color: white!important;
-  } */
- 
-  /* .input-gray ::v-deep .v-input__slot{
-    background: #ebe9e9!important;
-  }
-  .input-gray ::v-deep input{
-    color: gray!important;
-  } */
-
-  /* .v-subheader{
-    justify-content: right;
-  } */
   .head-corrupt{
     background-color: #003366;
     border-bottom: 1px solid #ada3a3;
