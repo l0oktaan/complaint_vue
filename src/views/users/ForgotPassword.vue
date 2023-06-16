@@ -69,6 +69,8 @@ export default {
             this.email = await ''
             await this.$refs.formForgot.reset()
             await this.$refs.formForgot.resetValidation()
+            await this.$refs.formForgot.resetValidation()
+            await this.$router.push("/user/login")
             // alert("Password reset email sent! Please check your inbox.");
           }
         }

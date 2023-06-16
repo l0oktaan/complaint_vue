@@ -41,6 +41,7 @@
                     dense
                     outlined
                     :disabled="disabled == true"
+                    :maxlength="100"
                 ></v-text-field>
                 
             </v-col>
@@ -65,6 +66,7 @@
                     dense
                     outlined
                     single-line
+                    :maxlength="100"
                 ></v-text-field>
             </v-col>
             <v-col cols="6" md="5">
@@ -77,6 +79,7 @@
                     dense
                     outlined
                     single-line
+                    :maxlength="100"
                 ></v-text-field>
             </v-col>
         
@@ -109,6 +112,7 @@
                     dense
                     outlined
                     single-line
+                    :maxlength="2"
                 ></v-text-field>
             </v-col>
         </v-row>
@@ -131,7 +135,7 @@
                 <p class="style-label">เบอร์ติดต่ออื่น ๆ :</p>
                 <v-text-field
                     v-model="item.phone_other"
-
+                    :rules="phoneOtherRules"
                     label="เบอร์ติดต่ออื่น ๆ"
                     :maxlength="10"
                     dense
@@ -150,6 +154,7 @@
                     dense
                     outlined
                     single-line
+                    :maxlength="512"
                 ></v-text-field>
             </v-col>
         </v-row>
@@ -255,27 +260,28 @@
           
             emailRules: [ 
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'อีเมลไม่ถูกต้อง'
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'อีเมลไม่ถูกต้อง',
+                v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 100 ตัวอักษร',
             ],
             nameRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+                v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 100 ตัวอักษร',
             ],
             lastnameRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+                v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 100 ตัวอักษร',
             ],
             ageRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
+                v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
             ],
             phoneRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
                 v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
             ],
           
-            // phoneOtherRules: [
-            //     v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
-            // ],
             // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
          
         }),
@@ -366,7 +372,8 @@
                     let response = await axios.post(`${path}`, { "email": this.item.email})
 
                     if(response.data.status == 200){
-                        await Swal.fire('ยังไม่มีอีเมลนี้ในระบบ')
+                        await Swal.fire(
+                            'ยังไม่มีอีเมลนี้ในระบบ')
                     }             
 
                 } catch (error) {

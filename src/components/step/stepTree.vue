@@ -18,6 +18,7 @@
                         dense
                         outlined
                         single-line
+                        :maxlength="100"
                     ></v-text-field>
                 </v-col>
                 <v-col>
@@ -30,6 +31,7 @@
                         dense
                         outlined
                         single-line
+                        :maxlength="100"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -45,6 +47,7 @@
                         dense
                         outlined
                         single-line
+                        :maxlength="100"
                     ></v-text-field>
                     <!-- <v-select
                         :items="selectDivision"
@@ -66,6 +69,7 @@
                         dense
                         outlined
                         single-line
+                        :maxlength="512"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -90,7 +94,7 @@
                         dense
                         outlined
                         single-line
-                        
+                        :maxlength="512"
                     ></v-text-field>
                 </v-col>
                 <v-col>
@@ -103,7 +107,7 @@
                         dense
                         outlined
                         single-line
-                        
+                        :maxlength="512"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -405,6 +409,7 @@
                         :rules="complainDetailRules"
                         clearable 
                         single-line
+                        :maxlength="512"
                     ></v-textarea>
                     <!-- <v-tiptap class="mb-5" v-model="complain_detail" /> -->
                     <!-- <v-text-field
@@ -430,7 +435,7 @@
                     <p class="style-label"><span>*</span>upload file : (เเนบไฟล์ png, jpeg, gif, pdf) </p>
                     <v-file-input v-model="files" 
                         small-chips 
-                        :max-size="1000000"
+                        :max-size="10000000"
                         :accept="acceptTypes"
                         :rules="fileRules"
                         outlined
@@ -495,6 +500,7 @@ export default {
         ],
         complainDetailRules: [
             v => !!v || 'กรุณากรอกข้อมูล',
+            v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
         ],
         locationRules: [
             v => !!v || 'กรุณากรอกข้อมูล',

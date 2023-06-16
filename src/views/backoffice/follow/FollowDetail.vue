@@ -361,13 +361,13 @@
                       </v-col>
       
                       <v-col>
+                        {{ change_corrupt_date }}
                         <DatePickers ref="corrupt_date" :show_date="corrupt.date" @change_date="change_corrupt_date"  label="วันที่ดำเนินการ"/>
                       </v-col>
                     </v-row> 
                     <v-row>
                       <v-col>
                         <InputFiles  ref="corrupt_file" />
-                      
                         <div class="text-left pl-6 mt-3">
                           <v-chip         
                           v-for="(corrupt_file,index) in corrupt_files" 
@@ -527,7 +527,10 @@ export default {
       v => !!v || 'กรุณากรอกข้อมูล',
       v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร'
     ],
-    corruptDetailfRules : [v => !!v || 'กรุณากรอกข้อมูล'],
+    corruptDetailfRules : [
+      v => !!v || 'กรุณากรอกข้อมูล',
+      v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร'
+    ],
     show_detail_status : false,
     editedIndex: -1,
     dialog_files_step: false,
@@ -540,6 +543,7 @@ export default {
   }),
   mounted() {
     this.getComplainStep()
+    // console.log(this.$refs.corrupt_date);
   },
   computed: {
     formTitle () {
@@ -554,7 +558,7 @@ export default {
       }else if(typeFile == 'corrupt'){
         this.$refs.dialog_files_corrupt.open()
         // this.dialog_files_corrupt = true
-        this.getCorruptFiles(v)
+        this.getCorruptFiles(v.corrupt_id)
       }
     },
 
@@ -604,23 +608,20 @@ export default {
                       check_remove : true,
                   }
 
-                  console.log(payload);
-
                   let path =  await `/api/update/deleteCorruptFiles`
                   let response = await axios.post(`${path}`, payload)
-
-                  console.log(response);
                   
                   if(response){
                       await Swal.fire({
                           icon: 'success',
                           text: 'ลบข้อมูลสำเร็จ',
                       })
+                     
                   } 
-
-                 await this.getCorruptFiles(v.corrupt_id)
+                  await this.getCorruptFiles(v.corrupt_id)
               }
           })
+
       } catch (error) {
         await Swal.fire({
             icon: 'error',
@@ -628,9 +629,7 @@ export default {
             text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
         })
       }
-      
-        // console.log(index);
-        // this.corrupt_files.splice(index, 1)
+
     },
     close(){
       this.dialog_edit_status = false
@@ -646,22 +645,22 @@ export default {
 
     },
     async dailogStatusEdit(v){
-      console.log(v);
+
       this.editedIndex = await 1
       this.dialog_edit_status = await true
       this.status_detail = await v.detail
-      await this.getComplainStepFiles(v)
       this.status_call = await v.status_call
-      this.complain_step_id = await v.id
       this.check_corrupt = await v.check_corrupt == 1 ? true : false
+      this.complain_step_id = await v.id
+      await this.getComplainStepFiles(v)
 
       if(this.check_corrupt){
         this.corrupt_id       = await v.corrupt_id
         this.corrupt.reference =  await v.reference_code
         this.corrupt.detail =  await v.corrupt_detail
         this.corrupt.date =  await v.corrupt_date
-        await this.getCorruptFiles(v)
         this.corrupt.detail =  await v.corrupt_detail
+        await this.getCorruptFiles(v.corrupt_id)
 
       }
 
@@ -690,11 +689,12 @@ export default {
 
 
     },
-    async getCorruptFiles(v){
-      console.log(v);
+    async getCorruptFiles(corrupt_id){
+
       let path              = await `/api/backoffice/get/CorruptFiles`
-      let response          = await axios.get(`${path}/`+ v.corrupt_id)
+      let response          = await axios.get(`${path}/`+ corrupt_id)
       this.corrupt_files    = await response.data.data
+
     },
 
     async urlPdfFiles(url,file_name){
@@ -798,14 +798,17 @@ export default {
                 await axios.post(`${path_api}`, fd_upload )
             }
 
-            await this.myUpload(formData)
-
             if(this.check_corrupt){
               await this.saveComplainCorrupt(response.data.complain_step_id)
             }
-       
+
+            if(this.$refs.status_files.files.length){
+              await axios.post('/api/uploadsFile', formData)
+              // await this.myUpload(formData)
+            }
+
           }
-       
+
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
@@ -819,7 +822,7 @@ export default {
               title: 'บันทึกไม่สำเร็จ',
               text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
           })
-            console.log(error);
+            console.log('saveComplainStep',error);
         }
       } 
     },
@@ -841,6 +844,10 @@ export default {
 
           this.overlay_edit_status = await false
 
+          this.$refs.formEdit.reset()
+      
+          this.$refs.formEdit.resetValidation()
+
         
           await this.getComplainStep()
           // await this.getComplainDetail()
@@ -856,7 +863,7 @@ export default {
     },
 
     async myUpload(files){
-      try {
+      // try {
         await axios.post('/api/uploadsFile', files)
         .then(response => {
             // Handle the response
@@ -867,31 +874,31 @@ export default {
             console.error(error);
         });
 
-      } catch (error) {
+      // } catch (error) {
 
-          console.log(error);
-      }
+      //     console.log(error);
+      // }
     },
     async saveComplainCorrupt(complain_step_id, corrupt_id){
 
-      let fd_corrupt = await {
+      try {
+        let fd_corrupt = await {
         "corrupt_id"        : corrupt_id,
         "admin_id"          : this.check_roles.id,
         "complain_step_id"  : complain_step_id,
         "reference_code"    : this.corrupt.reference,
-        "date"              : this.get_corrupt_date,
+        "date"              : this.$refs.corrupt_date.date,
         "detail"            : this.corrupt.detail,
       }
-    
 
       let path = null
 
-      if(corrupt_id != null){
+      if(corrupt_id != null || corrupt_id != undefined){
         path        = await `/api/backoffice/edit/complainCorrupt`
       }else{
         path        = await `/api/backoffice/create/complainCorrupt`
       }
-   
+
       let response    = await axios.post(`${path}`, fd_corrupt)
 
       if(response){
@@ -912,7 +919,7 @@ export default {
 
           let corrupt_id = await response.data.corrupt_id
 
-          const arr_file = await file.name.split("/")
+          const arr_file = await file.type.split("/")
 
           let file_name = await ''
             
@@ -939,11 +946,18 @@ export default {
           await axios.post(`${path_api}`, fd_upload )
         
         }
-        
-        await this.myUpload(formData)
+
+        if(this.$refs.corrupt_file.files.length){
+          await axios.post('/api/uploadsFile', formData)
+          // await this.myUpload(formData)
+        }
 
       } 
 
+      } catch (error) {
+        console.log('saveComplainCorrupt', error);
+      }
+  
     },
   }
 }

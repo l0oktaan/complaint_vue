@@ -22,6 +22,7 @@
                 name="input-7-4"
                 hide-details="auto"
                 v-model="complain_detail"
+                :rules="complainDetailRules"
               ></v-textarea>
             </v-card-text>
             <v-card-actions>
@@ -96,6 +97,9 @@ import DetailComplain from '@/components/detailComplain.vue';
             disabled: true,
             href: 'breadcrumbs_link_1',
           },
+        ],
+        complainDetailRules: [
+            v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
         ],
       }
     },

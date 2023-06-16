@@ -157,6 +157,7 @@ import StepTree from '@/components/step/stepTree.vue'
                         }
                                     
                         await Swal.fire({
+                            icon: 'info',
                             title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
                             html:
                                 '<span>Email : </span> <b>' + this.user.item.email + '</b><br><br>' +
@@ -449,6 +450,9 @@ import StepTree from '@/components/step/stepTree.vue'
     ::v-deep .v-icon{
         font-size: 14px!important;
     }
+    .swal2-container {
+        font-family: 'Prompt', sans-serif!important;
+    }
     .swal2-title{
         font-size: 24px;
     }
@@ -462,6 +466,14 @@ import StepTree from '@/components/step/stepTree.vue'
         color: #003366!important;
         border: 1px solid #003366!important;
         background-color: white!important;
-      }
+    }
+    .v-messages__message {
+        line-height: 20px!important;
+    }
+    .v-card__title{
+        font-family: 'Prompt', sans-serif!important;
+        /* background: #003366;
+        color: white; */
+    }
    
 </style>
