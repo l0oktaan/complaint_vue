@@ -2,7 +2,8 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-
+          <!-- <pre>{{ datas }}</pre> -->
+          
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
@@ -12,7 +13,7 @@
               <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
-                label="ค้นหา"
+                label="ค้นหา (Call No, หัวข้อปัญหา)"
                 single-line
                 hide-details
               ></v-text-field>
@@ -43,15 +44,15 @@
               <template v-slot:[`item.action`]="{ item }">
                
                 <v-btn
-                  color="primary"
-                  fab
-                  x-small
-                  dark
+                  color="#003366"
+                  icon
+                  small
                   @click="detailComplain(item.id)"
                 >
-                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <i class="f-16 fa-solid fa-magnifying-glass"></i>
                 </v-btn>
               </template>
+              <template v-slot:[`item.create_by`]="{ item }">{{ item.name }} {{ item.lastname }}</template>
           </v-data-table>
         </v-card>
       </div>
@@ -94,6 +95,7 @@
             align: 'center',
             value: 'action',
           },
+          { text: 'เจ้าหน้าที่ดำเนินการ', value: 'create_by' },
         ],
         desserts: [],
         itemsStatus: [

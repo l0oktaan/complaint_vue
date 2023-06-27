@@ -42,13 +42,13 @@
           <template v-slot:[`item.status`]="{ item }"><span :class="item.status == 0 ?'red--text':''">{{item.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน'}}</span></template>
           <template v-slot:[`item.actions`]="{ item }">
             <v-btn
-              color="primary"
-              fab
-              x-small
+              color="#003366"
+              icon
+              small
               dark
               @click="editItem(item)"
             >
-              <v-icon>mdi-pencil</v-icon>
+              <i class="f-16 fa-solid fa-pen-to-square"></i>
             </v-btn>
           </template>
         </v-data-table>

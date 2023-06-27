@@ -36,16 +36,17 @@
 
             <template   v-slot:[`item.detailComplainStep`]="{ item }"  >
              <div v-if="item.status_call != 0 && item.status_call != 1">
-              <v-btn color="primary" fab x-small dark @click="dailogDetailStep(item)">
-                <i class="fa-solid fa-magnifying-glass"></i>
+             
+              <v-btn color="#003366" small icon @click="dailogDetailStep(item)">
+                <i class="f-16 fa-solid fa-magnifying-glass"></i>
               </v-btn>
              </div>
             </template>
 
             <template v-slot:[`item.editCorrupt`]="{ item }">
               <div v-if="item.check_corrupt == 1">
-                <v-btn  color="primary" fab x-small dark @click="editCorrupt(item)">
-                  <i class="fa-solid fa-pen-to-square"></i>
+                <v-btn  color="#003366" icon small @click="editCorrupt(item)">
+                  <i class="f-16 fa-solid fa-pen-to-square"></i>
                 </v-btn>
               </div> 
             </template>
@@ -225,7 +226,7 @@
                         type="chip"
                       >
                       <div class="text-left mt-3">
-                        <v-chip class="mr-1" 
+                        <v-chip class="mr-1 mb-1" 
                           v-for="(step_file,index) in step_files" :key="index"
                           @click="showFile(step_file, 'UrlFilesComplainStep')"
                         >
@@ -306,14 +307,14 @@
               
             </v-container>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="btn-action">
           <v-spacer></v-spacer>
           <v-skeleton-loader
             :loading="loading"
             type="button"
           >
             <v-btn
-              class="btn btn-cancel"
+              class="btn btn-submit"
               text
               @click="dialogDetailStep = false"
             >

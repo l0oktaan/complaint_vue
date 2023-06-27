@@ -413,6 +413,9 @@ import store from '../store/index.js';
       background-color: #003366!important;
       color: white!important;
   }
+  .f-16{
+    font-size: 16px;
+  }
   /* .v-app-bar.v-app-bar--fixed{
     z-index: 1;
   }

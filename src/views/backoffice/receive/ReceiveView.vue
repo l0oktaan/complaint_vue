@@ -8,7 +8,7 @@
               <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
-                  label="ค้นหา"
+                  label="ค้นหา (Call No, หัวข้อปัญหา)"
                   single-line
                   hide-details
               ></v-text-field>
@@ -39,7 +39,7 @@
             </template>
             <template v-slot:[`item.action`]="{ item }">
               <router-link :to="{ name: 'receive-detail', params: { id: item.id }}">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="f-16 fa-solid fa-magnifying-glass"></i>
               </router-link>
             </template>
           </v-data-table>

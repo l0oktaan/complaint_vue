@@ -16,7 +16,7 @@
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
-                  label="ค้นหา (ชื่อ-สกุล, ตำแหน่ง, ระดับการใช้งาน)"
+                  label="ค้นหา (E-mail, ชื่อ-สกุล)"
                   single-line
                   hide-details
                 ></v-text-field>
@@ -28,13 +28,12 @@
             <template v-slot:[`item.E-mail`]="{ item }">{{ item.email }}</template>
             <template v-slot:[`item.actions`]="{ item }">
               <v-btn
-                color="primary"
-                fab
-                x-small
-                dark
+                color="#003366"
+                icon
+                small 
                 @click="editItem(item.id)"
               >
-                <v-icon>mdi-pencil</v-icon>
+                <i class="f-16 fa-solid fa-pen-to-square"></i>
               </v-btn>
             </template>
           </v-data-table>
