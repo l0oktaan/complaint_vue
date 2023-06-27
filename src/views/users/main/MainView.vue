@@ -158,10 +158,10 @@ import StepTree from '@/components/step/stepTree.vue'
                                     
                         await Swal.fire({
                             icon: 'info',
-                            title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
+                            title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
                             html:
-                                '<span>Email : </span> <b>' + this.user.item.email + '</b><br><br>' +
-                                '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br><br>' +
+                                '<span>Email : </span> <b>' + this.user.item.email + '</b><br>' +
+                                '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br>' +
                                 '<span>นามสกุล : </span> <b>' + this.user.item.lastname +'</b>',
                             showDenyButton: false,
                             showCancelButton: true,
@@ -221,7 +221,7 @@ import StepTree from '@/components/step/stepTree.vue'
                         "modified_by"       : this.register_id,
                     }
                     await Swal.fire({
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
+                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
                         showDenyButton: false,
                         showCancelButton: true,
                         confirmButtonText: 'บันทึก',
@@ -236,14 +236,58 @@ import StepTree from '@/components/step/stepTree.vue'
                             
                             if(response){
 
+                                const formData = await new FormData();    
+
+                                await formData.append('id', response.data.complain_id);
+
+                                await formData.append('types', 'Complain');    
+
                                 for (let i = 0; i < this.employee.files.length; i++) {
+
+                                    await formData.append('files', this.employee.files[i]);
+                                    
+                                    const complain_id = await response.data.complain_id
 
                                     let number = await i + 1
 
-                                    await this.insertFile(this.register_id, response.data.complain_id, this.employee.files[i], number)
+                                    const file = await this.employee.files[i]
+              
+                                    const arr_file = await file.type.split("/")
+
+                                    let file_name = await ''
+
+                                    if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+
+                                        file_name = await 'imgComplain' + complain_id + '_' + number + '.' + arr_file[1] 
+
+                                    }else if(file.type === 'application/pdf'){
+
+                                        file_name = await 'pdfComplain' + complain_id + '_' + number + '.' + arr_file[1] 
+                                    
+                                    }
+
+                                    let fd_upload = await {
+                                        "register_id"   : this.register_id,
+                                        "complain_id"   : complain_id,
+                                        "file_original" : file.name,
+                                        "file_name"     : file_name,
+                                        "file_type"     : file.type
+                                    }
+
+                                    let path = await `/api/user/files`
+
+                                    await axios.post(`${path}`, fd_upload )
+
+
+
+
+                                    // let number = await i + 1
+
+                                    // await this.insertFile(this.register_id, response.data.complain_id, this.employee.files[i], number)
                                     
                                 
                                 }
+                                await this.myUpload(formData)
                             }
                             await Swal.fire('รับเรื่องร้องเรียนการทุจริตเรีบร้อยเเล้ว', '', 'success')
 
@@ -260,123 +304,127 @@ import StepTree from '@/components/step/stepTree.vue'
             const blobUrl = window.URL.createObjectURL(v);
             window.open(blobUrl, '_blank');
         },
-        async submit(){
-            try {
-                let fd = await {
-                    "email"                 : this.user.item.email,
-                    "name"                  : this.user.item.name,
-                    "lastname"              : this.user.item.lastname,
-                    "gender"                : this.user.item.gender,
-                    "age"                   : this.user.item.age,
-                    "phone"                 : this.user.item.phone,
-                    "phone_other"           : this.user.item.phone_other,
-                    "address"               : this.user.item.address,     
-                    "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
-                    "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
-                    "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
-                    "postcode"              : this.user.item.postcode,
-                    "check_policy"          : this.step_one,
-                }
+        // async submit(){
+        //     try {
+        //         let fd = await {
+        //             "email"                 : this.user.item.email,
+        //             "name"                  : this.user.item.name,
+        //             "lastname"              : this.user.item.lastname,
+        //             "gender"                : this.user.item.gender,
+        //             "age"                   : this.user.item.age,
+        //             "phone"                 : this.user.item.phone,
+        //             "phone_other"           : this.user.item.phone_other,
+        //             "address"               : this.user.item.address,     
+        //             "province"              : this.user.province !== null ? this.user.province.id || this.user.province : null,
+        //             "district"              : this.user.district !== null ? this.user.district.id || this.user.district : null,
+        //             "subdistrict"           : this.user.subdistrict !== null ? this.user.subdistrict.id  || this.user.subdistrict : null,
+        //             "postcode"              : this.user.item.postcode,
+        //             "check_policy"          : this.step_one,
+        //         }
         
-                    await Swal.fire({
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไหม ?',
-                        showDenyButton: false,
-                        showCancelButton: true,
-                        confirmButtonText: 'บันทึก',
-                        cancelButtonText: `ยกเลิก`,
-                    }).then(async (result)  => {
-                    /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
+        //             await Swal.fire({
+        //                 title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
+        //                 showDenyButton: false,
+        //                 showCancelButton: true,
+        //                 confirmButtonText: 'บันทึก',
+        //                 cancelButtonText: `ยกเลิก`,
+        //             }).then(async (result)  => {
+        //             /* Read more about isConfirmed, isDenied below */
+        //                 if (result.isConfirmed) {
 
-                            console.log(result.isConfirmed);
+        //                     console.log(result.isConfirmed);
 
-                            let path = await `/api/user/register`
-                            await axios.post(`${path}`, fd)
+        //                     let path = await `/api/user/register`
+        //                     await axios.post(`${path}`, fd)
 
 
                           
-                            await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
+        //                     await Swal.fire('บันทึกข้อมูลเรีบร้อยเเล้ว', '', 'success')
                      
-                        }
-                    })
+        //                 }
+        //             })
 
-           } catch (error) {
-            console.log(error);
-           }
-        },
-        async insertComplain(register_id){
-            let fd = await {
-                "name"              : this.employee.name,
-                "lastname"          : this.employee.lastname,
-                "register_id"       : register_id,
-                "division"          : this.employee.division,
-                "description_face"  : this.employee.description_face,
-                "topic"             : this.employee.complain_topic,
-                "location"          : this.employee.complain_location,
-                "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
-                "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
-                "detail"            : this.employee.complain_detail,
-                "create_by"         : register_id,
-                // "create_date"       : this.employee.files,
-                "modified_by"       : register_id,
-                // "modified_date"     : this.employee.files,
-            }
+        //    } catch (error) {
+        //     console.log(error);
+        //    }
+        // },
+        // async insertComplain(register_id){
+        //     let fd = await {
+        //         "name"              : this.employee.name,
+        //         "lastname"          : this.employee.lastname,
+        //         "register_id"       : register_id,
+        //         "division"          : this.employee.division,
+        //         "description_face"  : this.employee.description_face,
+        //         "topic"             : this.employee.complain_topic,
+        //         "location"          : this.employee.complain_location,
+        //         "start_date"        : `${moment(this.employee.start_date).format('YYYY-MM-DD')}`,
+        //         "end_date"          : `${moment(this.employee.end_date).format('YYYY-MM-DD')}`,
+        //         "detail"            : this.employee.complain_detail,
+        //         "create_by"         : register_id,
+        //         // "create_date"       : this.employee.files,
+        //         "modified_by"       : register_id,
+        //         // "modified_date"     : this.employee.files,
+        //     }
 
-            let path = await `/api/user/complain`
-            let response = await axios.post(`${path}`, fd)
+        //     let path = await `/api/user/complain`
+        //     let response = await axios.post(`${path}`, fd)
 
-            if(response){
+        //     if(response){
 
-                const formData = await new FormData();    
+        //         const formData = await new FormData();    
 
-                await formData.append('id', response.data.complain_id);
+        //         await formData.append('id', response.data.complain_id);
 
-                await formData.append('types', 'Complain');
+        //         await formData.append('types', 'Complain');
             
 
-                for (let i = 0; i < this.employee.files.length; i++) {
+        //         for (let i = 0; i < this.employee.files.length; i++) {
 
-                    await formData.append('files', this.employee.files[i]);
+        //             await formData.append('files', this.employee.files[i]);
 
-                    let number = await i + 1
+        //             let number = await i + 1
 
-                    const complain_id = await response.data.complain_id
+        //             const complain_id = await response.data.complain_id
 
-                    const file = await this.employee.files[i]
+        //             const file = await this.employee.files[i]
 
-                    const arr_file = await file.name.split("/")
+        //             const arr_file = await file.name.split("/")
 
-                    let file_name = await ''
+        //             let file_name = await ''
 
-                    if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
+        //             if(file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'){
 
-                    file_name = await 'imgComplain' + complain_id + '_' + number + '.' +arr_file[1] 
+        //             file_name = await 'imgComplain' + complain_id + '_' + number + '.' +arr_file[1] 
 
-                    }else if(file.type === 'application/pdf'){
+        //             }else if(file.type === 'application/pdf'){
 
-                    file_name = await 'pdfComplain' + complain_id + '_' + number + '.' +arr_file[1] 
+        //             file_name = await 'pdfComplain' + complain_id + '_' + number + '.' +arr_file[1] 
                     
-                    }
+        //             }
 
-                    let fd_upload = await {
-                        "register_id"   : register_id,
-                        "complain_id"   : complain_id,
-                        "file_original" : file.name,
-                        "file_name"     : file_name
-                    }
+        //             let fd_upload = await {
+        //                 "register_id"   : register_id,
+        //                 "complain_id"   : complain_id,
+        //                 "file_original" : file.name,
+        //                 "file_name"     : file_name
+        //             }
 
-                    let path = await `/api/user/files`
+        //             let path = await `/api/user/files`
 
-                    await axios.post(`${path}`, fd_upload )
+        //             await axios.post(`${path}`, fd_upload )
 
 
-                }
+        //         }
                 
-                await this.myUpload(formData)
+        //         if(this.employee.files.length){
+        //             await axios.post('/api/uploadsFile', formData)
+        //             // await this.myUpload(formData)
+        //         }
+        //         // await this.myUpload(formData)
 
                    
-            }
-        },
+        //     }
+        // },
     
         async myUpload(files){
 
