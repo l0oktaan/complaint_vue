@@ -21,26 +21,6 @@
         </template>
     </v-file-input>
 
-
-    <!-- <v-file-input v-model="files" 
-        small-chips 
-        :show-size="1000"
-        :accept="acceptTypes"
-        :rules="fileRules"
-        outlined
-        placeholder="Select your files"
-        multiple 
-        clearable 
-        label="Add files"
-        single-line
-        hide-details="auto"
-        @change="fileAdded">
-        <template v-slot:selection="{ text, index }">
-            <v-chip small text-color="white" color="#295671" close @click:close="remove(index)">
-                {{ text }}
-            </v-chip>
-        </template>
-    </v-file-input> -->
 </template>
 
 <script>
@@ -80,6 +60,7 @@ export default {
             }
         ],
     }),
+
     watch: {
         files(val) {
             this.previousFiles = val
@@ -88,13 +69,15 @@ export default {
 
     methods:{
         remove (index) {
-            console.log(index);
             this.files.splice(index, 1)
         },
         fileAdded () {
             if (this.previousFiles.length > 0) {
                 this.files.push(...this.previousFiles)
             }
+        },
+        clearFiles(){
+            this.files = []
         }
     }
 }
