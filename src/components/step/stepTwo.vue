@@ -383,7 +383,11 @@
                     })
                 }
                }else{
-                    await Swal.fire('กรุณากรอกอีเมล')
+                    await Swal.fire({
+                        icon: 'info',
+                        title: 'กรุณากรอกอีเมล',
+                        // text: 'กรุณากรอกอีเมล',
+                    })
                }
                 
 

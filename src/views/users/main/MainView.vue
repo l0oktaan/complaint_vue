@@ -221,6 +221,7 @@ import StepTree from '@/components/step/stepTree.vue'
                         "modified_by"       : this.register_id,
                     }
                     await Swal.fire({
+                        icon: 'info',
                         title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
                         showDenyButton: false,
                         showCancelButton: true,

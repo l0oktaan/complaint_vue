@@ -53,6 +53,7 @@
               ></v-text-field> -->
               <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
           </v-card-text>
+          <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
           <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="btn btn-submit" text type="submit">บันทึก</v-btn>
@@ -151,8 +152,22 @@ import resetPassword from '@/components/resetPassword.vue';
   background-color: #1e1e1ecc!important;
 }
 .not-match{
-        background: #e7e7e7;
-        text-align: center;
-    }
+  background: #e7e7e7;
+  text-align: center;
+}
 
+v-deep.v-icon.v-icon{
+  font-size: 24px;
+}
+.btn-cancel{
+  border: 1px solid #003366;
+  color: #003366;
+}
+.btn-submit{
+  border: 1px solid #003366;
+  background: #003366;
+}
+.valid-text{
+  color: red;
+}
 </style>
