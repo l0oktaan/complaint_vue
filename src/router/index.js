@@ -39,6 +39,7 @@ import PageNotFound from '../views/NotFound.vue'
 // import AboutView from '../views/AboutView.vue'
 
 
+// import TestView from '../views/testView.vue'
 
 
 
@@ -77,9 +78,12 @@ const routes = [
     
   },
   {
-    path: '/user/reset-password',
+
+    path: '/user/reset-password/:token',
     name: 'reset-password',
     component: ResetPasswordView,
+    
+
     
   },
 
@@ -156,6 +160,12 @@ const routes = [
 
   },
 
+  // {
+  //   path: '/test-view',
+  //   name: 'test-view',
+  //   component: TestView,
+    
+  // },
   
 
   { 
@@ -200,7 +210,7 @@ const routes = [
 
   },
 
-  { path: '/:pathMatch(.*)*', component: PageNotFound },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: PageNotFound },
 
   // {
   //   path: '/:pathMatch(.*)',

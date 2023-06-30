@@ -70,8 +70,8 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn class="btn-cancel" text @click="close">ยกเลิก </v-btn>
                 <v-btn class="btn-submit" color="white" text type="submit">บันทึก</v-btn>
+                <v-btn class="btn-cancel" text @click="close">ยกเลิก </v-btn>
             </v-card-actions>
         </v-form>
       

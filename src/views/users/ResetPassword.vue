@@ -96,7 +96,8 @@ import resetPassword from '@/components/resetPassword.vue';
         //   ],
       }),
       created(){
-        console.log(this.$route.query.token)
+
+        this.fetchResetPassword();
       },
         computed: { 
             isPasswordMatch() {
@@ -104,45 +105,97 @@ import resetPassword from '@/components/resetPassword.vue';
             }
         },
       methods:{
-          closeDialog(){
-            this.$router.push("/user/login")
-          },
-          async resetPassword(){
-                try {
-                    if(this.$refs.formReset.validate()){
+        closeDialog(){
+          this.$router.push("/user/login")
+        },
+        async fetchResetPassword(){
 
-                        if (this.isPasswordMatch) {
-                            let fd = await {
-                                "forgot_token"  : this.$route.query.token,
-                                "password"      : this.$refs.pass.newPassword,
-                            }
 
-                            let path = await `/api/user/forgot/reset-password`
-                            let response = await axios.post(`${path}`, fd)
 
-                            await Swal.fire({
-                                icon: 'success',
-                                title: 'บันทึกสำเร็จ',
-                                text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
-                            }).then( function(){
-                            });
+          console.log(this.$route.params.token);
 
-                            await this.$router.push('/user/login')
-                            console.log(response);
-                       
-                        } else {
-                          this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
+          const response = await axios.get(`/api/user/checkTokenReset/${this.$route.params.token}`);
+
+          // console.log(response.data.status);
+          if(response.data.status === 401){
+            this.$router.push({name : 'NotFound'})
+          }else{
+            return { success: true, message: 'Password reset successful' };
+          } 
+
+        },
+        async resetPassword(){
+            try {
+                if(this.$refs.formReset.validate()){
+
+                    if (this.isPasswordMatch) {
+                        let fd = await {
+                            "forgot_token"  : this.$route.params.token,
+                            "password"      : this.$refs.pass.newPassword,
                         }
-                  }
-              } catch (error) {
-                  Swal.fire({
-                  icon: 'error',
-                  title: 'บันทึกไม่สำเร็จ',
-                  text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
-                  })
-                  console.log('error_resetPassword', error );
+
+                        let path = await `/api/user/forgot/reset-password`
+                        let response = await axios.post(`${path}`, fd)
+
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'บันทึกสำเร็จ',
+                            text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
+                        }).then( function(){
+                        });
+
+                        await this.$router.push('/user/login')
+                        console.log(response);
+                    
+                    } else {
+                      this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
+                    }
               }
-          },
+          } catch (error) {
+            Swal.fire({
+            icon: 'error',
+            title: 'บันทึกไม่สำเร็จ',
+            text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
+            })
+            console.log('error_resetPassword', error );
+          }
+        },
+        // async resetPassword(){
+          //       try {
+          //           if(this.$refs.formReset.validate()){
+
+          //               if (this.isPasswordMatch) {
+          //                   let fd = await {
+          //                       "forgot_token"  : this.$route.query.token,
+          //                       "password"      : this.$refs.pass.newPassword,
+          //                   }
+
+          //                   let path = await `/api/user/forgot/reset-password`
+          //                   let response = await axios.post(`${path}`, fd)
+
+          //                   await Swal.fire({
+          //                       icon: 'success',
+          //                       title: 'บันทึกสำเร็จ',
+          //                       text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
+          //                   }).then( function(){
+          //                   });
+
+          //                   await this.$router.push('/user/login')
+          //                   console.log(response);
+                       
+          //               } else {
+          //                 this.errorMessage = await 'รหัสผ่านไม่ตรงกัน'
+          //               }
+          //         }
+          //     } catch (error) {
+          //         Swal.fire({
+          //         icon: 'error',
+          //         title: 'บันทึกไม่สำเร็จ',
+          //         text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
+          //         })
+          //         console.log('error_resetPassword', error );
+          //     }
+          // },
       }
   
   }
