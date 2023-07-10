@@ -158,14 +158,14 @@ import StepTree from '@/components/step/stepTree.vue'
                                     
                         await Swal.fire({
                             icon: 'info',
-                            title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
+                            title: 'คุณต้องการยืนยันข้อมูลใช่หรือไม่ ?',
                             html:
                                 '<span>Email : </span> <b>' + this.user.item.email + '</b><br>' +
                                 '<span>ชื่อ : </span> <b>' + this.user.item.name  + '</b><br>' +
                                 '<span>นามสกุล : </span> <b>' + this.user.item.lastname +'</b>',
                             showDenyButton: false,
                             showCancelButton: true,
-                            confirmButtonText: 'บันทึก',
+                            confirmButtonText: 'ยืนยัน',
                             cancelButtonText: `ยกเลิก`,
                         }).then(async (result)  => {
                             if (result.isConfirmed) {
@@ -222,10 +222,10 @@ import StepTree from '@/components/step/stepTree.vue'
                     }
                     await Swal.fire({
                         icon: 'info',
-                        title: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
+                        title: 'คุณต้องการยืนยันข้อมูลใช่หรือไม่ ?',
                         showDenyButton: false,
                         showCancelButton: true,
-                        confirmButtonText: 'บันทึก',
+                        confirmButtonText: 'ยืนยัน',
                         cancelButtonText: `ยกเลิก`,
                     }).then(async (result)  => {
                     /* Read more about isConfirmed, isDenied below */

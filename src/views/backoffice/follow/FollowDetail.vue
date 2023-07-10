@@ -776,8 +776,8 @@ export default {
       this.corrupt_id         =   await v.corrupt_id
       this.corrupt.reference  =   await v.reference_code
       this.corrupt.detail     =   await v.corrupt_detail
-      this.corrupt_date       =   await v.corrupt_date;
-      // this.corrupt.date       =   await moment(v.corrupt_date).format("YYYY-MM-DD");
+      // this.corrupt_date       =   await v.corrupt_date;
+      this.corrupt_date       =   await moment(v.corrupt_date).format("YYYY-MM-DD");
       this.corrupt.detail     =   await v.corrupt_detail
       await this.getCorruptFiles(v.corrupt_id)
       
