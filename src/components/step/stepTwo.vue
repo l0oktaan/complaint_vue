@@ -14,15 +14,6 @@
         <v-row justify="space-between" class="align-center">
             <v-col>
                 <p class="style-label"><span>*</span>Email :</p>
-                <!-- <v-text-field
-                    v-model="item.email"
-                    :rules="emailRules"
-                    label="Name"
-                    required
-                    dense
-                    outlined
-                    single-line
-                ></v-text-field> -->
                 <v-text-field
                     v-if="!check_page"
                     v-model="item.email"
@@ -82,26 +73,7 @@
                     :maxlength="100"
                 ></v-text-field>
             </v-col>
-        
-            <!-- <v-col cols="3" md="3">
-                <p class="style-label"><span>*</span>เพศ : </p>
-                <v-select
-                    :items="selectGender"
-                    v-model="item.gender"
-                    :rules="genderRules"
-                    item-text="value"
-                    item-value="id"
-                    label="เลือกเพศ"
-                    dense
-                    outlined
-                    hide-details="auto"
-                    single-line
-                ></v-select>
-                <div class="box-gender">                    
-                    <div class="male" :class="{ active : active == 'male' }" @click="dataGender('male')">ชาย</div>
-                    <div class="female" :class="{ active : active == 'female' }"  @click="dataGender('female')">หญิง</div>
-                </div>
-            </v-col> -->
+    
             <v-col cols="3" md="2">
                 <p class="style-label"><span>*</span>อายุ (ปี) : </p>
                 <v-text-field
@@ -224,10 +196,6 @@
     import Swal from 'sweetalert2'
     export default {
         props: ['datas', 'check_page'],
-        //     datas:{
-        //     type: Object
-        //     }
-        // },
         data: () => ({
             disabled: true,
             maxLength: 10,
@@ -235,28 +203,17 @@
             email: '',
             name: '',
             lastname: '',
-            // gender: [],
             age: '',
             phone: '',
             phone_other: '',
             address: '',
             postcode: '',
-          
-            // selectGender:[
-            //     { value: 'ชาย', id: 'male' },
-            //     { value: 'หญิง', id: 'female' },
-            //     { value: 'อื่นๆ', id: 'other' },
-            // ],
             province: null,
-            // province_value: '',
             district: null,
-            // district_value: '',
             subdistrict: null,
-            // subdistrict_value: '',
             selectProvince:[],
             selectDistrict: [],
             selectSubDistrict: [],
-          
             emailRules: [ 
                 v => !!v || 'กรุณากรอกข้อมูล',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'อีเมลไม่ถูกต้อง',
@@ -272,59 +229,27 @@
                 v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
                 v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 100 ตัวอักษร',
             ],
-            ageRules: [
-                v => !!v || 'กรุณากรอกข้อมูล',
-                // v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
-            ],
+            ageRules: [v => !!v || 'กรุณากรอกข้อมูล',],
             phoneRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
                 v => /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวอักษร`
-            ],
-          
-            // genderRules: [   v => ( v && v.length > 0 ) || "กรุณาเลือกข้อมูล"],
-         
+            ], 
         }),
-        // computed: { 
-        //     isPasswordMatch() {
-        //         return this.newPassword === this.confirmPassword;
-        //     }
-        // },
-      
+    
         mounted(){
-          
-            // console.log(this.datas);
-          
-            // if (this.datas) {
-
-            //     this.item = this.datas
-            //     this.province = this.datas.province_id
-            //     this.district = this.datas.district_id
-            //     this.subdistrict = this.datas.subdistrict_id
-            //     // this.item.postcode = this.datas.postcode
-            // }
             this.getProvince()
-
         },
         watch:{
             province : function(v_province){
-
-                // this.province_value = v_province.value
-
                 let province_id = null
-
                 if(v_province.id){
                     province_id = v_province.id
                 }else{
                     province_id = v_province
                 }
-
-       
-                // this.getDistricts(v_province.id);
                 this.getDistricts(province_id);
             },
             district : function(v_district){
-
-                // this.district_value = v_district.value
 
                 let district_id = null
 
@@ -335,19 +260,26 @@
                 }
 
                 this.getSubDistricts(district_id);
-                // this.getSubDistricts(v_district.id);
+              
             },
             
             subdistrict: function(v_subdistrict){
+                console.log(v_subdistrict);
+                if(v_subdistrict.id){
+                    this.item.postcode = v_subdistrict.postcode  
+                }
+                // if(v_subdistrict.id){
 
-                this.item.postcode = v_subdistrict.postcode       
+                //     this.item.postcode = v_subdistrict.postcode    
+                // }
+
+                
 
             },
             datas(){
                 if(this.datas){
-                    
+                  
                     this.item = this.datas
-
                     if(this.datas.province_id){
                         this.province = this.datas.province_id
                     }
@@ -355,6 +287,7 @@
                         this.district = this.datas.district_id
                     }
                     if(this.datas.subdistrict_id){
+
                         this.subdistrict = this.datas.subdistrict_id
                         this.item.postcode  = this.datas.postcode
                     }
@@ -393,6 +326,7 @@
 
             },
             async getProvince(){
+                console.log('getProvince');
                 let path = await `/api/get/province`
                 let response = await axios.get(`${path}`)
 
@@ -404,12 +338,15 @@
                 })
             },
             async getDistricts(id){
+                console.log('getDistricts');
                 let path = await `/api/get/districts`
                 let response = await axios.get(`${path}/`+id)
 
-                this.selectDistrict = []
-                this.selectSubDistrict = []
-                this.item.postcode = ''
+                if(this.selectDistrict.length !== 0){
+                    this.selectDistrict = await []
+                    this.selectSubDistrict = await []
+                    this.item.postcode = await ''
+                }
 
                 await response.data.data.forEach(async item => {
 
@@ -418,12 +355,15 @@
                 })
             },
             async getSubDistricts(id){
+                console.log('getSubDistricts');
                 let path = await `/api/get/subdistricts`
                 let response = await axios.get(`${path}/`+id)
 
-                this.selectSubDistrict = []
-                this.item.postcode = ''
-
+                if(this.selectSubDistrict.length !== 0){
+                    this.selectSubDistrict = await []
+                    this.item.postcode = await ''
+                }
+           
                 await response.data.data.forEach(async item => {
 
                     await this.selectSubDistrict.push({'id':item.id, 'value':item.name_th, 'postcode': item.postcode})

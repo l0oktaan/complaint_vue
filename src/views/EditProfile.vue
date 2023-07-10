@@ -1,5 +1,6 @@
 <template>
   <div class="edit-profile">
+    <LoaderView  ref="loader"/>
     <div class="style-page">
       <v-form
         ref="form"
@@ -18,9 +19,10 @@ import axios  from "axios"
 import Swal from 'sweetalert2'
 import store from '../store/index.js'
 import stepTwo from '@/components/step/stepTwo.vue'
+import LoaderView from '@/components/loaderView.vue'
 
 export default {
-  components: { stepTwo },
+  components: { stepTwo, LoaderView },
   data: () => ({
     valid: true,
     check_roles: store.getters.user,
@@ -34,8 +36,10 @@ export default {
         try {
             let path        = await `/api/backoffice/get/registerDetail`
             let response    = await axios.get(`${path}/`+ this.check_roles.id )
+            console.log(response);
             this.data       = await response.data.data[0]
-            this.loadTable = await false;
+            await setTimeout(() => (this.$refs.loader.overlay = false), 500);
+            // this.loadTable = await false;
 
         } catch (error) {
             console.log('error :' + error)
