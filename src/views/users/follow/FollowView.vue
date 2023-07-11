@@ -2,13 +2,12 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
-            <v-col cols>
+            <v-col cols="12" sm="6">
               <selectStatus  ref="filter_status" :itemsStatus="itemsStatus"/>
             </v-col>
-            <v-col cols>
+            <v-col  cols="12" sm="6">
               <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"

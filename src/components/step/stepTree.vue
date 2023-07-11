@@ -8,7 +8,7 @@
             </v-row>
             
             <v-row>
-                <v-col>
+                <v-col cols="12" sm="6">
                 <p class="style-label"><span>*</span>ชื่อ : </p>
                     <v-text-field
                         v-model="name"
@@ -21,7 +21,7 @@
                         :maxlength="100"
                     ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="6">
                 <p class="style-label"><span>*</span>นามสกุล : </p>
                     <v-text-field
                         v-model="lastname"
@@ -37,8 +37,8 @@
             </v-row>
             
             <v-row>
-                <v-col>
-                <p class="style-label"><span>*</span>หน่วยงาน : </p>
+                <v-col cols="12" sm="6">
+                    <p class="style-label"><span>*</span>หน่วยงาน : </p>
                     <v-text-field
                         v-model="division"
                         :rules="divisionRules"
@@ -49,19 +49,9 @@
                         single-line
                         :maxlength="100"
                     ></v-text-field>
-                    <!-- <v-select
-                        :items="selectDivision"
-                        v-model="data.division"
-                        :rules="divisionRules"
-                        label="หน่วยงาน"
-                        dense
-                        outlined
-                        single-line
-                        
-                    ></v-select> -->
                 </v-col>
-                <v-col>
-                <p class="style-label">รูปพรรณสันฐาน :</p>
+                <v-col cols="12" sm="6">
+                    <p class="style-label">รูปพรรณสันฐาน :</p>
                     <v-text-field
                         v-model="description_face"
                         label="รูปพรรณสันฐาน"
@@ -79,12 +69,12 @@
 
         <div class="box-complaint">
             <v-row>
-                <v-col>
+                <v-col cols="12" sm="6">
                     <div class="h2 mt-5">เรื่องร้องเรียน</div>
                 </v-col>
             </v-row>
             <v-row>
-                <v-col>
+                <v-col cols="12" sm="6">
                     <p class="style-label"><span>*</span>หัวเรื่อง : </p>
                     <v-text-field
                         v-model="complain_topic"
@@ -97,7 +87,7 @@
                         :maxlength="512"
                     ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="6">
                     <p class="style-label"><span>*</span>สถานที่เกิดเหตุ : </p>
                     <v-text-field
                         v-model="complain_location"
@@ -113,52 +103,8 @@
             </v-row>
 
             <v-row>
-                <v-col>
-                    <p class="style-label mb-3"><span>*</span>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </p>
-                    <!-- <v-dialog
-                        ref="dialog_start"
-                        v-model="modal"
-                        :return-value.sync="start_date"
-                        persistent
-                        width="290px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            v-model="complain_start_date"
-                            label="วันที่เริ่มต้น"
-                            append-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                            dense
-                            outlined
-                            single-line
-                            
-                        ></v-text-field>
-                        </template>
-                        <v-date-picker
-                        v-model="start_date"
-                        scrollable
-                        locale="th-TH"
-                        >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="modal = false"
-                        >
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dialog_start.save(start_date)"
-                        >
-                            OK
-                        </v-btn>
-                        </v-date-picker>
-                    </v-dialog> -->
-                    
+                <v-col cols="12" sm="6">
+                    <p class="style-label mb-3"><span>*</span>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </p> 
                     <v-menu
                         ref="start_date"
                         v-model="menu_start_date"
@@ -256,51 +202,8 @@
                     </v-menu>
                 </v-col>
                 
-                <v-col>
+                <v-col cols="12" sm="6">
                     <p class="style-label mb-3"><span>*</span>ถึง : </p>
-                    <!-- <v-dialog
-                        ref="dialog_end"
-                        v-model="modal2"
-                        :return-value.sync="end_date"
-                        persistent
-                        width="290px"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                                v-model="complain_end_date"
-                                label="วันที่สิ้นสุด"
-                                append-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                dense
-                                outlined
-                                single-line
-                                
-                        ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="end_date"
-                            scrollable
-                        >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="modal2 = false"
-                        >
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dialog_end.save(end_date)"
-                        >
-                            OK
-                        </v-btn>
-                        </v-date-picker>
-                    </v-dialog> -->
-
                     <v-menu
                         ref="end_date"
                         v-model="menu_end_date"

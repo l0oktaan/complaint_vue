@@ -10,7 +10,7 @@
         <v-expansion-panel-content>
           <v-container fluid>
 
-              <v-row>
+              <v-row class="align-center">
                 <div class="w-180">
                   <v-subheader>Call No.</v-subheader>
                 </div>
@@ -25,7 +25,7 @@
                 </v-col>
               </v-row>
               
-            <v-row>
+            <v-row class="align-center">
               <div class="w-180">
                 <v-subheader>วันที่บันทึกปัญหา</v-subheader>
               </div>
@@ -40,7 +40,7 @@
               </v-col>
             </v-row>
 
-            <v-row>
+            <v-row class="align-center">
               <div class="w-180">
                 <v-subheader>หัวเรื่อง</v-subheader>
               </div>
@@ -55,7 +55,7 @@
               </v-col>
             </v-row>
 
-            <v-row>
+            <v-row class="align-center">
               <div class="w-180">
                 <v-subheader>สถานที่เกิดเหตุ</v-subheader>
               </div>
@@ -74,7 +74,7 @@
               <div class="w-180">
                 <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
               </div>
-              <v-col cols>
+              <v-col cols="12" sm="4">
                 <v-text-field
                   v-model="data.start_date"
                   append-icon="mdi-calendar"
@@ -90,10 +90,10 @@
                   solo
                 ></v-text-field>
               </v-col>
-              <v-col cols="1">
+              <v-col cols="12" sm="1">
                 <v-subheader>ถึง : </v-subheader>
               </v-col>
-              <v-col cols>
+              <v-col cols="12" sm="4">
                 <v-text-field
                   v-model="data.end_date"
                   label="วันที่สิ้นสุด"
@@ -128,7 +128,7 @@
               </v-col>
             </v-row>
 
-            <v-row>
+            <v-row >
               <div>
                 <v-subheader>เอกสารประกอบการร้องเรียน</v-subheader>
               </div>
@@ -521,7 +521,7 @@ export default {
 
 <style scoped>
   .w-180{
-    width: 180px;
+    width: 220px;
   }
   .v-expansion-panel-header{
     background-color: #003366;
@@ -529,10 +529,6 @@ export default {
     color: white;
   }
 
-  /* ::v-deep .v-icon {
-    color: white!important;
-  } */
- 
   .input-gray ::v-deep .v-input__slot{
     background: #ebe9e9!important;
   }
@@ -547,10 +543,6 @@ export default {
     height: 500px;
     object-fit: contain;
   }
-  /* .v-subheader{
-    justify-content: right;
-  } */
-
   .v-overlay.style-bg{
     z-index: 300!important;
   }
@@ -561,5 +553,11 @@ export default {
   }
   .btn-files{
     cursor: pointer;
+  }
+
+@media only screen and (max-width: 767px) {
+  .w-180{
+    width: 100%;
+  }
   }
 </style>

@@ -2,7 +2,7 @@
 
     <v-card class="form-register">
         <v-row>
-            <v-col>
+            <v-col cols="12" sm="6">
                 <div class="h2">ข้อมูลผู้ร้อง / ข้อมูลติดต่อ</div>
             </v-col>
             <v-col v-if="!check_page" class="text-right">
@@ -47,7 +47,7 @@
              </v-col>
         </v-row>
         <v-row>
-            <v-col cols="6" md="5">
+            <v-col cols="12" md="5">
                 <p class="style-label"><span>*</span>ชื่อ :</p>
                 <v-text-field
                     v-model="item.name"
@@ -60,7 +60,7 @@
                     :maxlength="100"
                 ></v-text-field>
             </v-col>
-            <v-col cols="6" md="5">
+            <v-col cols="12" md="5">
                 <p class="style-label"><span>*</span>นามสกุล :</p>
                 <v-text-field
                     v-model="item.lastname"
@@ -74,7 +74,7 @@
                 ></v-text-field>
             </v-col>
     
-            <v-col cols="3" md="2">
+            <v-col cols="12" md="2">
                 <p class="style-label"><span>*</span>อายุ (ปี) : </p>
                 <v-text-field
                     v-model="item.age"
@@ -90,7 +90,7 @@
         </v-row>
 
          <v-row>
-            <v-col cols="6" md="6">
+            <v-col cols="12" md="6">
                 <p class="style-label"><span>*</span>เบอร์โทรศัพท์มือถือ : </p>
                 <v-text-field
                     v-model="item.phone"
@@ -103,7 +103,7 @@
                     outlined
                 ></v-text-field>
             </v-col>
-            <v-col cols="6" md="6">
+            <v-col cols="12" md="6">
                 <p class="style-label">เบอร์ติดต่ออื่น ๆ :</p>
                 <v-text-field
                     v-model="item.phone_other"
@@ -130,7 +130,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="3" md="3">
+            <v-col cols="12" md="3">
                 <p class="style-label">จังหวัด</p>
                 <v-autocomplete
                     :items="selectProvince"
@@ -145,7 +145,7 @@
                     single-line
                 ></v-autocomplete>
             </v-col>
-            <v-col cols="3" md="3">
+            <v-col cols="12" md="3">
                 <p class="style-label">เขต / อำเภอ</p>
                 <v-select
                     :items="selectDistrict"
@@ -160,7 +160,7 @@
                     single-line
                 ></v-select>
             </v-col>
-            <v-col cols="3" md="3">
+            <v-col cols="12" md="3">
                 <p class="style-label">แขวง / ตำบล</p>
                 <v-select
                     :items="selectSubDistrict"
@@ -175,7 +175,7 @@
                     single-line
                 ></v-select>
             </v-col>
-            <v-col cols="3" md="3">
+            <v-col cols="12" md="3">
                 <p class="style-label">รหัสไปรษณีย์</p>
                 <v-text-field
                     v-model="item.postcode"
