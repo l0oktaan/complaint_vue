@@ -33,7 +33,7 @@
                 small 
                 @click="editItem(item.id)"
               >
-                <i class="f-16 fa-solid fa-pen-to-square"></i>
+                <i class="f-16 fa-solid fa-magnifying-glass"></i>
               </v-btn>
             </template>
           </v-data-table>
@@ -55,7 +55,7 @@
             { text: 'E-mail', value: 'email' },
             { text: 'ชื่อ-สกุล', value: 'name' },
             { text: 'เบอร์โทรศัพท์มือถือ', value: 'phone' },
-            { text: 'แก้ไข', value: 'actions', align: 'center', sortable: false },
+            { text: 'Action', value: 'actions', align: 'center', sortable: false },
           ],
           datas: [],
         }),

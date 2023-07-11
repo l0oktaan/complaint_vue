@@ -11,10 +11,10 @@
           <v-container fluid>
 
               <v-row>
-                <v-col cols="3">
+                <div class="w-180">
                   <v-subheader>Call No.</v-subheader>
-                </v-col>
-                <v-col cols="9">
+                </div>
+                <v-col cols>
                   <v-text-field
                     v-model="data.call_no"
                     solo
@@ -24,11 +24,12 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              
             <v-row>
-              <v-col cols="3">
+              <div class="w-180">
                 <v-subheader>วันที่บันทึกปัญหา</v-subheader>
-              </v-col>
-              <v-col>
+              </div>
+              <v-col cols>
                 <v-text-field
                   v-model="data.create_date"
                   solo
@@ -37,24 +38,13 @@
                   class="input-gray"
                 ></v-text-field>
               </v-col>
-              <!-- <v-col cols="3">
-                <v-subheader>วันที่พบปัญหา</v-subheader>
-              </v-col>
-              <v-col cols="3">
-                <v-text-field
-                  v-model="data.start_date"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
-                ></v-text-field>
-              </v-col> -->
             </v-row>
+
             <v-row>
-              <v-col cols="3">
+              <div class="w-180">
                 <v-subheader>หัวเรื่อง</v-subheader>
-              </v-col>
-              <v-col cols="9">
+              </div>
+              <v-col cols>
                 <v-text-field
                   v-model="data.topic"
                   solo
@@ -66,10 +56,10 @@
             </v-row>
 
             <v-row>
-              <v-col cols="3">
+              <div class="w-180">
                 <v-subheader>สถานที่เกิดเหตุ</v-subheader>
-              </v-col>
-              <v-col cols="9">
+              </div>
+              <v-col cols>
                 <v-text-field
                   v-model="data.location"
                   solo
@@ -79,11 +69,12 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+
             <v-row>
-              <v-col cols="3">
+              <div class="w-180">
                 <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
-              </v-col>
-              <v-col cols="4">
+              </div>
+              <v-col cols>
                 <v-text-field
                   v-model="data.start_date"
                   append-icon="mdi-calendar"
@@ -102,7 +93,7 @@
               <v-col cols="1">
                 <v-subheader>ถึง : </v-subheader>
               </v-col>
-              <v-col cols="4">
+              <v-col cols>
                 <v-text-field
                   v-model="data.end_date"
                   label="วันที่สิ้นสุด"
@@ -122,12 +113,11 @@
               </v-col>
             </v-row>
 
-
             <v-row>
-              <v-col cols="3">
+              <div class="w-180">
                 <v-subheader>รายละเอียดเรื่องร้องเรียน</v-subheader>
-              </v-col>
-              <v-col cols="9">
+              </div>
+              <v-col cols>
                 <v-textarea
                   v-model="data.detail"
                   solo
@@ -139,10 +129,10 @@
             </v-row>
 
             <v-row>
-              <v-col cols="3">
+              <div>
                 <v-subheader>เอกสารประกอบการร้องเรียน</v-subheader>
-              </v-col>
-              <v-col cols="9">
+              </div>
+              <v-col cols="12">
                 <v-list subheader>
                   <div class="d-flex justify-space-between">
                     <v-subheader>ชื่อไฟล์</v-subheader>
@@ -530,6 +520,9 @@ export default {
 </script>
 
 <style scoped>
+  .w-180{
+    width: 180px;
+  }
   .v-expansion-panel-header{
     background-color: #003366;
     border-bottom: 1px solid #ada3a3;

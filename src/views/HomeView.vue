@@ -414,7 +414,7 @@ import store from '../store/index.js';
       color: white!important;
   }
   .f-16{
-    font-size: 16px;
+    font-size: 14px;
   }
   /* .v-app-bar.v-app-bar--fixed{
     z-index: 1;

@@ -7,6 +7,7 @@
         v-model="valid"
         lazy-validation
       >
+    
         <stepTwo ref="user" :datas="data" check_page="edit-profile"/>
         <v-btn class="btn-submit" @click="editProfile">บันทึก</v-btn>
       </v-form>
@@ -48,7 +49,6 @@ export default {
     async editProfile(){
       if(this.$refs.form.validate()){
           const user = await this.$refs.user
-
           try {
             let fd = await {
                 "id"                    : user.item.id,
@@ -61,10 +61,14 @@ export default {
                 "phone_other"           : user.item.phone_other,
                 "address"               : user.item.address,      
                 "province_id"           : user.province !== null ? user.province.id || user.province : null,
+                "province_name"         : user.province !== null ? user.province.value || user.item.province_name : null,
                 "district_id"           : user.district !== null ? user.district.id || user.district : null,
+                "district_name"         : user.district !== null ? user.district.value || user.item.district_name : null,
                 "subdistrict_id"        : user.subdistrict !== null ? user.subdistrict.id || user.subdistrict : null,
+                "subdistrict_name"      : user.subdistrict !== null ? user.subdistrict.value || user.item.subdistrict_name : null,
                 "postcode"              : user.item.postcode,
             }
+            console.log(fd);
                 let path = await `/api/user/edit/profile`
                 let response = await axios.post(`${path}`, fd)
                 console.log(response);
