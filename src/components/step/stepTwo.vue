@@ -264,17 +264,9 @@
             },
             
             subdistrict: function(v_subdistrict){
-                console.log(v_subdistrict);
                 if(v_subdistrict.id){
                     this.item.postcode = v_subdistrict.postcode  
                 }
-                // if(v_subdistrict.id){
-
-                //     this.item.postcode = v_subdistrict.postcode    
-                // }
-
-                
-
             },
             datas(){
                 if(this.datas){
@@ -326,7 +318,6 @@
 
             },
             async getProvince(){
-                console.log('getProvince');
                 let path = await `/api/get/province`
                 let response = await axios.get(`${path}`)
 
@@ -338,7 +329,6 @@
                 })
             },
             async getDistricts(id){
-                console.log('getDistricts');
                 let path = await `/api/get/districts`
                 let response = await axios.get(`${path}/`+id)
 
@@ -355,7 +345,6 @@
                 })
             },
             async getSubDistricts(id){
-                console.log('getSubDistricts');
                 let path = await `/api/get/subdistricts`
                 let response = await axios.get(`${path}/`+id)
 
