@@ -27,24 +27,24 @@
                     <v-card-text>
                         <v-container fluid>
                             <v-row>
-                            <v-col cols="3">
-                                <v-subheader>Call No.</v-subheader>
-                            </v-col>
-                            <v-col cols="9">
-                                <v-text-field
-                                v-model="data.call_no"
-                                solo
-                                readonly
-                                hide-details="auto"
-                                class="input-gray"
-                                ></v-text-field>
-                            </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-subheader>Call No.</v-subheader>
+                                </v-col>
+                                <v-col cols="12" md="9">
+                                    <v-text-field
+                                    v-model="data.call_no"
+                                    solo
+                                    readonly
+                                    hide-details="auto"
+                                    class="input-gray"
+                                    ></v-text-field>
+                                </v-col>
                             </v-row>
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>วันที่บันทึกปัญหา</v-subheader>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="12" md="9">
                             <v-text-field
                                 v-model="data.create_date"
                                 solo
@@ -56,10 +56,10 @@
                             </v-row>
 
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>หัวเรื่อง</v-subheader>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="12" md="9">
                                 <v-text-field
                                 v-model="data.topic"
                                 solo
@@ -71,10 +71,10 @@
                             </v-row>
 
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>สถานที่เกิดเหตุ</v-subheader>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="12" md="9">
                                 <v-text-field
                                 v-model="data.location"
                                 solo
@@ -86,10 +86,10 @@
                             </v-row>
 
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="12" md="4">
                                 <v-text-field
                                 v-model="data.start_date"
                                 label="วันที่เริ่มต้น"
@@ -108,10 +108,10 @@
                                 hide-details="auto"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="1">
+                            <v-col cols="12" md="1">
                                 <v-subheader>ถึง : </v-subheader>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="12" md="4">
                                 <v-text-field
                                 v-model="data.end_date"
                                 label="วันที่สิ้นสุด"
@@ -134,10 +134,10 @@
                             </v-row>
 
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>รายละเอียดเรื่องร้องเรียน</v-subheader>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="12" md="9">
                                 <v-textarea
                                 v-model="data.detail"
                                 solo
@@ -149,10 +149,10 @@
                             </v-row>
 
                             <v-row>
-                            <v-col cols="3">
+                            <v-col cols="12" md="3">
                                 <v-subheader>เอกสารประกอบการร้องเรียน</v-subheader>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="12" md="9">
                                 <v-list subheader>
                                 <div class="d-flex justify-space-between">
                                     <v-subheader>ชื่อไฟล์</v-subheader>
@@ -194,19 +194,11 @@
                                     class="input-gray"
                                     ></v-text-field>
                                 </v-col>
-                                <!-- <v-col cols="3">
-                        <v-text-field
-                        v-model="user.email"
-                        solo
-                        readonly
-                        hide-details="auto"
-                        class="input-gray"
-                        ></v-text-field>
-                    </v-col> -->
+                           
                             </v-row>
 
                             <v-row>
-                                <v-col cols class="d-flex">
+                                <v-col cols md="9" class="d-flex">
                                     <v-subheader>ชื่อผู้แจ้งปัญหา</v-subheader>
                                     <v-text-field
                                         v-model="user.name"
@@ -216,70 +208,22 @@
                                         class="input-gray"
                                     ></v-text-field>
                                 </v-col>
-                                <!-- <v-col cols="3" class="d-flex">
-                                    <v-subheader>เพศ</v-subheader>
+                              
+                                <v-col cols md="3" class="d-flex">
+                                    <v-subheader>อายุ</v-subheader>
                                     <v-text-field
-                                    v-model="user.gender"
+                                    v-model="user.age"
                                     solo
                                     readonly
                                     hide-details="auto"
                                     class="input-gray"
                                     ></v-text-field>
-                                </v-col> -->
-                                <v-col cols="3" class="d-flex">
-                                        <v-subheader>อายุ</v-subheader>
-                                        <v-text-field
-                                        v-model="user.age"
-                                        solo
-                                        readonly
-                                        hide-details="auto"
-                                        class="input-gray"
-                                        ></v-text-field>
-                                    </v-col>
-                                
-                                <!-- <v-col cols="9">
-                                <v-text-field
-                                v-model="user.username"
-                                solo
-                                readonly
-                                hide-details="auto"
-                                class="input-gray"
-                                ></v-text-field>
-                            </v-col> -->
+                                </v-col>
                             </v-row>
 
-                            <!-- <v-row>
-                            <v-col cols="3">
-                                <v-subheader>เพศ</v-subheader>
-                            </v-col>
-                            <v-col cols="9">
-                                <v-text-field
-                                v-model="user.gender"
-                                solo
-                                readonly
-                                hide-details="auto"
-                                class="input-gray"
-                                ></v-text-field>
-                            </v-col>
-                            </v-row> -->
-
-                            <!-- <v-row>
-                            <v-col cols="3">
-                                <v-subheader>อายุ</v-subheader>
-                            </v-col>
-                            <v-col cols="9">
-                                <v-text-field
-                                v-model="user.age"
-                                solo
-                                readonly
-                                hide-details="auto"
-                                class="input-gray"
-                                ></v-text-field>
-                            </v-col>
-                            </v-row> -->
-
+            
                             <v-row>
-                                <v-col cols="6" class="d-flex">
+                                <v-col cols md="6" class="d-flex">
                                     <v-subheader>*เบอร์โทรศัพท์มือถือ</v-subheader>
                                     <v-text-field
                                         v-model="user.phone"
@@ -289,7 +233,7 @@
                                         class="input-gray"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col cols="6" class="d-flex">
+                                <v-col cols md="6" class="d-flex">
                                     <v-subheader>เบอร์ติดต่ออื่น ๆ </v-subheader>
                                     <v-text-field
                                     v-model="user.phone_other"

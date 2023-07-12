@@ -78,10 +78,10 @@
                 lazy-validation
               >
                 <v-row>
-                  <v-col cols="3">
+                  <v-col cols md="3">
                     <v-subheader>รายละเอียดข้อมูล</v-subheader>
                   </v-col>
-                  <v-col cols="9">
+                  <v-col cols md="9">
                     <v-textarea
                       outlined
                       hide-details="auto"
@@ -94,19 +94,19 @@
                 </v-row>
   
                 <v-row>
-                  <v-col cols="3">
+                  <v-col cols md="3">
                     <v-subheader>ไฟล์เเนบ</v-subheader>
                   </v-col>
-                  <v-col cols="9">
+                  <v-col cols md="9">
                     <InputFiles  ref="status_files" :file="step_files"/>
                   </v-col>
                 </v-row>
   
                 <v-row>
-                  <v-col cols="3">
+                  <v-col cols md="3">
                     <v-subheader>สถานะการดำเนินงาน</v-subheader>
                   </v-col>
-                  <v-col cols="9">
+                  <v-col cols md="9">
                     <v-select
                       v-model="status_call"
 
@@ -124,10 +124,10 @@
                 </v-row>
               
                 <v-row v-if="show_detail_status">
-                  <v-col cols="3">
+                  <v-col cols md="3">
                     <v-subheader>ประเภทการร้องเรียน</v-subheader>
                   </v-col>
-                  <v-col cols="9">
+                  <v-col cols md="9">
                     <v-radio-group
                       v-model="check_corrupt"
                       row
@@ -183,7 +183,7 @@
         <v-card-text>
             <v-container fluid >
                   <v-row>
-                      <v-col cols="3">
+                      <v-col cols md="3">
                         <v-skeleton-loader
                           :loading="loading"
                           type="list-item"
@@ -191,7 +191,7 @@
                           <v-subheader>รายละเอียดข้อมูล</v-subheader>
                         </v-skeleton-loader>
                       </v-col>
-                      <v-col cols="9">
+                      <v-col cols md="9">
                         <v-skeleton-loader
                           :loading="loading"
                           height="150"
@@ -211,7 +211,7 @@
                   </v-row>
   
                   <v-row>
-                    <v-col cols="3">
+                    <v-col cols md="3">
                       <v-skeleton-loader
                         :loading="loading"
                         type="list-item"
@@ -219,7 +219,7 @@
                         <v-subheader>ไฟล์เเนบ</v-subheader>
                       </v-skeleton-loader>
                     </v-col>
-                    <v-col cols="9">
+                    <v-col cols md="9">
                       <v-skeleton-loader
                         :loading="loading"
                        
@@ -242,7 +242,7 @@
                   </v-row>
   
                   <v-row>
-                    <v-col cols="3">
+                    <v-col cols md="3">
                       <v-skeleton-loader
                         :loading="loading"
                         type="list-item"
@@ -251,7 +251,7 @@
                       </v-skeleton-loader>
                     </v-col>
                   
-                    <v-col cols="9">
+                    <v-col cols md="9">
                       <v-skeleton-loader
                         :loading="loading"
                         height="40"
@@ -273,7 +273,7 @@
                   </v-row>
               
                   <v-row v-if="detailStep.status_call == 2">
-                    <v-col cols="3">
+                    <v-col cols md="9">
                       <v-skeleton-loader
                         :loading="loading"
                         type="list-item"
@@ -281,7 +281,7 @@
                         <v-subheader>ประเภทการร้องเรียน</v-subheader>
                       </v-skeleton-loader>
                     </v-col>
-                    <v-col cols="9">
+                    <v-col cols md="9">
                       <v-skeleton-loader
                         :loading="loading"
                         type="list-item"
@@ -343,7 +343,7 @@
                   lazy-validation
               >
                 <v-row>
-                  <v-col>
+                  <v-col cols md="6">
                     <v-skeleton-loader
                       :loading="loading"
                       height="45"
@@ -360,7 +360,7 @@
                     </v-skeleton-loader>
                   </v-col>
                
-                  <v-col>
+                  <v-col cols md="6">
                     <v-skeleton-loader
                       :loading="loading"
                       height="45"

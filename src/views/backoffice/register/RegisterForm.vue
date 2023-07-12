@@ -17,7 +17,7 @@
           </v-row>
 
           <v-row>
-            <v-col>
+            <v-col cols md="4">
               <p class="style-label">ชื่อ :</p>
               <v-text-field
                   v-model="data.name"
@@ -27,7 +27,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="4">
                 <p class="style-label">นามสกุล :</p>
               <v-text-field
                   v-model="data.lastname"
@@ -37,7 +37,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="4">
               <p class="style-label">อายุ (ปี) : </p>
               <v-text-field
                   v-model="data.age"
@@ -50,7 +50,7 @@
           </v-row>
 
           <v-row>
-            <v-col>
+            <v-col cols md="6">
               <p class="style-label">เบอร์โทรศัพท์มือถือ :</p>
               <v-text-field
                   v-model="data.phone"
@@ -60,7 +60,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="6">
                 <p class="style-label">เบอร์ติดต่ออื่น ๆ :</p>
               <v-text-field
                   v-model="data.phone_other"
@@ -86,7 +86,7 @@
           </v-row>
 
           <v-row>
-            <v-col>
+            <v-col cols md="3">
               <p class="style-label">จังหวัด</p>
               <v-text-field
                   v-model="data.province_name"
@@ -96,7 +96,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="3">
               <p class="style-label">เขต / อำเภอ</p>
               <v-text-field
                   v-model="data.district_name"
@@ -106,7 +106,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="3">
               <p class="style-label">แขวง / ตำบล</p>
               <v-text-field
                   v-model="data.subdistrict_name"
@@ -116,7 +116,7 @@
                   hide-details
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col cols md="3">
               <p class="style-label">รหัสไปรษณีย์</p>
               <v-text-field
                   v-model="data.postcode"
