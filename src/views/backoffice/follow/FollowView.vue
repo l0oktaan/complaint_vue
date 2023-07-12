@@ -28,8 +28,8 @@
           >
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
-            <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
-            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template>
+            <!-- <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
+            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template> -->
               <!-- <template v-slot:[`item.create_date`]="{ item }">
                 {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
               </template> -->
@@ -86,8 +86,8 @@
           },
           { text: 'วันที่เริ่มต้น', value: 'start_date' },
           { text: 'วันที่สิ้นสุด', value: 'end_date' },
-          { text: 'ตั้งเเต่เวลา', value: 'start_time' },
-          { text: 'ถึงเวลา', value: 'end_time' },
+          // { text: 'ตั้งเเต่เวลา', value: 'start_time' },
+          // { text: 'ถึงเวลา', value: 'end_time' },
           // { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
           {

@@ -507,7 +507,6 @@ export default {
       let path              = await `/api/user/get/complainStep`
       let response          =  await axios.get(`${path}/`+ this.$route.params.id)
       this.desserts         = await response.data.data
-      console.log(response );
     }, 
     async getComplainStepFiles(v){
         let path              = await `/api/backoffice/get/ComplainStepFiles`
