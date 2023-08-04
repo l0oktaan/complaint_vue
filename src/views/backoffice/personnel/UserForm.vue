@@ -195,8 +195,9 @@
             ],
             divisions: { value: '', id: null },
             selectDivisions: [
-                { value: 'ศทส', id: 1 },
-                { value: 'สล', id: 2 },
+                { value: 'ศทส.', id: 1 },
+                { value: 'กบค.', id: 2 },
+                // { value: 'สล', id: 2 },
             ],
             status: { value: 'ใช้งาน', id: 1 },
             state: '',
