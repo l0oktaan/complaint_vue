@@ -178,7 +178,6 @@ import DetailComplain from '@/components/detailComplain.vue';
         selectContact: null,
         itemsContact: [
           {value : 'กรมบัญชีกลาง', id:1, url: 'https://www.cgd.go.th/cs/internet/internet/RequestForm_Dev.html?page_locale=th_TH'},
-          {value : 'test', id:2, url: 'https://www.google.co.th/?hl=th'},
 
         ],
         complainDetailRules: [

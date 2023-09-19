@@ -191,7 +191,7 @@
             selectRoles: [
                 { value: 'ผู้ใช้งานทั่วไป', id: 'general' },
                 { value: 'ผู้ดูเเลระบบ', id: 'admin' },
-                { value: 'ผู้ใช้งานระดับสูง', id: 'vip' },
+                // { value: 'ผู้ใช้งานระดับสูง', id: 'vip' },
             ],
             divisions: { value: '', id: null },
             selectDivisions: [

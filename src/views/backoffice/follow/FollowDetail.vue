@@ -1056,9 +1056,12 @@ export default {
 
           if(this.vComplainStep.check_corrupt === true){
             this.dialogComplainCorrupt  = await true
-            this.dialogStatusComplainStep = await false
+            this.closeStatusComplainStep()
+            // this.dialogStatusComplainStep = await false
           }else{
             this.dialogStatusComplainStep = await false
+            this.vComplainStep = await {}
+            this.vComplainStepFiles = await {}
           }
           await this.getComplainStep()
 
@@ -1072,10 +1075,12 @@ export default {
         }
       } 
     },
-    async closeStatusComplainStep(){
-      this.dialogStatusComplainStep = await false
-      this.editComplainStep         = await -1
-      this.vComplainStep            = await {}
+    closeStatusComplainStep(){
+      this.dialogStatusComplainStep =  false
+      this.editComplainStep         = -1
+      this.vComplainStep            = {}
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
     },
 
 
@@ -1187,6 +1192,11 @@ export default {
     closeComplainCorrupt(){
       this.dialogComplainCorrupt  = false
       this.editComplainCorrupt    = -1
+      this.disabled = false
+      this.vCorruptDate = new Date().toISOString().substr(0, 10),
+      this.vCorruptDetail = ''
+      // this.$refs.formCorrupt.reset()
+      this.$refs.formCorrupt.resetValidation()
     },
 
     // Corrupt File
