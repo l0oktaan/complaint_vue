@@ -109,7 +109,7 @@
       getColor (status_call) {
         if (status_call > 400) return 'red'
         else if (status_call > 200) return 'orange'
-        else return '#FFA000'
+        else return '#a19d9d'
       },
       formattedDate(create_date) {
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
@@ -117,10 +117,8 @@
       async getListComplain(){
         let path = await `/api/backoffice/get/listComplain`
         let response =  await axios.get(`${path}/`)
-        // let response =  await axios.get(`${path}/`+ this.check_roles.id)
         this.datas = await response.data.data
         this.loading = await false
-        console.log(response);
       },
     },
   }

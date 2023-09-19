@@ -290,7 +290,7 @@ import StepTree from '@/components/step/stepTree.vue'
                                 }
                                 await this.myUpload(formData)
                             }
-                            await Swal.fire('รับเรื่องร้องเรียนการทุจริตเรีบร้อยเเล้ว', '', 'success')
+                            await Swal.fire('รับเรื่องร้องเรียนเรียบร้อยเเล้ว', '', 'success')
 
                             await  this.$router.push("/user/login");
                         }

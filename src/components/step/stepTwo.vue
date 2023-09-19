@@ -117,9 +117,10 @@
         </v-row>
         <v-row>
             <v-col cols="12" md="12">
-                <p class="style-label">ที่อยู่ :</p>
+                <p class="style-label"><span>*</span>ที่อยู่ : </p>
                 <v-text-field
                     v-model="item.address"
+                    :rules="addressRules"
                     label="ที่อยู่"
                     required
                     dense
@@ -229,6 +230,10 @@
                 v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
                 v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 100 ตัวอักษร',
             ],
+            addressRules: [
+                v => !!v || 'กรุณากรอกข้อมูล',
+                v => (v && v.length <= 100) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
+            ],
             ageRules: [v => !!v || 'กรุณากรอกข้อมูล',],
             phoneRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
@@ -296,8 +301,10 @@
                     let response = await axios.post(`${path}`, { "email": this.item.email})
 
                     if(response.data.status == 200){
-                        await Swal.fire(
-                            'ยังไม่มีอีเมลนี้ในระบบ')
+                        await Swal.fire({
+                            icon: 'info',
+                            text: 'ยังไม่มีอีเมลนี้ในระบบ',
+                        })   
                     }             
 
                 } catch (error) {

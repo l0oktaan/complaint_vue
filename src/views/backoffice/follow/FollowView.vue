@@ -100,11 +100,11 @@
         desserts: [],
         itemsStatus: [
           { value: 'ทั้งหมด', id: null },
-          { value: 'อยู่ระหว่างดำเนินการ', id: 1 },
-          { value: 'เรื่องเสร็จ', id: 2 },
-          { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
-          { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
-          { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
+          { value: 'รับเรื่อง', id: 1 },
+          { value: 'ไม่รับเรื่อง', id: 2 },
+          { value: 'อยู่ระหว่างดำเนินการ', id: 3 },
+          { value: 'สอบถามข้อมูลเพิ่มเติม', id: 4 },
+          { value: 'เรื่องเสร็จ', id: 5 },
         ],
       }
     },
@@ -142,21 +142,21 @@
       },
       getColor (status_call) {
         if (status_call == 0) return '#FFA000'
-        else if (status_call == 1) return '#EF6C00'
-        else if (status_call == 2) return 'green'
+        else if (status_call == 1) return '#FFA000'
+        else if (status_call == 2) return '#EF6C00'
         else if (status_call == 3) return '#01579B'
         else if (status_call == 4) return '#512DA8'
-        else if (status_call == 5) return '#D81B60'
+        else if (status_call == 5) return 'green'
         else return 'green'
       },
       getstatus (status_call) {
 
         if (status_call == 0) return 'รอรับเรื่อง'
-        else if (status_call == 1) return 'อยู่ระหว่างดำเนินการ'
-        else if (status_call == 2) return 'เรื่องเสร็จ'
-        else if (status_call == 3) return 'สอบถามข้อมูลเพิ่มเติม'
-        else if (status_call == 4) return 'ส่งต่อผู้เกี่ยวข้อง'
-        else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
+        else if (status_call == 1) return 'รับเรื่อง'
+        else if (status_call == 2) return 'ไม่รับเรื่อง'
+        else if (status_call == 3) return 'อยู่ระหว่างดำเนินการ'
+        else if (status_call == 4) return 'สอบถามข้อมูลเพิ่มเติม'
+        else if (status_call == 5) return 'เรื่องเสร็จ'
         else return ''
       },
       formattedDate(create_date) {
@@ -167,7 +167,6 @@
         let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
         this.datas = await response.data.data
         this.loading = await false
-        console.log(response);
       },
     },
   }

@@ -9,27 +9,88 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container fluid>
+            <div class="h2 mb-6">เจ้าหน้าที่ / หน่วยงาน</div>
+            <v-row class="align-center">
+              <v-col cols="2">
+                  <v-subheader>ชื่อ</v-subheader>
+              </v-col>
 
-              <v-row class="align-center">
-                <div class="w-180">
-                  <v-subheader>Call No.</v-subheader>
-                </div>
-                <v-col cols>
-                  <v-text-field
-                    v-model="data.call_no"
+              <v-col cols="4">
+                <v-text-field
+                    v-model="data.name"
                     solo
                     readonly
                     hide-details="auto"
                     class="input-gray"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="2">
+                <v-subheader>นามสกุล</v-subheader>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                    v-model="data.lastname"
+                    solo
+                    readonly
+                    hide-details="auto"
+                    class="input-gray"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            
             <v-row class="align-center">
-              <div class="w-180">
+              <v-col cols="2">
+                  <v-subheader>หน่วยงาน</v-subheader>
+              </v-col>
+
+              <v-col cols="4">
+                  <v-text-field
+                      v-model="data.division"
+                      solo
+                      readonly
+                      hide-details="auto"
+                      class="input-gray"
+                  ></v-text-field>
+              </v-col>
+
+              <v-col cols="2">
+                  <v-subheader>รูปพรรณสันฐาน</v-subheader>
+              </v-col>
+
+              <v-col cols="4">
+                  <v-text-field
+                      v-model="data.description_face"
+                      solo
+                      readonly
+                      hide-details="auto"
+                      class="input-gray"
+                  ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <div class="h2 mt-10 mb-6">เรื่องร้องเรียน</div>
+            <v-row class="align-center">
+              <v-col cols="2">
+                <v-subheader>Call No.</v-subheader>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                  v-model="data.call_no"
+                  solo
+                  readonly
+                  hide-details="auto"
+                  class="input-gray"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="2">
                 <v-subheader>วันที่บันทึกปัญหา</v-subheader>
-              </div>
-              <v-col cols>
+              </v-col>
+
+              <v-col cols="4">
                 <v-text-field
                   v-model="data.create_date"
                   solo
@@ -41,59 +102,58 @@
             </v-row>
 
             <v-row class="align-center">
-              <div class="w-180">
+              <v-col cols="2">
                 <v-subheader>หัวเรื่อง</v-subheader>
-              </div>
-              <v-col cols>
+              </v-col>
+
+              <v-col cols="10">
                 <v-text-field
-                  v-model="data.topic"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
+                    v-model="data.topic"
+                    solo
+                    readonly
+                    hide-details="auto"
+                    class="input-gray"
                 ></v-text-field>
               </v-col>
             </v-row>
 
             <v-row class="align-center">
-              <div class="w-180">
+              <v-col cols="2">
                 <v-subheader>สถานที่เกิดเหตุ</v-subheader>
-              </div>
-              <v-col cols>
+              </v-col>
+
+              <v-col cols="10">
                 <v-text-field
-                  v-model="data.location"
-                  solo
-                  readonly
-                  hide-details="auto"
-                  class="input-gray"
+                    v-model="data.location"
+                    solo
+                    readonly
+                    hide-details="auto"
+                    class="input-gray"
                 ></v-text-field>
               </v-col>
             </v-row>
 
-            <v-row>
-              <div class="w-180">
-                <v-subheader>ช่วงวัน - เวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
-              </div>
-              <v-col cols="12" sm="4">
+            <v-row class="align-center">
+              <v-col cols="2">
+                <v-subheader>ช่วงวันเกิดเหตุ : ตั้งแต่ </v-subheader>
+              </v-col>
+
+              <v-col cols="4">
                 <v-text-field
                   v-model="data.start_date"
+                  label="วันที่เริ่มต้น"
                   append-icon="mdi-calendar"
                   class="input-gray"
                   readonly
                   solo
                 ></v-text-field>
-                <v-text-field
-                  v-model="data.start_time"
-                  append-icon="mdi-clock-time-four-outline"
-                  class="input-gray"
-                  readonly
-                  solo
-                ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="1">
-                <v-subheader>ถึง : </v-subheader>
+
+              <v-col cols="2">
+                <v-subheader>ถึง </v-subheader>
               </v-col>
-              <v-col cols="12" sm="4">
+
+              <v-col cols="4">
                 <v-text-field
                   v-model="data.end_date"
                   label="วันที่สิ้นสุด"
@@ -101,23 +161,48 @@
                   readonly
                   class="input-gray"
                   solo
-                        
                 ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row class="align-center">
+              <v-col cols="2">
+                <v-subheader>ช่วงเวลาเกิดเหตุ : ตั้งแต่ </v-subheader>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                  v-model="data.start_time"
+                  append-icon="mdi-clock-time-four-outline"
+                  class="input-gray"
+                  readonly
+                  solo
+                  hide-details="auto"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="2">
+                <v-subheader>ถึง </v-subheader>
+              </v-col>
+
+              <v-col cols="4">
                 <v-text-field
                   v-model="data.end_time"
                   append-icon="mdi-clock-time-four-outline"
                   class="input-gray"
                   readonly
                   solo
+                  hide-details="auto"
                 ></v-text-field>
               </v-col>
             </v-row>
 
-            <v-row>
-              <div class="w-180">
+            <v-row class="align-center">
+              <v-col cols="2">
                 <v-subheader>รายละเอียดเรื่องร้องเรียน</v-subheader>
-              </div>
-              <v-col cols>
+              </v-col>
+
+              <v-col cols="10">
                 <v-textarea
                   v-model="data.detail"
                   solo
@@ -128,10 +213,8 @@
               </v-col>
             </v-row>
 
-            <v-row >
-              <div>
-                <v-subheader>เอกสารประกอบการร้องเรียน</v-subheader>
-              </div>
+            <div class="h2 mt-10 mb-4">เอกสารประกอบการร้องเรียน</div>
+            <v-row class="align-center">
               <v-col cols="12">
                 <v-list subheader>
                   <div class="d-flex justify-space-between">
@@ -139,94 +222,21 @@
                     <v-subheader>ไฟล์เเนบ</v-subheader>
                   </div>
 
-                  <v-list-item
-                    v-for="file in files"
-                    :key="file.id"
-                  >
-
+                  <v-list-item v-for="file in files" :key="file.id">
                     <v-list-item-content class="text-left">
-                      <v-list-item-title>{{ file.file_original }}</v-list-item-title>
+                    <v-list-item-title>{{ file.file_original }}</v-list-item-title>
                     </v-list-item-content>
-                      <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
-                      <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
-
+                    <div class="btn-files" v-if="file.file_type == 'application/pdf'" @click="urlPdfFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-file"></i></div>
+                    <div class="btn-files" v-else @click="urlFiles('UrlFilesComplain',file.file_name)"><i class="fa-solid fa-image"></i></div>
                   </v-list-item>
-                  
+                    
                 </v-list>
               </v-col>
             </v-row>
           </v-container>
+          
         </v-expansion-panel-content>
       </v-expansion-panel>
-
-      <!-- <v-expansion-panel v-if="check_roles.roles == 'admin'">
-        <v-expansion-panel-header>
-          สถานะการดำเนินงานของเจ้าหน้าที่
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-
-          <v-container fluid>
-            <v-form
-                ref="form"
-                v-model="valid"
-                lazy-validation
-            >
-              <v-row>
-                <v-col cols="3">
-                  <v-subheader>รายละเอียดข้อมูล</v-subheader>
-                </v-col>
-                <v-col cols="9">
-                  <v-textarea
-                    outlined
-                    hide-details="auto"
-                    single-line
-                    name="input-7-4"
-                    v-model="status_detail"
-                    :rules="detailRules"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col cols="3">
-                  <v-subheader>ไฟล์เเนบ</v-subheader>
-                </v-col>
-                <v-col cols="9">
-                  
-                  <InputFiles  ref="status"/>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col cols="3">
-                  <v-subheader>สถานะการดำเนินงาน</v-subheader>
-                </v-col>
-                <v-col cols="9">
-                  <v-select
-                    v-model="status_call"
-                    :items="selectStatus"
-                    item-text="value"
-                    item-value="id"
-                    label="สถานะการดำเนินงาน"
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-btn
-                depressed
-                class="btn-submit mt-5"
-                @click="saveComplainStep"
-              >
-                บันทึก
-              </v-btn>
-            </v-form>
-          
-          </v-container>
-        </v-expansion-panel-content>
-      </v-expansion-panel> -->
       
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -246,19 +256,6 @@
               {{ formattedDate(item.date) == 'Invalid date' ? '' : formattedDate(item.date) }}
             </template>
 
-            <!-- <template v-slot:[`item.files`]="{ item }">
-              <div  v-if="item.status_call != 0 && item.status_call != 1">
-                <v-btn
-                  color="primary"
-                  dark
-                  icon
-                  @click="dailogfiles(item)"
-                >
-                <i class="fa-solid fa-file"></i>
-                </v-btn>
-              </div>
-            </template> -->
-
             <template v-slot:[`item.status_call`]="{ item }">
               <v-chip
               :color="getColor(item.status_call)"
@@ -267,74 +264,39 @@
               {{ getstatus(item.status_call) }}
               </v-chip>
             </template>
-            <!-- <template   v-slot:[`item.edit`]="{ item }"  >
-             <div v-if="item.status_call != 0 && item.status_call != 1">
-              <v-btn
-                color="primary"
-                dark
-                icon
-                @click="dailogDetail(item)"
-              >
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <template   v-slot:[`item.detailComplainStep`]="{ item }"  >
+             <div v-if="item.status_call == 2">
+             
+              <v-btn color="#003366" small icon @click="DetailComplainStep(item)">
+                <i class="f-16 fa-solid fa-magnifying-glass"></i>
               </v-btn>
              </div>
-             
-            </template> -->
+            </template>
+          
           </v-data-table>
 
         </v-expansion-panel-content>
       </v-expansion-panel>
 
     </v-expansion-panels>
-   
-      <v-dialog
-        v-model="dialog_files_step" max-width="500">
-        <v-toolbar color="#167dc2" dark>
-          <v-toolbar-title>ไฟล์เเนบ</v-toolbar-title>
-        </v-toolbar>
-     
-        <!-- <div v-if="!loading"> -->
-          <v-list  subheader two-line>
-            <div v-if="step_files.length">
-              <v-list-item
-                  v-for="step_file in step_files"
-                  :key="step_file.id"
-                >
-                <v-list-item-content class="text-left">
-                  <v-list-item-title >{{ step_file.file_original }}</v-list-item-title>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-btn icon @click="urlFiles('UrlFilesComplainStep',step_file.file_name, step_file.file_type)">
-                    <i class="fa-solid fa-file"></i>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </div>
-            <p v-else>ไม่มีข้อมูล</p>
-          </v-list>
-
-      </v-dialog>
-
-
-
-
-
-
-      <v-dialog
-        v-model="dialog_detail"
-        max-width="500"
-      >
+      <v-dialog persistent max-width="700px" v-model="dialogComplainStep">
         <v-card>
-          <v-card-title class="text-h5">
-          รายการดำเนินงานของเจ้าหน้าที่
-          </v-card-title>
-          <v-card-text>
-
-          </v-card-text>
-
-        
+          <v-toolbar color="#167dc2" dark>
+            <v-toolbar-title>รายละเอียดสถานะการดำเนินงานของเจ้าหน้าที่</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon dark @click="dialogComplainStep = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          </v-toolbar>
         </v-card>
+        <v-card-text class="bg-w">
+          <v-container fluid>
+            <p>{{ cancelMessageName }}</p>
+            <p>กรุณาร้องเรียนผ่านช่องทางนี้ : 
+              <a v-bind:href="`${cancelContactUrl}`">{{cancelContactName}}</a>
+            </p>
+          </v-container>
+        </v-card-text>
       </v-dialog>
 
       <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
@@ -350,9 +312,6 @@
           </v-btn>
       </v-overlay>
 
-      <!-- <a v-if="overlayImg" :href="url" target="_blank">
-        <img width="220" height="250" border="0" align="center"  :src="url" alt=""/>
-      </a> -->
   </div>
 </template>
 <script>
@@ -378,12 +337,10 @@ export default {
     url: '',
     status_detail: '',
     status_call: { value: '', id: null },
-    selectStatus: [
-          { value: 'เรื่องเสร็จ', id: 2 },
-          { value: 'สอบถามข้อมูลเพิ่มเติม', id: 3 },
-          { value: 'ส่งต่อผู้เกี่ยวข้อง', id: 4 },
-          { value: 'ตั้งคณะกรรมการสอบสวน', id: 5 },
-      ],
+    cancelMessageName: '',
+    cancelContactName:'',
+    cancelContactUrl:'',
+    dialogComplainStep: false,
     dialog_files_step: false,
     dialog_detail: false,
     overlayImg: false,
@@ -410,12 +367,9 @@ export default {
           sortable: false,
           value: 'date',
         },
-        // { text: 'ชื่อ - สกุล', value: 'name' },
-        // { text: 'หน่วยงาน', value: 'division' },
         { text: 'รายละเอียด', value: 'detail' },
         { text: 'สถานะ', value: 'status_call' },
-        // { text: 'ไฟล์เเนบ', value: 'files' },
-        // { text: 'Action', value: 'edit' },
+        { text: 'รายละเอียดสถานะการดำเนินงานของเจ้าหน้าที่', value: 'detailComplainStep', align: 'center' },
       ],
     }),
   mounted() {
@@ -434,22 +388,22 @@ export default {
      
     },
     getColor (status_call) {
-      if (status_call == 0) return '#FFA000'
-      else if (status_call == 1) return '#EF6C00'
-      else if (status_call == 2) return 'green'
+      if (status_call == 0) return '#a19d9d'
+      else if (status_call == 1) return '#FFA000'
+      else if (status_call == 2) return '#EF6C00'
       else if (status_call == 3) return '#01579B'
       else if (status_call == 4) return '#512DA8'
-      else if (status_call == 5) return '#D81B60'
+      else if (status_call == 5) return 'green'
       else return 'green'
     },
     getstatus (status_call) {
 
       if (status_call == 0) return 'รอรับเรื่อง'
-      else if (status_call == 1) return 'อยู่ระหว่างดำเนินการ'
-      else if (status_call == 2) return 'เรื่องเสร็จ'
-      else if (status_call == 3) return 'สอบถามข้อมูลเพิ่มเติม'
-      else if (status_call == 4) return 'ส่งต่อผู้เกี่ยวข้อง'
-      else if (status_call == 5) return 'ตั้งคณะกรรมการสอบสวน'
+      else if (status_call == 1) return 'รับเรื่อง'
+      else if (status_call == 2) return 'ไม่รับเรื่อง'
+      else if (status_call == 3) return 'อยู่ระหว่างดำเนินการ'
+      else if (status_call == 4) return 'สอบถามข้อมูลเพิ่มเติม'
+      else if (status_call == 5) return 'เรื่องเสร็จ'
       else return ''
     },
     formattedDate(create_date) {
@@ -488,12 +442,21 @@ export default {
         this.overlayImg = await !this.overlayImg 
       },
 
+    async DetailComplainStep(v){
+
+      this.dialogComplainStep = await true,
+      this.cancelMessageName  = await v.cancel_message_id === 3 ? v.cancel_message_other : v.cancel_message_name,
+      this.cancelContactName  = await v.cancel_contact_name,
+      this.cancelContactUrl   = await v.cancel_contact_url
+
+    },
+
     async getComplainDetail(){
       let path              = await `/api/user/get/complainDetail`
       let response          =  await axios.get(`${path}/`+ this.$route.params.id)
       this.data             = await response.data.data[0]
-      // this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').utcOffset("+00:00").format("DD/MM/YYYY HH:mm:ss")
-      this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY') + ' ' + moment(response.data.data[0].create_date).utcOffset("+00:00").format('HH:mm')
+      this.data.create_date = await  moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
+      // this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY') + ' ' + moment(response.data.data[0].create_date).utcOffset("+00:00").format('HH:mm')
       this.data.start_time  = await moment(response.data.data[0].start_date).utcOffset("+00:00").format('HH:mm') == '00:00' ? '' : moment(response.data.data[0].start_date).utcOffset("+00:00").format('HH:mm')
       this.data.end_time  = await moment(response.data.data[0].end_date).utcOffset("+00:00").format('HH:mm') == '00:00' ? '' : moment(response.data.data[0].end_date).utcOffset("+00:00").format('HH:mm')
       this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
@@ -509,11 +472,11 @@ export default {
       this.desserts         = await response.data.data
     }, 
     async getComplainStepFiles(v){
-        let path              = await `/api/backoffice/get/ComplainStepFiles`
-        let response          = await axios.get(`${path}/`+ v.id)
-        this.step_files    = await response.data.data
+      let path              = await `/api/backoffice/get/ComplainStepFiles`
+      let response          = await axios.get(`${path}/`+ v.id)
+      this.step_files    = await response.data.data
 
-      },
+    },
   }
 }
 </script>
@@ -554,9 +517,19 @@ export default {
     cursor: pointer;
   }
 
+  v-subheader {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    letter-spacing: 0.0071428571em;
+}
+.bg-w{
+  background: #fff;
+}
+
 @media only screen and (max-width: 767px) {
   .w-180{
     width: 100%;
   }
-  }
+}
 </style>
