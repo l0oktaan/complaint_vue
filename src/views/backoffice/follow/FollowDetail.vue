@@ -20,6 +20,7 @@
             :items="dataComaplinStep"
             class="elevation-1"
           >
+          
             <template v-slot:[`item.name`]="{ item }">
               {{ item.name + ' ' +item.lastname }}
             </template>
@@ -27,6 +28,10 @@
               {{ formattedDate(item.date) == 'Invalid date' ? '' : formattedDate(item.date) }}
             </template>
 
+            <template v-slot:[`item.detail`]="{ item }">
+                  <div class="overflow" >{{ item.detail }}</div>
+            </template>
+           
             <template v-slot:[`item.status_call`]="{ item }">
               <v-chip
               :color="getColor(item.status_call)"
@@ -441,15 +446,19 @@
     <v-dialog v-if="dialogComplainCorrupt"
       v-model="dialogComplainCorrupt"
       persistent
-      max-width="900px"
+      max-width="700px"
     >
       
       <v-card>
         <v-toolbar color="#167dc2" dark>
           <v-toolbar-title>{{formTitleCorrupt}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn v-if="checkSubmit" icon dark @click="closeComplainCorrupt">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-toolbar>
         <v-card-text>
-          <v-container fluid>
+          <!-- <v-container fluid> -->
 
             <v-overlay v-if="loading"
               :loading="loading"
@@ -470,11 +479,11 @@
               <div class="box-corrupt-file">
 
                   <div class="text-right">
-                    <v-btn class="btn btn-add" @click="dialogCorruptFile = true">เพิ่มรายการเอกสาร</v-btn>
+                    <v-btn class="btn btn-add mt-4" @click="dialogCorruptFile = true">เพิ่มรายการเอกสาร</v-btn>
                   </div>
                   <v-list v-if="corruptFiles.length > 0" subheader>
-                    <v-subheader class="h-25">รายการเอกสาร</v-subheader>
-                    <v-list-item
+                    <v-subheader class="h-25 px-0">รายการเอกสาร</v-subheader>
+                    <v-list-item class="px-0"
                       v-for="(corruptFile,index) in corruptFiles" 
                       :key="index"
                     >
@@ -495,8 +504,9 @@
                     </v-list-item>
                   </v-list>
               </div>
-              <v-row>
-                <v-col cols>
+              <!-- <v-row> -->
+                <!-- <v-col cols> -->
+                <div>
                   <v-menu
                     ref="menu"
                     v-model="menu"
@@ -542,32 +552,34 @@
                       </v-btn>
                     </v-date-picker>
                   </v-menu>
-                  </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-skeleton-loader
-                    :loading="loading"
-                    height="155"
-                    type="image"
-                  >
-                    <p class="style-label"><span>*</span>รายละเอียดการทุจริต</p>
-                    <v-textarea
-                      v-model="vCorruptDetail"
-                      :rules="detailRules"
-                      hide-details="auto"
-                      outlined
-                    ></v-textarea>
-                  </v-skeleton-loader>
-                </v-col>
-              </v-row>
+                </div>
+                  <!-- </v-col> -->
+              <!-- </v-row> -->
+              <!-- <v-row> -->
+                <!-- <v-col> -->
+              <div class="mt-4">
+                <v-skeleton-loader
+                  :loading="loading"
+                  height="155"
+                  type="image"
+                >
+                  <p class="style-label"><span>*</span>รายละเอียดการทุจริต</p>
+                  <v-textarea
+                    v-model="vCorruptDetail"
+                    :rules="detailRules"
+                    hide-details="auto"
+                    outlined
+                  ></v-textarea>
+                </v-skeleton-loader>
+              </div>
+                <!-- </v-col> -->
+              <!-- </v-row> -->
             </v-form>
 
-            <v-card-actions v-if="!loading" class="px-0 py-0 mt-4">
+            <v-card-actions v-if="!loading && !checkSubmit" class="px-0 py-0 mt-4">
               <v-spacer></v-spacer>
 
               <v-btn
-                :disabled="disabled"
                 class="btn btn-submit"
                 text
                 @click="updateComplainCorrupt"
@@ -583,7 +595,7 @@
               </v-btn>
             </v-card-actions>
 
-          </v-container>
+          <!-- </v-container> -->
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -599,67 +611,71 @@
           <v-toolbar-title>{{formTitleCorruptFile}}</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-container fluid>
+          <!-- <v-container fluid> -->
             <v-form
               ref="formCorruptFile"
               v-model="valid"
               lazy-validation
             >
-              <v-row>
-                <v-col cols>
-                  <v-skeleton-loader
-                    :loading="loading"
-                    height="45"
-                    type="image"
-                  >
-                    <p class="style-label"><span>*</span>เลขที่หนังสือ</p>
-                    <v-text-field
-                      v-model="vCorruptReferenceCode"
-                      :rules="corruptRefRules"
-                      hide-details="auto"
-                      outlined
-                      dense
-                    ></v-text-field>
-                  </v-skeleton-loader>   
-                </v-col>
+              <!-- <v-row> -->
+                <!-- <v-col cols> -->
+              <div class="mt-4"> 
+                <v-skeleton-loader
+                  :loading="loading"
+                  height="45"
+                  type="image"
+                >
+                  <p class="style-label"><span>*</span>เลขที่หนังสือ</p>
+                  <v-text-field
+                    v-model="vCorruptReferenceCode"
+                    :rules="corruptRefRules"
+                    hide-details="auto"
+                    outlined
+                    dense
+                  ></v-text-field>
+                </v-skeleton-loader> 
+              </div>  
+                <!-- </v-col> -->
               
-              </v-row>
+              <!-- </v-row> -->
               
-              <v-row>
-                <v-col>
-               
-                  <p class="style-label"><span>*</span>ไฟล์เเนบ</p>
+              <!-- <v-row> -->
+                <!-- <v-col> -->
+              <div class="mt-4">  
+                <p class="style-label"><span>*</span>ไฟล์เเนบ</p>
+              
+                <div v-if="dataCorruptFile.file_name !== null && dataCorruptFile.check_remove_file === 0" class="text-left  display-flex align-center">
                 
-                  <div v-if="dataCorruptFile.file_name !== null && dataCorruptFile.check_remove_file === 0" class="text-left">
+                    
+                    <v-chip class="mr-1"      
+                    
+                      @click="showFile(dataCorruptFile, 'UrlFilesCorrupt')"
+                      >
+                      <i v-if="dataCorruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pr-2"></i>
+                      <i v-else class="fa-solid fa-image pr-2"></i>
+                      {{dataCorruptFile.file_original}}
+                    </v-chip>
+                    <v-btn density="compact" color="red" icon="mdi-trash" @click="removeCorruptFile(dataCorruptFile)"><i class="fa-solid fa-trash icon-trash"></i></v-btn>
                   
-                     
-                      <v-chip class="mr-1"      
-                        close @click:close="removeCorruptFile(dataCorruptFile)"
-                        @click="showFile(dataCorruptFile, 'UrlFilesCorrupt')"
-                        >
-                        <i v-if="dataCorruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pr-2"></i>
-                        <i v-else class="fa-solid fa-image pr-2"></i>
-                        {{dataCorruptFile.file_original}}
-                      </v-chip>
 
-                  </div>
-                  <div v-else>
-                    <v-file-input 
-                      v-model="vCorruptFile"
-                      :accept="acceptTypes"
-                      :rules="fileRules"
-                      show-size
-                      outlined
-                      dense
-                      label="ไฟล์เเนบ"
-                      hide-details="auto"
-                    ></v-file-input>
-                  </div>
-                 
-
+                </div>
+                <div v-else>
+                  <v-file-input 
+                    v-model="vCorruptFile"
+                    :accept="acceptTypes"
+                    :rules="fileRules"
+                    show-size
+                    outlined
+                    dense
+                    label="ไฟล์เเนบ"
+                    hide-details="auto"
+                  ></v-file-input>
+                </div>
+          
+              </div>
                   
-                </v-col>
-              </v-row>
+                <!-- </v-col> -->
+              <!-- </v-row> -->
             </v-form>
             <v-card-actions class="px-0 py-0 mt-4">
         
@@ -680,11 +696,11 @@
                   text
                   @click="closeCorruptFile"
                 >
-                  ยกเลิก
+                  ปิด
                 </v-btn>
               </v-skeleton-loader>
             </v-card-actions>
-          </v-container>
+          <!-- </v-container> -->
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -736,7 +752,7 @@ export default {
     panel: [0, 1],
     headers: [
       {
-        text: 'วันที่ / เวลา',
+        text: 'วันที่',
         align: 'center',
         sortable: false,
         value: 'date',
@@ -753,7 +769,7 @@ export default {
     opacity: 1,
     absolute: false,
     overlayImg: false,
-    disabled : false,
+    // disabled : false,
 
     dataComplain: {},
     dataRegister: {},
@@ -775,6 +791,7 @@ export default {
     corruptId : null,
     vCorruptDate: new Date().toISOString().substr(0, 10),
     vCorruptDetail: '',
+    checkSubmit: false,
 
     corruptFileId : null,
     vCorruptReferenceCode: '',
@@ -866,7 +883,7 @@ export default {
 
     },
     formattedDate(create_date) {
-      return moment(create_date).add(543, 'year').utcOffset("+00:00").format("DD/MM/YYYY HH:mm:ss");
+      return moment(create_date).add(543, 'year').utcOffset("+00:00").format("DD/MM/YYYY");
     },
     getColor (status_call) {
       if (status_call == 0) return '#a19d9d'
@@ -1134,7 +1151,8 @@ export default {
           await this.getComplainStep()
 
           if(this.editComplainCorrupt === -1){
-            this.disabled = await !this.disabled
+            // this.dialogComplainCorrupt = await false
+            this.checkSubmit = await true
           }
 
         } catch (error) {
@@ -1192,7 +1210,8 @@ export default {
     closeComplainCorrupt(){
       this.dialogComplainCorrupt  = false
       this.editComplainCorrupt    = -1
-      this.disabled = false
+      this.checkSubmit = false
+      // this.disabled = false
       this.vCorruptDate = new Date().toISOString().substr(0, 10),
       this.vCorruptDetail = ''
       // this.$refs.formCorrupt.reset()
@@ -1343,7 +1362,7 @@ export default {
       this.dataCorruptFile          = {}
       this.$refs.formCorruptFile.reset()
       this.$refs.formCorruptFile.resetValidation()
-      this.disabled = false
+      // this.disabled = false
     },
   }
 }
@@ -1395,4 +1414,19 @@ export default {
 .h-25{
   height: 25px;
 }
+
+.icon-trash{
+  color: #167dc2;
+  font-size: 16px;
+}
+.overflow{
+  min-width: auto;
+  max-width: 372px;
+  word-wrap: break-word;
+  /* text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 250px; */
+}
+
 </style>
