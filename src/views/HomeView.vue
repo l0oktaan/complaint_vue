@@ -287,7 +287,7 @@ import store from '../store/index.js';
         if(this.check_roles.roles === 'user'){
           await this.$router.push("/user/profile").catch(()=>{});
         }else{
-          this.$router.push({ name: 'personnel_formedit', params: { id: this.check_roles.id },})
+          this.$router.push({ name: 'personal_detail',  params: { id: this.check_roles.id}})
         }
       },
       async logout() {

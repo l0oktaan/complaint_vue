@@ -12,7 +12,6 @@ import FollowView from '../views/users/follow/FollowView.vue'
 import FollowDetail from '../views/users/follow/FollowDetail.vue'
 import ComplainView from '../views/users/complain/ComplainView.vue'
 import EditProfile from '../views/EditProfile.vue'
-
 import ForgotPasswordView from '../views/users/ForgotPassword.vue'
 import ResetPasswordView from '../views/users/ResetPassword.vue'
 
@@ -28,9 +27,11 @@ import BackofficeFollowDetail from '../views/backoffice/follow/FollowDetail.vue'
 import PersonnelView from '../views/backoffice/personnel/UserViews.vue'
 import PersonnelForm from '../views/backoffice/personnel/UserForm.vue'
 import PersonnelFormEdit from '../views/backoffice/personnel/UserForm.vue'
+import PersonalDetail from '../views/backoffice/personnel/UserDetail.vue'
 import RegisterComplain from '../views/backoffice/register/RegisterViews.vue'
 import Registerform from '../views/backoffice/register/RegisterForm.vue'
-// import ReportView from '../views/backoffice/report/ReportView.vue'
+import ReportView from '../views/backoffice/report/ReportView.vue'
+import ReportComplain  from '../views/backoffice/report/reportComplain.vue'
 
 
 import HomeView from '../views/HomeView.vue'
@@ -145,6 +146,12 @@ const routes = [
         name: 'personnel_formedit',
         component: PersonnelFormEdit
       },
+
+      {
+        path: '/backoffice/personal/detail/:id',
+        name: 'personal_detail',
+        component: PersonalDetail
+      },
       {
         path: '/backoffice/register',
         name: 'register_complain',
@@ -155,6 +162,19 @@ const routes = [
         name: 'register_form',
         component: Registerform
       },
+      
+      {
+        path: '/backoffice/report',
+        name: 'report_view',
+        component: ReportView
+      },
+
+      {
+        path: '/backoffice/report/complain',
+        name: 'report-complain',
+        component: ReportComplain
+      },
+
 
     ]
 
@@ -205,6 +225,8 @@ const routes = [
         name: 'complain-report',
         component: ComplainView,
       },
+
+      
     
     ]
 
