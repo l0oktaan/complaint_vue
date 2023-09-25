@@ -182,7 +182,7 @@
 
             <v-list-item >
               <v-list-item-title>
-                <v-btn depressed rounded text @click="editProfile"> แก้ไขโปรไฟล์ </v-btn>
+                <v-btn depressed rounded text @click="editProfile"> โปรไฟล์ </v-btn>
                 <v-divider  class="my-3"></v-divider> 
                 <!-- <v-btn
                   v-if="check_roles.roles == 'user'"
