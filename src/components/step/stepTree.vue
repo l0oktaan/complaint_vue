@@ -18,7 +18,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="100"
+                        :maxlength="50"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -31,7 +31,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="100"
+                        :maxlength="50"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -47,7 +47,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="100"
+                        :maxlength="200"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -59,7 +59,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="512"
+                        :maxlength="200"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -84,7 +84,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="512"
+                        :maxlength="200"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -97,7 +97,7 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="512"
+                        :maxlength="200"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -314,14 +314,7 @@
                         single-line
                         :maxlength="512"
                     ></v-textarea>
-                    <!-- <v-tiptap class="mb-5" v-model="complain_detail" /> -->
-                    <!-- <v-text-field
-                        v-model="data.detail"
-                        label="*รายละเอียดเรื่องร้องเรียน"
-                        required
-                        dense
-                        outlined
-                    ></v-text-field> -->
+                
                 </v-col>
             </v-row>
             <!-- <v-divider></v-divider> -->
@@ -389,17 +382,21 @@ export default {
         acceptTypes: "image/*, application/pdf",
         nameRules: [
             v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า เจ้าหน้าที่',
-            v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+            v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+            v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
         ],
         lastnameRules: [
             v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า เจ้าหน้าที่',
-            v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+            v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+            v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร',
         ],
         divisionRules: [
             v => !!v || 'กรุณากรอกข้อมูลหน่วยงานที่ติดต่อ / ต้องการร้องเรียน',
+            v => (v && v.length <= 200) || 'กรอกรายละเอียดห้ามเกิน 200 ตัวอักษร',
         ],
         topicRules: [
             v => !!v || 'กรุณากรอกข้อมูล',
+            v => (v && v.length <= 200) || 'กรอกรายละเอียดห้ามเกิน 200 ตัวอักษร',
         ],
         complainDetailRules: [
             v => !!v || 'กรุณากรอกข้อมูล',

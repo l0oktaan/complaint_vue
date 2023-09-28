@@ -98,6 +98,7 @@
                     name="input-7-4"
                     v-model="vComplainStep.status_detail"
                     :rules="detailRules"
+                    :maxlength="512"
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -569,6 +570,7 @@
                     :rules="detailRules"
                     hide-details="auto"
                     outlined
+                    :maxlength="512"
                   ></v-textarea>
                 </v-skeleton-loader>
               </div>
@@ -632,6 +634,7 @@
                     hide-details="auto"
                     outlined
                     dense
+                    :maxlength="50"
                   ></v-text-field>
                 </v-skeleton-loader> 
               </div>  
@@ -807,8 +810,7 @@ export default {
     ],
     corruptRefRules : [
       v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า -',
-      v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า เจ้าหน้าที่',
-      v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร'
+      v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
     ],
     fileRules: [
       value => {

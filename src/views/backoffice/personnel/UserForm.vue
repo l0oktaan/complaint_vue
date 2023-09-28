@@ -25,6 +25,7 @@
                                     single-line
                                     hide-details="auto"
                                     clearable
+                                    :maxlength="50"
                                 ></v-text-field>
                             </v-col>
                             <!-- <v-col cols="6">
@@ -53,7 +54,7 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
-                                    maxlength="30"
+                                    :maxlength="50"
                                 ></v-text-field>
                             </v-col>
 
@@ -69,7 +70,7 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
-                                    maxlength="30"
+                                    :maxlength="50"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -87,6 +88,7 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
+                                    :maxlength="200"
                                 ></v-text-field>
                             </v-col>
 
@@ -208,6 +210,7 @@
 
             usernameRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
+                v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
             ],
             passwordRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
@@ -215,19 +218,22 @@
             ],
             nameRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+                v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
             ],
             lastnameRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+                v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
             ],
             positionRules: [
                 v => !!v || 'กรุณากรอกข้อมูล',
-                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`
+                v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
+                v => (v && v.length <= 200) || 'กรอกรายละเอียดห้ามเกิน 200 ตัวอักษร'
             ],
             rules:{
                 divisionsRules: [(v) =>  v.length> 0  || "เลือกประเภทหน่วยงาน"],
-                rolesRules: [(v) =>  v.length> 0 || "เลือกประเภทสิทธิ์การใช้งาน"],
+                rolesRules: [(v) =>  v.length> 0 || "เลือกประเภทสิทธิ์การใช้งาน"]
                 // statusRules: [(v) =>  v.length> 0 || "เลือกสถานะการใช้งาน"],
             },
             item: [
