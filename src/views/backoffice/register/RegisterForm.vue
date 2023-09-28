@@ -3,6 +3,11 @@
       <LoaderView ref="loader"/>
       <breadcrumbsView :items="item"/>
       <div class="style-page">
+        <v-card class="style-card">
+          <v-toolbar flat>
+            <v-toolbar-title class="h2"> ข้อมูลผู้ร้อง / ข้อมูลติดต่อ </v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
           <v-row>
             <v-col>
               <p class="style-label">Email :</p>
@@ -127,6 +132,10 @@
               ></v-text-field>
             </v-col>
           </v-row>
+        </v-card-text>
+       
+        </v-card>
+      
       </div>
   </div>
 
@@ -149,7 +158,7 @@ data: () => ({
           href: '/backoffice/register',
       },
       {
-          text: 'ข้อมูลผู้ร้อง',
+          text: 'ข้อมูลผู้ร้อง / ข้อมูลติดต่อ',
           disabled: true,
           href: '/backoffice/register/form',
       },
