@@ -13,6 +13,7 @@
             :append-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showNewPassword = !showNewPassword"
             autocomplete="on"
+            :maxlength="20"
         ></v-text-field>
         <p class="style-label">ยืนยันรหัสผ่านใหม่ <span>*</span></p>
         <v-text-field
@@ -27,6 +28,7 @@
             :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showConfirmPassword = !showConfirmPassword"
             autocomplete="on"
+            :maxlength="20"
         ></v-text-field>
     </div>
 </template>

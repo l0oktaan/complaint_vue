@@ -32,7 +32,7 @@
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword = !showPassword"
                     autocomplete="on"
-                
+                    :maxlength="20"
                 ></v-text-field>
                 <p class="style-label">รหัสผ่านใหม่ <span>*</span></p>
                 <v-text-field
@@ -47,6 +47,7 @@
                     :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword2 = !showPassword2"
                     autocomplete="on"
+                    :maxlength="20"
                 ></v-text-field>
                 <p class="style-label">ยืนยันรหัสผ่านใหม่ <span>*</span></p>
                 <v-text-field
@@ -62,6 +63,7 @@
                     :append-icon="showPassword3 ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword3 = !showPassword3"
                     autocomplete="on"
+                    :maxlength="20"
                 ></v-text-field>
                 <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
             </v-card-text>
