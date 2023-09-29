@@ -191,7 +191,7 @@
             admin_id: store.getters.user.id,
             roles: { value: '', id: null },
             selectRoles: [
-                { value: 'ผู้ใช้งานทั่วไป', id: 'general' },
+                { value: 'เจ้าหน้าที่รับเรื่อง', id: 'general' },
                 { value: 'ผู้ดูเเลระบบ', id: 'admin' },
                 // { value: 'ผู้ใช้งานระดับสูง', id: 'vip' },
             ],

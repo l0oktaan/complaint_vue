@@ -126,7 +126,7 @@ export default {
             this.lastname               = await response.data.data[0].lastname
             this.position               = await response.data.data[0].position
             this.divisions              = await response.data.data[0].divisions === 1 ? 'ศทส' : 'กบค'
-            this.roles                  = await response.data.data[0].roles === 'general' ? 'ผู้ใช้งานทั่วไป' : 'ผู้ดูเเลระบบ'
+            this.roles                  = await response.data.data[0].roles === 'general' ? 'เจ้าหน้าที่รับเรื่อง' : 'ผู้ดูเเลระบบ'
             this.status                 = await response.data.data[0].status === 1 ?  'ใช้งาน' : 'ไม่ใช้งาน'
 
             await setTimeout(() => (this.$refs.loader.overlay = false), 300);

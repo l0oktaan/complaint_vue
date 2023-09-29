@@ -94,7 +94,7 @@
         },
         typeRoles(type){
           if(type == 'general'){
-            return 'ผู้ใช้งานทั่วไป';
+            return 'เจ้าหน้าที่รับเรื่อง';
           }else if(type == 'admin'){
             return 'ผู้ดูเเลระบบ';
           }else if(type == 'vip'){

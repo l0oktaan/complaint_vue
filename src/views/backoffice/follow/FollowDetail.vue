@@ -479,35 +479,7 @@
             >
               <div class="box-corrupt-file">
 
-                  <div class="text-right">
-                    <v-btn class="btn btn-add mt-4" @click="dialogCorruptFile = true">เพิ่มรายการเอกสาร</v-btn>
-                  </div>
-                  <v-list v-if="corruptFiles.length > 0" subheader>
-                    <v-subheader class="h-25 px-0">รายการเอกสาร</v-subheader>
-                    <v-list-item class="px-0"
-                      v-for="(corruptFile,index) in corruptFiles" 
-                      :key="index"
-                    >
-                      
-                        <v-list-item-content class="text-left">
-                          <v-list-item-title>{{ corruptFile.reference_code }}</v-list-item-title>
-                        </v-list-item-content>
-                        <div class="d-flex justify-center align-center">
-                          <v-chip  v-if="!corruptFile.check_remove_file" class="mr-1" @click="showFile(corruptFile, 'UrlFilesCorrupt')">
-                            <i v-if="corruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pr-2"></i>
-                            <i v-else class="fa-solid fa-image pr-2"></i>
-                            {{corruptFile.file_original}}
-                          </v-chip>
-                            <div class="btn-corrupt-edit mr-2" @click="dialogEditCorruptFile(corruptFile)">แก้ไข  <i class="fa-solid fa-pen-to-square"></i></div>
-                          
-                          <div class="btn-corrupt-remove" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
-                        </div>
-                    </v-list-item>
-                  </v-list>
-              </div>
-              <!-- <v-row> -->
-                <!-- <v-col cols> -->
-                <div>
+                <div class="mt-4">
                   <v-menu
                     ref="menu"
                     v-model="menu"
@@ -554,47 +526,75 @@
                     </v-date-picker>
                   </v-menu>
                 </div>
-                  <!-- </v-col> -->
-              <!-- </v-row> -->
-              <!-- <v-row> -->
-                <!-- <v-col> -->
-              <div class="mt-4">
-                <v-skeleton-loader
-                  :loading="loading"
-                  height="155"
-                  type="image"
-                >
-                  <p class="style-label"><span>*</span>รายละเอียดการทุจริต</p>
-                  <v-textarea
-                    v-model="vCorruptDetail"
-                    :rules="detailRules"
-                    hide-details="auto"
-                    outlined
-                    :maxlength="512"
-                  ></v-textarea>
-                </v-skeleton-loader>
+
+                <div class="mt-4">
+                  <v-skeleton-loader
+                    :loading="loading"
+                    height="155"
+                    type="image"
+                  >
+                    <p class="style-label"><span>*</span>รายละเอียดการทุจริต</p>
+                    <v-textarea
+                      v-model="vCorruptDetail"
+                      :rules="detailRules"
+                      hide-details="auto"
+                      outlined
+                      :maxlength="512"
+                    ></v-textarea>
+                  </v-skeleton-loader>
+                </div>
+               
+                <v-list class="mt-4" v-if="corruptFiles.length > 0" subheader>
+                  <v-subheader class="h-25 px-0">รายการเอกสาร</v-subheader>
+                  <v-list-item class="px-0"
+                    v-for="(corruptFile,index) in corruptFiles" 
+                    :key="index"
+                  >
+                    
+                      <v-list-item-content class="text-left">
+                        <!-- <div>{{ corruptFile.reference_code }}</div> -->
+                        
+                        <div v-if="!corruptFile.check_remove_file" class="icon-corrupt"  @click="showFile(corruptFile, 'UrlFilesCorrupt')">
+                          {{ corruptFile.reference_code }}
+                          <i v-if="corruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pl-2"></i>
+                          <i v-else class="fa-solid fa-image pl-2"></i>
+                          <!-- {{corruptFile.file_original}} -->
+                        </div>
+                      </v-list-item-content>
+
+                    
+                      <div class="d-flex justify-center align-center">
+                          <div class="btn-corrupt-edit mr-2" @click="dialogEditCorruptFile(corruptFile)">แก้ไข  <i class="fa-solid fa-pen-to-square"></i></div>
+                        
+                        <div class="btn-corrupt-remove" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
+                      </div>
+                  </v-list-item>
+                </v-list>
               </div>
-                <!-- </v-col> -->
-              <!-- </v-row> -->
+
             </v-form>
 
-            <v-card-actions v-if="!loading && !checkSubmit" class="px-0 py-0 mt-4">
+            <v-card-actions v-if="!loading" class="px-0 py-0 mt-4">
+              <div class="text-right">
+                <v-btn class="btn btn-add" @click="createDialogCorruptFile">เพิ่มรายการเอกสาร</v-btn>
+              </div>
               <v-spacer></v-spacer>
-
-              <v-btn
-                class="btn btn-submit"
-                text
-                @click="updateComplainCorrupt"
-              >
-                บันทึก
-              </v-btn>
-              <v-btn
-                class="btn btn-cancel"
-                text
-                @click="closeComplainCorrupt"
-              >
-                ยกเลิก
-              </v-btn>
+              <div v-if="!checkSubmit">
+                <v-btn
+                  class="btn btn-submit mr-2"
+                  text
+                  @click="updateComplainCorrupt"
+                >
+                  บันทึก
+                </v-btn>
+                <v-btn
+                  class="btn btn-cancel"
+                  text
+                  @click="closeComplainCorrupt"
+                >
+                  ยกเลิก
+                </v-btn>
+              </div>
             </v-card-actions>
 
           <!-- </v-container> -->
@@ -1167,6 +1167,20 @@ export default {
         }
       }
     },
+    async createDialogCorruptFile(){
+
+      console.log('==========', this.checkSubmit);
+      if(!this.checkSubmit && this.editComplainCorrupt === -1){
+        Swal.fire(
+          'กรุณากรอกข้อมูลรายละเอียดการทุจริต',
+          'ก่อนการเพิ่มรายการเอกสาร',
+          'question'
+          
+        )
+      }else{
+        this.dialogCorruptFile  = await true
+      }
+    },
     async removeCorrupt(v){
       try {
         await Swal.fire({
@@ -1216,6 +1230,7 @@ export default {
       // this.disabled = false
       this.vCorruptDate = new Date().toISOString().substr(0, 10),
       this.vCorruptDetail = ''
+      this.corruptFiles = {}
       // this.$refs.formCorrupt.reset()
       this.$refs.formCorrupt.resetValidation()
     },
@@ -1429,6 +1444,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   max-width: 250px; */
+}
+ .icon-corrupt svg{
+  font-size: 18px!important;
+  cursor: pointer!important;
 }
 
 </style>
