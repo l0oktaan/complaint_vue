@@ -183,7 +183,7 @@
                         @click:minute="$refs.start_time.save(complain_start_time)"
                     
                     >
-                    <v-spacer></v-spacer>
+                    <!-- <v-spacer></v-spacer>
                     <v-btn
                         text
                         color="primary"
@@ -197,7 +197,7 @@
                         @click="$refs.menu.save(time)"
                     >
                         ตกลง
-                    </v-btn>
+                    </v-btn> -->
                     </v-time-picker>
                     </v-menu>
                 </v-col>
@@ -230,6 +230,7 @@
 
                         <v-date-picker
                             v-model="end_date"
+                            :min="start_date"
                             no-title
                             scrollable
                             locale="th-TH"
@@ -277,12 +278,13 @@
                     </template>
                     <v-time-picker
                         v-model="complain_end_time"
+                        :min="complain_start_time"
                         format="24hr"
                         full-width
                         @click:minute="$refs.end_time.save(complain_end_time)"
                     
                     >
-                    <v-spacer></v-spacer>
+                    <!-- <v-spacer></v-spacer>
                     <v-btn
                         text
                         color="primary"
@@ -296,7 +298,7 @@
                         @click="$refs.menu.save(time)"
                     >
                         ตกลง
-                    </v-btn>
+                    </v-btn> -->
                     </v-time-picker>
                     </v-menu>
                 </v-col>
@@ -317,7 +319,6 @@
                 
                 </v-col>
             </v-row>
-            <!-- <v-divider></v-divider> -->
         </div>
              
         <div class="box-upload">
@@ -450,14 +451,16 @@ export default {
     },
 
     watch: {
-        start_date(){
+        start_date(v){
+            console.log(v);
+            this.end_date = v
             this.getEndThaiDate()
         },
         end_date(){
-
-           this.getEndThaiDate()
-
-            
+           this.getEndThaiDate()  
+        },
+        complain_start_time(){
+            this.complain_end_time = null
         },
         files(val) {
             this.previousFiles = val
