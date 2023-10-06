@@ -25,7 +25,8 @@
                                     single-line
                                     hide-details="auto"
                                     clearable
-                                    :maxlength="50"
+                                    :maxlength="maxLengthFifty"
+                                    @input="checkRulesLength(username.length, maxLengthFifty)"
                                 ></v-text-field>
                             </v-col>
                             <!-- <v-col cols="6">
@@ -54,7 +55,8 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
-                                    :maxlength="50"
+                                    :maxlength="maxLengthFifty"
+                                    @input="checkRulesLength(name.length, maxLengthFifty)"
                                 ></v-text-field>
                             </v-col>
 
@@ -70,7 +72,8 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
-                                    :maxlength="50"
+                                    :maxlength="maxLengthFifty"
+                                    @input="checkRulesLength(lastname.length, maxLengthFifty)"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -88,7 +91,8 @@
                                     hide-details="auto"
                                     clearable
                                     thai_engLanguage
-                                    :maxlength="200"
+                                    :maxlength="maxLengthTwoHundred"
+                                    @input="checkRulesLength(position.length, maxLengthTwoHundred)"
                                 ></v-text-field>
                             </v-col>
 
@@ -97,7 +101,6 @@
                                 <v-select
                                     v-model="divisions"
                                     :items="selectDivisions"
-                                    
                                     item-text="value"
                                     item-value="id"
                                     label="หน่วยงาน"
@@ -189,6 +192,8 @@
             lastname: '',
             position: '',
             admin_id: store.getters.user.id,
+            maxLengthFifty: 50,
+            maxLengthTwoHundred: 200,
             roles: { value: '', id: null },
             selectRoles: [
                 { value: 'เจ้าหน้าที่รับเรื่อง', id: 'general' },
@@ -262,6 +267,11 @@
             },
         },
         methods: {
+            checkRulesLength(valueLength, maxLength){
+                if(valueLength === maxLength){
+                    Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
+                }
+            },
             async getuserDetail(){
                 let path                    = await `/api/backoffice/get/userDetail`
                 let response                = await axios.get(`${path}/`+ this.$route.params.id)

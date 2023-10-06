@@ -87,7 +87,6 @@
             >
               <v-row>
                 <v-col cols md="3">
-                  <!-- <v-subheader>รายละเอียดข้อมูล</v-subheader> -->
                   <v-subheader><p class="style-label"><span>*</span>รายละเอียดข้อมูล</p></v-subheader>
                 </v-col>
                 <v-col cols md="9">
@@ -98,13 +97,13 @@
                     name="input-7-4"
                     v-model="vComplainStep.status_detail"
                     :rules="detailRules"
-                    :maxlength="512"
+                    :maxlength="maxLengthFiveHundredTwelve"
+                    @input="checkRulesLength(vComplainStep.status_detail.length, maxLengthFiveHundredTwelve)"
                   ></v-textarea>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols md="3">
-                  <!-- <v-subheader>ไฟล์เเนบ</v-subheader> -->
                   <v-subheader><p class="style-label">ไฟล์เเนบ</p></v-subheader>
                 </v-col>
                 <v-col cols md="9">
@@ -277,6 +276,7 @@
 
               </div>
 
+              <!-- รายละเอียดสถานะการดำเนินงานของเจ้าหน้าที่ -->
               <div v-if="vComplainStep.status_call === 3 || vComplainStep.status_call === 4 || vComplainStep.status_call === 5">
                 
                 <v-row>
@@ -301,7 +301,6 @@
                         single-line
                         name="input-7-4"
                         v-model="vComplainStep.detail"
-                        :rules="detailRules"
                       ></v-textarea>
                     </v-skeleton-loader>
                   </v-col>
@@ -355,9 +354,6 @@
                         filled
                         readonly
                         v-model="vComplainStep.status_call"
-                        :items="selectStatus"
-                        item-text="value"
-                        item-value="id"
                         dense
                         single-line
                         hide-details="auto" 
@@ -366,6 +362,7 @@
                   </v-col>
                 </v-row>
                 
+                <!-- สถานะเรื่องเสร็จ -->
                 <v-row class="align-center" v-if="vComplainStep.status_call == 5">
                   <v-col cols md="4">
                     <v-skeleton-loader
@@ -459,7 +456,6 @@
           </v-btn>
         </v-toolbar>
         <v-card-text>
-          <!-- <v-container fluid> -->
 
             <v-overlay v-if="loading"
               :loading="loading"
@@ -539,7 +535,9 @@
                       :rules="detailRules"
                       hide-details="auto"
                       outlined
-                      :maxlength="512"
+                      :maxlength="maxLengthFiveHundredTwelve"
+                      @input="checkRulesLength(vCorruptDetail.length, maxLengthFiveHundredTwelve)"
+
                     ></v-textarea>
                   </v-skeleton-loader>
                 </div>
@@ -551,19 +549,18 @@
                     :key="index"
                   >
                     
-                      <v-list-item-content class="text-left">
-                        <!-- <div>{{ corruptFile.reference_code }}</div> -->
-                        
-                        <div v-if="!corruptFile.check_remove_file" class="icon-corrupt"  @click="showFile(corruptFile, 'UrlFilesCorrupt')">
+                      <v-list-item-content class="text-left" v-if="!corruptFile.check_remove_file">
+                     
+                        <div class="icon-corrupt"  @click="showFile(corruptFile, 'UrlFilesCorrupt')">
                           {{ corruptFile.reference_code }}
                           <i v-if="corruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pl-2"></i>
                           <i v-else class="fa-solid fa-image pl-2"></i>
-                          <!-- {{corruptFile.file_original}} -->
+
                         </div>
                       </v-list-item-content>
 
                     
-                      <div class="d-flex justify-center align-center">
+                      <div v-if="!corruptFile.check_remove_file" class="d-flex justify-center align-center">
                           <div class="btn-corrupt-edit mr-2" @click="dialogEditCorruptFile(corruptFile)">แก้ไข  <i class="fa-solid fa-pen-to-square"></i></div>
                         
                         <div class="btn-corrupt-remove" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
@@ -634,7 +631,8 @@
                     hide-details="auto"
                     outlined
                     dense
-                    :maxlength="50"
+                    :maxlength="maxLengthFifty"
+                    @input="checkRulesLength(vCorruptReferenceCode.length, maxLengthFifty)"
                   ></v-text-field>
                 </v-skeleton-loader> 
               </div>  
@@ -658,7 +656,9 @@
                       <i v-else class="fa-solid fa-image pr-2"></i>
                       {{dataCorruptFile.file_original}}
                     </v-chip>
-                    <v-btn density="compact" color="red" icon="mdi-trash" @click="removeCorruptFile(dataCorruptFile)"><i class="fa-solid fa-trash icon-trash"></i></v-btn>
+                    <v-btn density="compact" icon @click="removeCorruptFile(dataCorruptFile)">
+                      <i class="fa-solid fa-trash icon-trash"></i>
+                    </v-btn>
                   
 
                 </div>
@@ -804,14 +804,11 @@ export default {
     checkRemoveFile : false,
     acceptTypes: "image/*, application/pdf",
 
-    detailRules: [
-      v => !!v || 'กรุณากรอกข้อมูล',
-      v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
-    ],
-    corruptRefRules : [
-      v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า -',
-      v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
-    ],
+    maxLengthFifty: 50,
+    maxLengthFiveHundredTwelve: 512,
+
+    detailRules: [v => !!v || 'กรุณากรอกข้อมูล'],
+    corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า -'],
     fileRules: [
       value => {
         if (!value || value.length === 0) {
@@ -927,6 +924,11 @@ export default {
         this.urlFiles(urlFiles, v.file_name)
       }
     },
+    checkRulesLength(valueLength, maxLength){
+      if(valueLength === maxLength){
+          Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
+      }
+    },
     async urlPdfFiles(url,file_name){
       axios({
           url: `/api/get/pdf/${url}`,
@@ -957,6 +959,7 @@ export default {
 
       this.overlayImg = await !this.overlayImg 
     },
+    
 
     // Complain Step
     async DetailComplainStep(v){
@@ -1098,7 +1101,7 @@ export default {
       this.dialogStatusComplainStep =  false
       this.editComplainStep         = -1
       this.vComplainStep            = {}
-      this.$refs.form.reset()
+      // this.$refs.form.reset()
       this.$refs.form.resetValidation()
     },
 
@@ -1118,13 +1121,14 @@ export default {
       return response;
     },
     async editCorrupt(v){
+
       await this.fetchData();
       this.dialogComplainCorrupt      =   await true
       this.editComplainCorrupt        =   await 0
       this.complainStepId             =   await v.id
       this.corruptId                  =   await v.corrupt_id;
       this.vCorruptDetail             =   await v.corrupt_detail
-      this.vCorruptDate               =   await moment(v.corrupt_date).format("YYYY-MM-DD");
+      this.vCorruptDate               =   await v.corrupt_date === null ? this.vCorruptDate : moment(v.corrupt_date).format("YYYY-MM-DD");
       await this.getCorruptFiles();
     },
     async updateComplainCorrupt(){
@@ -1246,25 +1250,30 @@ export default {
       if(this.$refs.formCorruptFile.validate()){
         try {
 
+
           const formData = await new FormData(); 
-
-          await formData.append('id', this.corruptFileId);
-
-          await formData.append('types', 'Corrupt');
-
-          await formData.append('files', this.vCorruptFile);
-
-          const arrFile = await this.vCorruptFile.type.split("/")
 
           let fileName = await ''
 
-          if(this.vCorruptFile.type === 'image/jpeg' || this.vCorruptFile.type === 'image/jpg' || this.vCorruptFile.type === 'image/png'){
-  
-            fileName = await 'imgCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+          if(this.vCorruptFile !== null){
 
-          }else if(this.vCorruptFile.type === 'application/pdf'){
+            await formData.append('id', this.corruptFileId);
 
-            fileName = await 'pdfCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+            await formData.append('types', 'Corrupt');
+
+            await formData.append('files', this.vCorruptFile);
+            
+            const arrFile = await this.vCorruptFile.type.split("/")
+
+            if(this.vCorruptFile.type === 'image/jpeg' || this.vCorruptFile.type === 'image/jpg' || this.vCorruptFile.type === 'image/png'){
+
+              fileName = await 'imgCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+
+            }else if(this.vCorruptFile.type === 'application/pdf'){
+
+              fileName = await 'pdfCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+            }
+
           }
 
           let fd_corrupt_file = await {
@@ -1272,13 +1281,14 @@ export default {
             "corrupt_id"          : this.corruptId,
             "admin_id"            : this.check_roles.id,
             "reference_code"      : this.vCorruptReferenceCode,
-            "file_original"       : this.vCorruptFile.name,
-            "file_name"           : fileName,
-            "file_type"           : this.vCorruptFile.type,
+            "file_original"       : this.vCorruptFile !== null ? this.vCorruptFile.name : this.dataCorruptFile.file_original ,
+            "file_name"           : this.vCorruptFile !== null ? fileName : this.dataCorruptFile.file_name,
+            "file_type"           : this.vCorruptFile !== null ? this.vCorruptFile.type : this.dataCorruptFile.file_type,
             "check_remove"        : false,
-            "check_remove_file"  : false,
-            
+            "check_remove_file"   : false,
+  
           }
+        
           
           let path_api = null
           if(this.editCorruptFile > -1){
@@ -1317,13 +1327,14 @@ export default {
       }
     },
     async dialogEditCorruptFile(v){
-      console.log(v);
+
       this.dialogCorruptFile        = await true
       this.editCorruptFile          = await 0
       this.corruptId                = await v.corrupt_id
       this.corruptFileId            = await v.id
       this.vCorruptReferenceCode    = await v.reference_code
       this.dataCorruptFile          = await v
+      console.log(this.dataCorruptFile );
     },
     async removeCorruptFile (v) {
       try {
@@ -1377,7 +1388,9 @@ export default {
       this.dialogCorruptFile        = false
       this.editCorruptFile          = -1
       this.dataCorruptFile          = {}
-      this.$refs.formCorruptFile.reset()
+      this.vCorruptReferenceCode    = ''
+      this.vCorruptFile                  = null
+      // this.$refs.formCorruptFile.reset()
       this.$refs.formCorruptFile.resetValidation()
       // this.disabled = false
     },

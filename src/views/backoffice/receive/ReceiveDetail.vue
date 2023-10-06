@@ -27,7 +27,8 @@
                 name="input-7-4"
                 hide-details="auto"
                 v-model="complain_detail"
-                :rules="complainDetailRules"
+                :maxlength="maxLengthFiveHundredTwelve"
+                @input="checkRulesLength(complain_detail.length, maxLengthFiveHundredTwelve)"
               ></v-textarea>
             </v-card-text>
             <v-card-actions class="px-4 pb-5">
@@ -74,8 +75,7 @@
                 return-object
                 @change="clickSelectCancel(selectCancel)"
               ></v-select>
-
-              <!-- <v-subheader>กรุณาติดต่อช่องทาง</v-subheader> -->
+              
               <p class="style-label"><span>*</span>กรุณาติดต่อช่องทาง</p>
               <v-select
                 v-model="selectContact"
@@ -92,7 +92,6 @@
               ></v-select>
 
               <div v-if="showSelectCancel">
-                <!-- <v-subheader>ข้อความอื่นๆ</v-subheader> -->
                 <p class="style-label"><span>*</span>ข้อความอื่นๆ</p>
                 <v-textarea
                   v-model="otherCancel"
@@ -100,6 +99,8 @@
                   outlined
                   name="input-7-4"
                   hide-details="auto"
+                  :maxlength="maxLengthFiveHundredTwelve"
+                  @input="checkRulesLength(otherCancel.length, maxLengthFiveHundredTwelve)"
                 ></v-textarea>
               </div>
             </v-card-text>
@@ -155,6 +156,7 @@ import DetailComplain from '@/components/detailComplain.vue';
         loading: false,
         show: false,
         showSelectCancel: false,
+        maxLengthFiveHundredTwelve: 512,
         item: [
           {
             text: 'รับปัญหา',
@@ -180,16 +182,15 @@ import DetailComplain from '@/components/detailComplain.vue';
           {value : 'กรมบัญชีกลาง', id:1, url: 'https://www.cgd.go.th/cs/internet/internet/RequestForm_Dev.html?page_locale=th_TH'},
 
         ],
-        complainDetailRules: [
-            v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
-        ],
+        // complainDetailRules: [
+        //     v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
+        // ],
         CancelcomplainDetailRules: [
           v => !!v || 'กรุณากรอกข้อมูล',
           v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
         ],
         otherCancelRules: [
           v => !!v || 'กรุณากรอกข้อมูล',
-          v => (v && v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
         ],
       }
     },
@@ -211,6 +212,11 @@ import DetailComplain from '@/components/detailComplain.vue';
         }else{
           this.showSelectCancel = true
         }   
+      },
+      checkRulesLength(valueLength, maxLength){
+          if(valueLength === maxLength){
+              Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
+          }
       },
       async saveComplainStep(){
         if(this.$refs.form.validate()){
