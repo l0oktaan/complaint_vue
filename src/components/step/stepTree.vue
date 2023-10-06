@@ -6,20 +6,21 @@
                     <div class="h2">เจ้าหน้าที่ / หน่วยงาน </div>
                 </v-col>
             </v-row>
-            
+           
             <v-row>
                 <v-col cols="12" sm="6">
                 <p class="style-label"><span>*</span>ชื่อ : </p>
-                    <v-text-field
-                        v-model="name"
-                        :rules="nameRules"
-                        label="กรอกชื่อ"
-                        required
-                        dense
-                        outlined
-                        single-line
-                        :maxlength="50"
-                    ></v-text-field>
+                <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="กรอกชื่อ"
+                    required
+                    dense
+                    outlined
+                    single-line
+                    :maxlength="maxLengthFifty"
+                    @input="checkRulesLength(name.length, maxLengthFifty)"
+                ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
                 <p class="style-label"><span>*</span>นามสกุล : </p>
@@ -31,7 +32,8 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="50"
+                        :maxlength="maxLengthFifty"
+                        @input="checkRulesLength(lastname.length, maxLengthFifty)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -47,7 +49,8 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="200"
+                        :maxlength="maxLengthTwoHundred"
+                        @input="checkRulesLength(division.length, maxLengthTwoHundred)"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -59,7 +62,8 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="200"
+                        :maxlength="maxLengthTwoHundred"
+                        @input="checkRulesLength(description_face.length, maxLengthTwoHundred)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -84,7 +88,8 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="200"
+                        :maxlength="maxLengthTwoHundred"
+                        @input="checkRulesLength(complain_topic.length, maxLengthTwoHundred)"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -97,7 +102,8 @@
                         dense
                         outlined
                         single-line
-                        :maxlength="200"
+                        :maxlength="maxLengthTwoHundred"
+                        @input="checkRulesLength(complain_location.length, maxLengthTwoHundred)"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -309,12 +315,13 @@
                     <p class="style-label"><span>*</span>รายละเอียดเรื่องร้องเรียน : </p>
                     <v-textarea
                         outlined
-                        label="รายละเอียดเรื่องร้องเรียน"
                         v-model="complain_detail"
                         :rules="complainDetailRules"
+                        label="รายละเอียดเรื่องร้องเรียน"
                         clearable 
                         single-line
-                        :maxlength="512"
+                        :maxlength="maxLengthFiveHundredTwelve"
+                        @input="checkRulesLength(complain_detail.length, maxLengthFiveHundredTwelve)"
                     ></v-textarea>
                 
                 </v-col>
@@ -355,6 +362,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
     data: () => ({
         data:{},
@@ -381,13 +389,16 @@ export default {
         modal: false,
         modal2: false,
         acceptTypes: "image/*, application/pdf",
+        maxLengthFifty: 50,
+        maxLengthTwoHundred: 200,
+        maxLengthFiveHundredTwelve: 512,
         nameRules: [
-            v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า เจ้าหน้าที่',
+            v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้ระบุคำว่า เจ้าหน้าที่',
             v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
-            v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
+            // v => (v && v.length == 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร'
         ],
         lastnameRules: [
-            v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า เจ้าหน้าที่',
+            v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้ระบุคำว่า เจ้าหน้าที่',
             v =>/^[a-zA-Zก-ฮะ-์\s]+$/.test(v) ||` ห้ามกรอกอักขระพิเศษ เเละตัวเลข`,
             v => (v && v.length <= 50) || 'กรอกรายละเอียดห้ามเกิน 50 ตัวอักษร',
         ],
@@ -484,6 +495,11 @@ export default {
         fileAdded () {
             if (this.previousFiles.length > 0) {
                 this.files.push(...this.previousFiles)
+            }
+        },
+        checkRulesLength(valueLength, maxLength){
+            if(valueLength === maxLength){
+                Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
             }
         }
     }

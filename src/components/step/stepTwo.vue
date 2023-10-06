@@ -23,6 +23,8 @@
                     required
                     dense
                     outlined
+                    :maxlength="50"
+                    @input="checkRulesLength"
                 ></v-text-field>
                 <v-text-field
                     v-else
@@ -33,6 +35,7 @@
                     outlined
                     :disabled="disabled == true"
                     :maxlength="50"
+                    @input="checkRulesLength"
                 ></v-text-field>
                 
             </v-col>
@@ -57,7 +60,8 @@
                     dense
                     outlined
                     single-line
-                    :maxlength="50"
+                    :maxlength="maxLengthFifty"
+                    @input="checkRulesLength(item.name.length, maxLengthFifty)"
                 ></v-text-field>
             </v-col>
             <v-col cols="12" md="5">
@@ -71,6 +75,7 @@
                     outlined
                     single-line
                     :maxlength="50"
+                    @input="checkRulesLength(item.lastname.length, maxLengthFifty)"
                 ></v-text-field>
             </v-col>
     
@@ -101,6 +106,7 @@
                     required
                     dense
                     outlined
+                    
                 ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -118,16 +124,18 @@
         <v-row>
             <v-col cols="12" md="12">
                 <p class="style-label"><span>*</span>ที่อยู่ : </p>
-                <v-text-field
+                <v-textarea
                     v-model="item.address"
                     :rules="addressRules"
                     label="ที่อยู่"
-                    required
+                    rows="2"
                     dense
                     outlined
                     single-line
-                    :maxlength="200"
-                ></v-text-field>
+                    :maxlength="maxLengthTwoHundred"
+                    @input="checkRulesLength(item.address.length, maxLengthTwoHundred)"
+                ></v-textarea>
+                
             </v-col>
         </v-row>
         <v-row>
@@ -216,6 +224,8 @@
             selectProvince:[],
             selectDistrict: [],
             selectSubDistrict: [],
+            maxLengthFifty: 50,
+            maxLengthTwoHundred: 200,
             emailRules: [ 
                 v => !!v || 'กรุณากรอกข้อมูล',
                 v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'อีเมลไม่ถูกต้อง',
@@ -298,6 +308,7 @@
             }
         },
         methods: {
+
             async checkMail(){
                if(this.item.email){
                 try {
@@ -371,6 +382,11 @@
 
                 })
 
+            },
+            checkRulesLength(valueLength, maxLength){
+                if(valueLength === maxLength){
+                    Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
+                }
             }
         }
     }
