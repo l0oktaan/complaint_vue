@@ -381,6 +381,7 @@
                         v-model="vComplainStep.check_corrupt"
                         row
                         disabled
+                        :rules="[v => !!v || 'Item is required']" required
                       >
                         <v-radio
                           label="กรณีอื่นๆ"
@@ -772,8 +773,6 @@ export default {
     opacity: 1,
     absolute: false,
     overlayImg: false,
-    // disabled : false,
-
     dataComplain: {},
     dataRegister: {},
 
@@ -809,6 +808,7 @@ export default {
 
     detailRules: [v => !!v || 'กรุณากรอกข้อมูล'],
     corruptRefRules : [v => !!v || 'กรุณากรอกข้อมูล / หากไม่ทราบให้กรอกคำว่า -'],
+    // checkCorruptRules: [v =>  v.length > 0 || '"At least one item should be selected"'],
     fileRules: [
       value => {
         if (!value || value.length === 0) {
@@ -1014,6 +1014,16 @@ export default {
             
           if(response){
 
+            if(this.vComplainStep.check_corrupt === true){
+
+              let responseCorrupt  =  await this.saveComplainCorrupt()
+
+              this.corruptId      = await responseCorrupt.data.corrupt_id
+
+              console.log(this.corruptId);
+
+            }
+
             const formData = await new FormData();  
 
             this.complainStepId = await response.data.complain_step_id
@@ -1054,6 +1064,8 @@ export default {
                 let path_api = await `/api/backoffice/complainStepFiles`
 
                 await axios.post(`${path_api}`, fd_upload )
+
+                await this.getComplainStep()
             }
 
             if(this.$refs.status_files.files.length){
@@ -1062,31 +1074,26 @@ export default {
 
           }
 
-          if(this.vComplainStep.check_corrupt === true){
-            let responseCorrupt         =  await this.saveComplainCorrupt()
-            this.corruptId      = await responseCorrupt.data.corrupt_id
-
-          }
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
           }).then( function(){});
 
-          // this.dialogStatusComplainStep = await false
-          // this.vComplainStep = await {}
-
           if(this.vComplainStep.check_corrupt === true){
             this.dialogComplainCorrupt  = await true
             this.closeStatusComplainStep()
-            // this.dialogStatusComplainStep = await false
+
           }else{
             this.dialogStatusComplainStep = await false
             this.vComplainStep = await {}
             this.vComplainStepFiles = await {}
           }
-          await this.getComplainStep()
 
+          this.showStatusComplainStep = await false
+
+
+          
         } catch (error) {
           Swal.fire({
               icon: 'error',
@@ -1113,6 +1120,7 @@ export default {
         "admin_id"          : this.check_roles.id,
         "complain_step_id"  : this.complainStepId,
       }
+
 
       let path = await `/api/backoffice/create/complainCorrupt`
 
@@ -1172,8 +1180,6 @@ export default {
       }
     },
     async createDialogCorruptFile(){
-
-      console.log('==========', this.checkSubmit);
       if(!this.checkSubmit && this.editComplainCorrupt === -1){
         Swal.fire(
           'กรุณากรอกข้อมูลรายละเอียดการทุจริต',
@@ -1244,7 +1250,7 @@ export default {
       let path              = await `/api/backoffice/get/CorruptFiles`
       let response          = await axios.get(`${path}/`+ this.corruptId)
       this.corruptFiles     = await response.data.data
-      console.log(this.corruptFiles);
+      console.log('===============',this.corruptFiles);
     },
     async saveCorruptFile(){
       if(this.$refs.formCorruptFile.validate()){
@@ -1300,6 +1306,8 @@ export default {
   
           await axios.post(`${path_api}`, fd_corrupt_file )
 
+          await this.getCorruptFiles();
+
           if(this.vCorruptFile){
             await axios.post('/api/uploadsFile', formData)
 
@@ -1310,8 +1318,6 @@ export default {
               title: 'บันทึกสำเร็จ',
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
           }).then( function(){});
-
-          await this.getCorruptFiles();
           await this.closeCorruptFile();
         
 
