@@ -542,26 +542,28 @@
                     ></v-textarea>
                   </v-skeleton-loader>
                 </div>
-               
+
                 <v-list class="mt-4" v-if="corruptFiles.length > 0" subheader>
                   <v-subheader class="h-25 px-0">รายการเอกสาร</v-subheader>
                   <v-list-item class="px-0"
                     v-for="(corruptFile,index) in corruptFiles" 
                     :key="index"
                   >
-                    
-                      <v-list-item-content class="text-left" v-if="!corruptFile.check_remove_file">
-                     
-                        <div class="icon-corrupt"  @click="showFile(corruptFile, 'UrlFilesCorrupt')">
-                          {{ corruptFile.reference_code }}
-                          <i v-if="corruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pl-2"></i>
-                          <i v-else class="fa-solid fa-image pl-2"></i>
+                  <!-- <pre>    {{ corruptFiles}}</pre> -->
+              
+                      <v-list-item-content class="text-left" v-if="!corruptFile.check_remove">
+                        <div class="icon-corrupt d-flex align-center">
+                          <span>  {{ corruptFile.reference_code }}</span>
+                          <div v-if="!corruptFile.check_remove_file" @click="showFile(corruptFile, 'UrlFilesCorrupt')">
+                            <i v-if="corruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pl-2"></i>
+                            <i v-else class="fa-solid fa-image pl-2"></i>
+                          </div>
+                         
 
                         </div>
                       </v-list-item-content>
-
                     
-                      <div v-if="!corruptFile.check_remove_file" class="d-flex justify-center align-center">
+                      <div v-if="!corruptFile.check_remove" class="d-flex justify-center align-center">
                           <div class="btn-corrupt-edit mr-2" @click="dialogEditCorruptFile(corruptFile)">แก้ไข  <i class="fa-solid fa-pen-to-square"></i></div>
                         
                         <div class="btn-corrupt-remove" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
@@ -611,100 +613,90 @@
           <v-toolbar-title>{{formTitleCorruptFile}}</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <!-- <v-container fluid> -->
-            <v-form
-              ref="formCorruptFile"
-              v-model="valid"
-              lazy-validation
-            >
-              <!-- <v-row> -->
-                <!-- <v-col cols> -->
-              <div class="mt-4"> 
-                <v-skeleton-loader
-                  :loading="loading"
-                  height="45"
-                  type="image"
-                >
-                  <p class="style-label"><span>*</span>เลขที่หนังสือ</p>
-                  <v-text-field
-                    v-model="vCorruptReferenceCode"
-                    :rules="corruptRefRules"
-                    hide-details="auto"
-                    outlined
-                    dense
-                    :maxlength="maxLengthFifty"
-                    @input="checkRulesLength(vCorruptReferenceCode.length, maxLengthFifty)"
-                  ></v-text-field>
-                </v-skeleton-loader> 
-              </div>  
-                <!-- </v-col> -->
-              
-              <!-- </v-row> -->
-              
-              <!-- <v-row> -->
-                <!-- <v-col> -->
-              <div class="mt-4">  
-                <p class="style-label"><span>*</span>ไฟล์เเนบ</p>
-              
-                <div v-if="dataCorruptFile.file_name !== null && dataCorruptFile.check_remove_file === 0" class="text-left  display-flex align-center">
-                
-                    
-                    <v-chip class="mr-1"      
-                    
-                      @click="showFile(dataCorruptFile, 'UrlFilesCorrupt')"
-                      >
-                      <i v-if="dataCorruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pr-2"></i>
-                      <i v-else class="fa-solid fa-image pr-2"></i>
-                      {{dataCorruptFile.file_original}}
-                    </v-chip>
-                    <v-btn density="compact" icon @click="removeCorruptFile(dataCorruptFile)">
-                      <i class="fa-solid fa-trash icon-trash"></i>
-                    </v-btn>
-                  
-
-                </div>
-                <div v-else>
-                  <v-file-input 
-                    v-model="vCorruptFile"
-                    :accept="acceptTypes"
-                    :rules="fileRules"
-                    show-size
-                    outlined
-                    dense
-                    label="ไฟล์เเนบ"
-                    hide-details="auto"
-                  ></v-file-input>
-                </div>
-          
-              </div>
-                  
-                <!-- </v-col> -->
-              <!-- </v-row> -->
-            </v-form>
-            <v-card-actions class="px-0 py-0 mt-4">
-        
-              <v-spacer></v-spacer>
+          <v-form
+            ref="formCorruptFile"
+            v-model="valid"
+            lazy-validation
+          >
+            <div class="mt-4"> 
               <v-skeleton-loader
                 :loading="loading"
-                type="actions"
+                height="45"
+                type="image"
               >
-                <v-btn
-                  class="btn btn-submit mr-2"
-                  text
-                  @click="saveCorruptFile"
-                >
-                  บันทึก
+                <p class="style-label"><span>*</span>เลขที่หนังสือ</p>
+                <v-text-field
+                  v-model="vCorruptReferenceCode"
+                  :rules="corruptRefRules"
+                  hide-details="auto"
+                  outlined
+                  dense
+                  :maxlength="maxLengthFifty"
+                  @input="checkRulesLength(vCorruptReferenceCode.length, maxLengthFifty)"
+                ></v-text-field>
+              </v-skeleton-loader> 
+            </div>  
+            <div class="mt-4">  
+              <p class="style-label"><span>*</span>ไฟล์เเนบ</p>
+
+              <div 
+               v-if="!dataCorruptFile.check_remove_file && dataCorruptFile.id && !checkRemoveFile"
+                class="text-left  display-flex align-center"
+              > 
+                <v-chip class="mr-1"      
+                
+                  @click="showFile(dataCorruptFile, 'UrlFilesCorrupt')"
+                  >
+                  <i v-if="dataCorruptFile.file_type == 'application/pdf'" class="fa-solid fa-file pr-2"></i>
+                  <i v-else class="fa-solid fa-image pr-2"></i>
+                  {{dataCorruptFile.file_original}}
+                </v-chip>
+                <v-btn density="compact" icon @click="removeCorruptFile(dataCorruptFile)">
+                  <i class="fa-solid fa-trash icon-trash"></i>
                 </v-btn>
-                <v-btn
-                  class="btn btn-cancel"
-                  text
-                  @click="closeCorruptFile"
-                >
-                  ปิด
-                </v-btn>
-              </v-skeleton-loader>
-            </v-card-actions>
-          <!-- </v-container> -->
+                
+
+              </div>
+             
+              <div v-else>
+                <v-file-input 
+                  v-model="vCorruptFile"
+                  :accept="acceptTypes"
+                  :rules="fileRules"
+                  show-size
+                  outlined
+                  dense
+                  label="ไฟล์เเนบ"
+                  hide-details="auto"
+                ></v-file-input>
+              </div>
+        
+            </div>
+
+          </v-form>
+          <v-card-actions class="px-0 py-0 mt-4">
+      
+            <v-spacer></v-spacer>
+            <v-skeleton-loader
+              :loading="loading"
+              type="actions"
+            >
+              <v-btn
+                class="btn btn-submit mr-2"
+                text
+                @click="saveCorruptFile"
+              >
+                บันทึก
+              </v-btn>
+              <v-btn
+                class="btn btn-cancel"
+                text
+                @click="closeCorruptFile"
+              >
+                ปิด
+              </v-btn>
+            </v-skeleton-loader>
+          </v-card-actions>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -1372,7 +1364,6 @@ export default {
                     
                   } 
                   await this.getCorruptFiles()
-                  await this.closeCorruptFile()
                   this.checkRemoveFile = await  true
               }
           })
@@ -1395,10 +1386,9 @@ export default {
       this.editCorruptFile          = -1
       this.dataCorruptFile          = {}
       this.vCorruptReferenceCode    = ''
-      this.vCorruptFile                  = null
-      // this.$refs.formCorruptFile.reset()
+      this.vCorruptFile             = null
+      this.checkRemoveFile          = false
       this.$refs.formCorruptFile.resetValidation()
-      // this.disabled = false
     },
   }
 }
