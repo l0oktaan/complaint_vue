@@ -120,8 +120,8 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
-<!-- 
-        <router-link 
+
+        <!-- <router-link 
           v-if="check_roles.roles === 'admin'"
           class="d-flex align-center menu-link"
           active-class="activemenu"
