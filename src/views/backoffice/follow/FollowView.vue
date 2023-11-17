@@ -26,6 +26,9 @@
               :loading="loading"
               loading-text="Loading... Please wait"
           >
+            <template v-slot:[`item.topic`]="{ item }">
+              <div class="overflow" >{{ item.topic }}</div>
+              </template>
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
             <!-- <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
@@ -34,12 +37,14 @@
                 {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
               </template> -->
               <template v-slot:[`item.status_call`]="{ item }">
+                <div class="overflow-160" >
                   <v-chip
                   :color="getColor(item.status_call)"
                   dark
                   >
                   {{ getstatus(item.status_call) }}
                   </v-chip>
+                </div>
               </template>
               <template v-slot:[`item.action`]="{ item }">
                
@@ -61,7 +66,6 @@
 <script>
   import axios from "axios";
   import moment from 'moment';
-  // import 'moment/locale/th'; // Import the Thai locale
   import store from '../../../store/index.js';
   import selectStatus from '@/components/selectStatus.vue';
   export default {
@@ -86,9 +90,6 @@
           },
           { text: 'วันที่เริ่มต้น', value: 'start_date' },
           { text: 'วันที่สิ้นสุด', value: 'end_date' },
-          // { text: 'ตั้งเเต่เวลา', value: 'start_time' },
-          // { text: 'ถึงเวลา', value: 'end_time' },
-          // { text: 'วัน - เวลาเเจ้งปัญหา', value: 'create_date' },
           { text: 'สถานะ Call', value: 'status_call' },
           {
             text: 'รายละเอียดเรื่องร้องเรียน',
@@ -163,10 +164,23 @@
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
       },
       async getListComplain(){
-        let path = await `/api/backoffice/get/listFollow`
-        let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
-        this.datas = await response.data.data
-        this.loading = await false
+        try {
+
+          let path = await `/api/backoffice/get/listFollow`
+          let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
+          this.datas = await response.data.data
+          this.loading = await false
+
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getListComplain');
+            // Handle other errors
+          }
+        }
+      
       },
     },
   }

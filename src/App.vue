@@ -55,4 +55,25 @@ nav {
     /* .main{
       z-index: 6;
     } */
+    .overflow{
+      min-width: auto;
+      max-width: 372px;
+      word-wrap: break-word;
+      /* text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 250px; */
+    }
+    .overflow-160{
+      min-width: auto;
+      max-width: 160px;
+      word-wrap: break-word;
+     
+    }
+    .overflow-630{
+      min-width: auto;
+      max-width: 630px;
+      word-wrap: break-word;
+     
+    }
 </style>

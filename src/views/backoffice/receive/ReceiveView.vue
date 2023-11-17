@@ -1,5 +1,6 @@
 <template>
     <div class="receive-complain">
+
       <div class="style-page">
         <v-card class="style-card">
           <v-card-title>
@@ -22,6 +23,9 @@
           >
 
             <template v-slot:[`item.call_no`]="{ item }">{{ item.call_no }}</template>
+            <template v-slot:[`item.topic`]="{ item }">
+              <div class="overflow" >{{ item.topic }}</div>
+            </template>
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
             <!-- <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
@@ -52,7 +56,9 @@
   import moment from 'moment';
   import 'moment/locale/th'; // Import the Thai locale
   import store from '../../../store/index.js';
+
   export default {
+  components: {},
     data () {
       return {
         check_roles: store.getters.user,
@@ -115,10 +121,21 @@
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY HH:mm:ss");
       },
       async getListComplain(){
-        let path = await `/api/backoffice/get/listComplain`
-        let response =  await axios.get(`${path}/`)
-        this.datas = await response.data.data
-        this.loading = await false
+        try {
+          let path = await `/api/backoffice/get/listComplain`
+          let response =  await axios.get(`${path}/`)
+          this.datas = await response.data.data
+          this.loading = await false
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getListComplain');
+            // Handle other errors
+          }
+        }
+    
       },
     },
   }

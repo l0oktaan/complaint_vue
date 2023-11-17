@@ -52,14 +52,16 @@
                   autocomplete="on"
               ></v-text-field> -->
               <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
+              <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
+              <v-card-actions class="px-0">
+                <v-spacer></v-spacer>
+                <v-btn class="btn btn-submit" text type="submit">บันทึก</v-btn>
+                <v-btn class="btn btn-cancel" text @click="closeDialog">ยกเลิก</v-btn>
+            
+                </v-card-actions>
           </v-card-text>
-          <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
-          <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="btn btn-submit" text type="submit">บันทึก</v-btn>
-          <v-btn class="btn btn-cancel" text @click="closeDialog">ยกเลิก</v-btn>
-       
-          </v-card-actions>
+        
+
       </v-form>
     
     </v-card>

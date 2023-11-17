@@ -2,8 +2,8 @@
   <div class="page">
     <div class="center">
       <div class="box-forgot-password">
-        <h2 class="mb-7">Forgot your password</h2>
-        <p class="style-label">Enter email address</p>
+        <h2 class="mb-7">ลืมรหัสผ่าน</h2>
+        <p class="style-label">อีเมล</p>
         <v-form
           ref="formForgot"
           v-model="valid"
@@ -14,7 +14,7 @@
             v-model="email"
             :rules="emailRules"
             required
-            label="อีเมล"
+            label="name@example.com"
             single-line
             outlined
             dense
@@ -25,11 +25,11 @@
             color="#003366"
             type="submit"
           >
-            บันทึก
+            รีเซ็ตรหัสผ่าน
           </v-btn>
       </v-form>
           <router-link class="back-login text-decoration-none" to="/user/login" >
-              <p class="mt-2 mb-0">Back To Login</p>
+              <p class="mt-2 mb-0">ล็อกอินเข้าสู่ระบบ</p>
           </router-link>
       </div>
     </div>

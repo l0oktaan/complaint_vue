@@ -28,6 +28,11 @@
               {{ formattedDate(item.date) == 'Invalid date' ? '' : formattedDate(item.date) }}
             </template>
 
+            <template v-slot:[`item.division`]="{ item }">
+                  <div class="overflow" >{{ item.division }}</div>
+            </template>
+           
+
             <template v-slot:[`item.detail`]="{ item }">
                   <div class="overflow" >{{ item.detail }}</div>
             </template>
@@ -1445,15 +1450,7 @@ export default {
   color: #167dc2;
   font-size: 16px;
 }
-.overflow{
-  min-width: auto;
-  max-width: 372px;
-  word-wrap: break-word;
-  /* text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 250px; */
-}
+
  .icon-corrupt svg{
   font-size: 18px!important;
   cursor: pointer!important;

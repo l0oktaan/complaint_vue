@@ -110,13 +110,16 @@
             let path        = await `/api/backoffice/get/listUser`
             let response    = await axios.get(`${path}`)
             this.datas_user = await response.data.data
-  
             await this.checkState(this.datas_user)
-            
             this.loadTable = await false;
-  
           } catch (error) {
-            // console.log('error :' + error)
+            if (error.response.status === 401) {
+              // Redirect to the login page
+              this.$router.push('/backoffice/login'); // Replace with your login route
+            } else {
+              console.log('getUser');
+              // Handle other errors
+            }
           }
         },
         checkState(v){

@@ -78,11 +78,15 @@
               let path        = await `/api/backoffice/get/listRegister`
               let response    = await axios.get(`${path}`)
               this.datas = await response.data.data
-
               this.loadTable = await false;
-    
             } catch (error) {
-              console.log('error :' + error)
+              if (error.response.status === 401) {
+                // Redirect to the login page
+                this.$router.push('/backoffice/login'); // Replace with your login route
+              } else {
+                console.log('getRegister');
+                // Handle other errors
+              }
             }
           },
 

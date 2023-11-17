@@ -24,8 +24,9 @@
             loading-text="Loading... Please wait"
             :items="filteredItems"
           >
-            <template v-slot:[`item.call_no`]="{ item }">
-                {{ item.call_no }}
+            <template v-slot:[`item.call_no`]="{ item }"> {{ item.call_no }} </template>
+            <template v-slot:[`item.topic`]="{ item }">
+              <div class="overflow" >{{ item.topic }}</div>
             </template>
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
@@ -152,10 +153,21 @@
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY");
       },
       async getListComplain(){
-        let path = await `/api/user/get/listFollow`
-        let response =  await axios.get(`${path}/`+ this.check_roles.id)
-        this.datas = await response.data.data
-        this.loading = await false
+        try {
+          let path      =   await `/api/user/get/listFollow`
+          let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          this.datas    =   await response.data.data
+          this.loading  =   await false
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/user/login'); // Replace with your login route
+          } else {
+            console.log('getListComplain');
+            // Handle other errors
+          }
+        }
+      
       },
     },
   }
