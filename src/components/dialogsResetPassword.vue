@@ -66,15 +66,17 @@
                     :maxlength="20"
                 ></v-text-field>
                 <p v-if="errorMessage" class="error_message not-match">{{ errorMessage }}</p>
+                <p class="valid-text mt-3">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
+                <v-card-actions class="px-0">
+                    <v-spacer></v-spacer>
+                    <v-btn class="btn-submit" color="white" text type="submit">บันทึก</v-btn>
+                    <v-btn class="btn-cancel" text @click="close">ยกเลิก </v-btn>
+                </v-card-actions>
             </v-card-text>
-            <p class="valid-text">*หมายเหตุ กำหนดรหัสผ่าน 8 ตัวอักษรขึ้นไป ประกอบด้วย อักษรภาษาอังกฤษ พิมพ์ใหญ่ พิมพ์เล็ก อักขระพิเศษ เเละตัวเลข</p>
+        
             <!-- <v-divider></v-divider> -->
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="btn-submit" color="white" text type="submit">บันทึก</v-btn>
-                <v-btn class="btn-cancel" text @click="close">ยกเลิก </v-btn>
-            </v-card-actions>
+           
         </v-form>
       
       </v-card>
@@ -84,9 +86,11 @@
   <script>
     import axios from "axios";
     import Swal from 'sweetalert2';
+    import store from '../store/index.js';
     export default {
         props: ['userId'],
         data: () => ({
+            check_roles: store.getters.user,
             valid:false,
             dialog: false,
             password: '',
@@ -110,15 +114,6 @@
             ],
          
         }),
-        watch: {
-            // dialog(val) {
-            //     if(val) {
-            //         this.password = '',
-            //         this.newPassword = '',
-            //         this.confirmPassword = ''
-            //     }
-            // }
-        },
         computed: { 
             isPasswordMatch() {
                 return this.newPassword === this.confirmPassword;
@@ -136,13 +131,16 @@
             },
             async resetPassword(){
                 try {
+
+                    console.log(this.check_roles)
                  
                     if(this.$refs.formReset.validate()){
 
                         if (this.isPasswordMatch) {
                             let fd = await {
                                 "id"            : this.userId,
-                                "password"      : this.newPassword,
+                                "newPassword"   : this.newPassword,
+                                "password"      : this.password,
                             }
                             let path = await `/api/user/reset-password`
                             let response = await axios.post(`${path}`, fd)

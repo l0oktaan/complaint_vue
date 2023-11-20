@@ -61,7 +61,7 @@ export default {
             await Swal.fire({
               position: 'center',
               icon: 'success',
-              title: 'Password reset email sent! Please check your inbox.',
+              title: 'ระบบได้ส่ง E-mail เพื่อเปลี่ยนรหัสผ่านให้เเล้ว',
               showConfirmButton: false,
               timer: 1500
             })
