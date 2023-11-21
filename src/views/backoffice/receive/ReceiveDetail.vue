@@ -5,7 +5,7 @@
       <v-card>
         <DetailComplain ref="data" @updateValue="getValue" />
       </v-card>
-      <v-btn class="btn-submit mt-3 mr-2" color="deep-orange" @click="dialogCancel = true">ไม่รับเรื่อง</v-btn>
+      <v-btn class="btn-submit mt-3 mr-2" color="deep-orange" @click="dialogShowCancel">ไม่รับเรื่อง</v-btn>
 
       <v-btn class="btn-submit mt-3" @click="dialog = true">รับเรื่อง</v-btn>
 
@@ -171,20 +171,9 @@ import DetailComplain from '@/components/detailComplain.vue';
         ],
         otherCancel: '',
         selectCancel: null,
-        itemsCancel: [
-          {value : 'กรณีไม่ใช่เรื่องเจ้าหน้าที่กรมบัญชีกลางกระทำทุจริตหรือประพฤติมิชอบต่อหน้าที่', id:1},
-          {value : 'เรื่องที่ร้องเรียนไม่มีมูลหรือไม่มีพยานหลักฐานเพียงพอ', id:2},
-          {value : 'กรณีอื่นๆ', id:3},
-
-        ],
+        itemsCancel: [],
         selectContact: null,
-        itemsContact: [
-          {value : 'กรมบัญชีกลาง', id:1, url: 'https://www.cgd.go.th/cs/internet/internet/RequestForm_Dev.html?page_locale=th_TH'},
-
-        ],
-        // complainDetailRules: [
-        //     v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
-        // ],
+        itemsContact: [],
         CancelcomplainDetailRules: [
           v => !!v || 'กรุณากรอกข้อมูล',
           v => (v.length <= 512) || 'กรอกรายละเอียดห้ามเกิน 512 ตัวอักษร',
@@ -196,6 +185,11 @@ import DetailComplain from '@/components/detailComplain.vue';
     },
 
     methods: {
+      dialogShowCancel(){
+        this.dialogCancel = true;
+        this.getSelectReplyMessage();
+        this.getSelectContactChannels();
+      },
       close(){
         this.dialog = false
         this.complain_detail = ''
@@ -274,7 +268,31 @@ import DetailComplain from '@/components/detailComplain.vue';
         this.dataComplain = await v.data
         this.dataRegister = await v.user
         await setTimeout(() => (this.$refs.loader.overlay = false), 300);
-      }
+      },
+
+      async getSelectReplyMessage(){
+
+        let path = await `/api/get/replyMessage`
+       
+        let response = await axios.get(`${path}`)
+
+        console.log(response);
+        await response.data.data.forEach(async item => {
+            await this.itemsCancel.push({'id':item.id, 'value':item.message_detail})
+        })
+      },
+
+      async getSelectContactChannels(){
+
+        let path = await `/api/get/contactChannels`
+
+        let response = await axios.get(`${path}`)
+
+        console.log(response);
+        await response.data.data.forEach(async item => {
+            await this.itemsContact.push({'id':item.id, 'value':item.contact_name, 'url' : item.contact_link})
+        })
+      },
     }
   }
 </script>

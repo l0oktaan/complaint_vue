@@ -7,11 +7,14 @@ import VueAxios from 'vue-axios';
 import store from './store';
 import VTiptap from "@peepi/vuetify-tiptap";
 import fonts from './assets/css/fonts.css';
+import VueExcelXlsx from "vue-excel-xlsx"
 
 
 Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
+
+Vue.use(VueExcelXlsx);
 
 Vue.use(VTiptap)
 

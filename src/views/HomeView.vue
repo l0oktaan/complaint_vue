@@ -121,8 +121,8 @@
           </v-list-item>
         </router-link>
 
-        <!-- <router-link 
-          v-if="check_roles.roles === 'admin'"
+        <router-link 
+          v-if="check_roles.roles === 'admin' && check_roles.id === 1"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/report"
@@ -135,7 +135,24 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </router-link> -->
+        </router-link>
+
+        <router-link 
+          v-if="check_roles.roles === 'admin' && check_roles.id === 1"
+          class="d-flex align-center menu-link"
+          active-class="activemenu"
+          to="/backoffice/manage"
+        >
+          <v-list-item link>
+            <i class="fa-solid fa-gear menu-icon"></i>
+            <v-list-item-content>
+              <v-list-item-title class="menu-text">
+                ตั้งค่า
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
       </v-list>
 
     </v-navigation-drawer>
