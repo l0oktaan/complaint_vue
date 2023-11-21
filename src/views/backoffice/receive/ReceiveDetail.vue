@@ -196,12 +196,14 @@ import DetailComplain from '@/components/detailComplain.vue';
       },
       closeCancel(){
         this.dialogCancel = false
-        this.$refs.form.reset()
+        this.otherCancel = ''
+        this.selectCancel = null
+        this.selectContact = null
+        // this.$refs.form.reset()
         this.$refs.form.resetValidation()
       },
       clickSelectCancel(v){
-        console.log(v);
-        if(v.id != 3){
+        if(!v.check){
           this.showSelectCancel = false
         }else{
           this.showSelectCancel = true
@@ -234,8 +236,6 @@ import DetailComplain from '@/components/detailComplain.vue';
               "create_by"             : this.check_roles.id,
               "modified_by"           : this.check_roles.id,
             } 
-
-            console.log(fd);
 
           let path        = await `/api/backoffice/create/complainStep`
           await axios.post(`${path}`, fd)
@@ -276,9 +276,8 @@ import DetailComplain from '@/components/detailComplain.vue';
        
         let response = await axios.get(`${path}`)
 
-        console.log(response);
         await response.data.data.forEach(async item => {
-            await this.itemsCancel.push({'id':item.id, 'value':item.message_detail})
+            await this.itemsCancel.push({'id':item.id, 'value':item.message_detail, 'check': item.message_detail_other})
         })
       },
 
@@ -288,7 +287,6 @@ import DetailComplain from '@/components/detailComplain.vue';
 
         let response = await axios.get(`${path}`)
 
-        console.log(response);
         await response.data.data.forEach(async item => {
             await this.itemsContact.push({'id':item.id, 'value':item.contact_name, 'url' : item.contact_link})
         })

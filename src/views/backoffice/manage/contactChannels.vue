@@ -103,18 +103,18 @@
             <v-card-actions class="px-0 py-0 mt-4">
               <v-spacer></v-spacer>
               <v-btn
-                class="btn btn-cancel"
-                variant="text"
-                @click="closeDailogCreate"
-              >
-                ยกเลิก
-              </v-btn>
-              <v-btn
                 class="btn btn-submit"
                 variant="text"
                 @click="saveContactChannels"
               >
                 บันทึก
+              </v-btn>
+              <v-btn
+                class="btn btn-cancel"
+                variant="text"
+                @click="closeDailogCreate"
+              >
+                ยกเลิก
               </v-btn>
             </v-card-actions>
           </v-card-text> 

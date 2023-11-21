@@ -74,23 +74,27 @@
               :maxlength="maxLengthTwoHundred"
               @input="checkRulesLength(messageDetail.length, maxLengthTwoHundred)"
           ></v-textarea>
+          <v-checkbox
+            v-model="CheckmessageOther"
+            label="เพิ่มช่องกรอกรายละเอียดข้อความอื่นๆ"
+          ></v-checkbox>
         </v-form>
 
         <v-card-actions class="px-0 py-0 mt-4">
           <v-spacer></v-spacer>
-          <v-btn
-            class="btn btn-cancel"
-            variant="text"
-            @click="closeDailogCreate"
-          >
-            ยกเลิก
-          </v-btn>
           <v-btn
             class="btn btn-submit"
             variant="text"
             @click="saveReplyMessage"
           >
             บันทึก
+          </v-btn>
+          <v-btn
+            class="btn btn-cancel"
+            variant="text"
+            @click="closeDailogCreate"
+          >
+            ยกเลิก
           </v-btn>
         </v-card-actions>
       </v-card-text> 
@@ -116,6 +120,7 @@
       loading: true,
       dialogCreate: false,
       dataReplyMessage: [],
+      CheckmessageOther: false,
       date : moment().format('YYYY-MM-DD HH:mm:ss'),
       maxLengthTwoHundred: 200,
       id: null,
@@ -212,6 +217,7 @@
         this.titleReplyMessage  = await 0;
         this.id                 = await value.id;
         this.messageDetail      = await value.message_detail;
+        this.CheckmessageOther  = await value.message_detail_other;
         // this.messageStatus      = await value.status;
         // this.checkRemove        = await value.check_remove;
         // console.log(this.messageStatus);
@@ -225,20 +231,23 @@
 
               if(this.titleReplyMessage === -1){
                 fd = await {
-                  "message_detail"  : this.messageDetail,
-                  "status"          : true,
-                  "check_remove"    : this.checkRemove,
-                  "create_by"       : this.check_roles.id,
-                  "create_date"     : this.date,
-                  "modified_by"     : this.check_roles.id,
-                  "modified_date"   : this.date,
+                  "message_detail"          : this.messageDetail,
+                  "message_detail_other"    : this.CheckmessageOther,
+                  "status"                  : true,
+                  "check_remove"            : this.checkRemove,
+                  "create_by"               : this.check_roles.id,
+                  "create_date"             : this.date,
+                  "modified_by"             : this.check_roles.id,
+                  "modified_date"           : this.date,
                 }
+                console.log(fd);
                 path        = await `/api/backoffice/create/replyMessage`
               }else{
                 fd = await {
-                  "id"              : this.id,
-                  "message_detail"  : this.messageDetail,
-                  "modified_by"     : this.check_roles.id,
+                  "id"                      : this.id,
+                  "message_detail"          : this.messageDetail,
+                  "message_detail_other"    : this.CheckmessageOther,
+                  "modified_by"             : this.check_roles.id,
 
                 }
                 path        = await `/api/backoffice/edit/replyMessage`
@@ -355,6 +364,7 @@
         this.dialogCreate = false
         this.titleReplyMessage = -1
         this.messageDetail = ''
+        this.CheckmessageOther = false
         this.$refs.formReplyMessage.resetValidation()
       },
 
