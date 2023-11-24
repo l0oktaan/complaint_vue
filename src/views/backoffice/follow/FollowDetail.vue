@@ -1008,6 +1008,8 @@ export default {
           let path        = await `/api/backoffice/create/complainStep`
 
           let response    = await axios.post(`${path}`, fd)
+
+          this.complainStepId = await response.data.complain_step_id
             
           if(response){
 
@@ -1022,8 +1024,6 @@ export default {
             }
 
             const formData = await new FormData();  
-
-            this.complainStepId = await response.data.complain_step_id
 
             await formData.append('id', this.complainStepId);
             
