@@ -15,6 +15,14 @@
 
             </div>
         </v-col>
+
+        <v-col md="3">
+            <div class="box-card">
+                <i class="fa-solid fa-address-book"></i>
+                <router-link to="/backoffice/manage/announceView"><p>ช่องทางการประกาศ</p></router-link>
+
+            </div>
+        </v-col>
        
     </v-row>
 

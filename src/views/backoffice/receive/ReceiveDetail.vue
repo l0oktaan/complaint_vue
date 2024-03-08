@@ -120,6 +120,14 @@
                 >
                   ยกเลิก
                 </v-btn>
+                <v-btn
+                  class="btn-submit"
+                  text
+                  @click="sendFile"
+
+                >
+                  send
+                </v-btn>
               </v-card-actions>
               
           </v-form>
@@ -268,6 +276,17 @@ import DetailComplain from '@/components/detailComplain.vue';
         this.dataComplain = await v.data
         this.dataRegister = await v.user
         await setTimeout(() => (this.$refs.loader.overlay = false), 300);
+      },
+
+      async sendFile(){
+        console.log('=========');
+        let fd = await {
+            "mail"           : "saraban@dbd.go.th",
+            } 
+        let path  = await `/api/backoffice/sendFile`
+        await axios.post(`${path}`, fd)
+
+        
       },
 
       async getSelectReplyMessage(){

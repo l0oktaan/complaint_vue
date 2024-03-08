@@ -11,7 +11,6 @@
                         />
                     </v-avatar>
 
-                  
                     <v-spacer />
                     <div class="head-menu">
                      
@@ -23,7 +22,18 @@
                                     </span>
                                 </router-link>
                             </template>
-                            <span>Home</span>
+                            <span>หน้าหลัก</span>
+                        </v-tooltip>
+
+                        <v-tooltip bottom color="#1976d2">
+                            <template v-slot:activator="{ on, attrs }">
+                                <router-link class="mr-5" to="/user/RequestForm" >
+                                    <span v-bind="attrs" v-on="on">
+                                        <i class="fas fa-file-signature"></i>
+                                    </span>
+                                </router-link>
+                            </template>
+                            <span>รับเรื่องร้องเรียน</span>
                         </v-tooltip>
 
                         <v-tooltip bottom color="#1976d2">
@@ -34,7 +44,7 @@
                                     </span>
                                 </router-link>
                             </template>
-                            <span>Contact</span>
+                            <span>ติดต่อเรา</span>
                         </v-tooltip>
 
                         <v-tooltip bottom color="#1976d2">
@@ -45,7 +55,7 @@
                                     </span>
                                 </router-link>
                             </template>
-                            <span>Login</span>
+                            <span>เข้าสู่ระบบ</span>
                         </v-tooltip>
 
                         <!-- <router-link class="mr-3" to="/"><i class="fa-solid fa-house"></i></router-link> -->

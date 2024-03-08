@@ -6,6 +6,8 @@ import store from '../store/index.js'
 // user
 import LayoutView from "../views/users/LayoutView.vue"
 import MainView from "../views/users/main/MainView.vue"
+import MainDetail from "../views/users/main/MainDetail.vue"
+import RequestFormView from "../views/users/main/RequestFormView.vue"
 import ContactView from "../views/users/contact/ContactView.vue"
 import UserLoginView from '../views/users/LoginView.vue'
 import FollowView from '../views/users/follow/FollowView.vue'
@@ -30,8 +32,16 @@ import PersonnelFormEdit from '../views/backoffice/personnel/UserForm.vue'
 import PersonalDetail from '../views/backoffice/personnel/UserDetail.vue'
 import RegisterComplain from '../views/backoffice/register/RegisterViews.vue'
 import Registerform from '../views/backoffice/register/RegisterForm.vue'
+
 import ReportView from '../views/backoffice/report/ReportView.vue'
 import ReportComplain  from '../views/backoffice/report/reportComplain.vue'
+
+import ManageView from '../views/backoffice/manage/manageView.vue'
+// import ManageDetail from '../views/backoffice/manage/manageDetail.vue'
+import ReplyMessage from '../views/backoffice/manage/replyMessage.vue'
+import ContactChannels from '../views/backoffice/manage/contactChannels.vue'
+import AnnounceView from '../views/backoffice/manage/announceView.vue'
+
 
 
 import HomeView from '../views/HomeView.vue'
@@ -58,6 +68,16 @@ const routes = [
         path: '/',
         name: 'main',
         component: MainView,
+      },
+      {
+        path: '/user/MainDetail/:id',
+        name: 'main-detail',
+        component: MainDetail,
+      },
+      {
+        path: '/user/RequestForm',
+        name: 'RequestForm',
+        component: RequestFormView,
       },
       {
         path: '/user/contact',
@@ -170,22 +190,62 @@ const routes = [
       },
 
       {
-        path: '/backoffice/report/complain',
+        path: '/backoffice/report/1',
         name: 'report-complain',
-        component: ReportComplain
+        component: ReportComplain,
+        
       },
 
+      {
+        path: '/backoffice/manage',
+        name: 'manage-view',
+        component: ManageView,
+        
+      },
 
-    ]
+      // {
+      //   path: '/backoffice/manage/:id',
+      //   name: 'manage-detail',
+      //   component: ManageDetail,
+        
+      // },
+
+      {
+        path: '/backoffice/manage/replyMessage',
+        name: 'reply-message',
+        component: ReplyMessage,
+        
+      },
+
+      {
+        path: '/backoffice/manage/contactChannels',
+        name: 'contact-channels',
+        component: ContactChannels,
+        
+      },
+      
+      {
+        path: '/backoffice/manage/announceView',
+        name: 'announce-view',
+        component: AnnounceView,
+        
+      },
+      
+      
+      // {
+      //   path: '/backoffice/report/complain',
+      //   name: 'report-complain',
+      //   component: ReportComplain
+      // },
+
+
+    ],
+
+   
 
   },
 
-  // {
-  //   path: '/test-view',
-  //   name: 'test-view',
-  //   component: TestView,
-    
-  // },
+
   
 
   { 
