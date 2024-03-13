@@ -1,13 +1,13 @@
 <template>
-
   <div class="announce-view">
+    
     <!-- <LoaderView ref="loader"/> -->
     <breadcrumbsView :item="item"/>
 
-    <!-- รายการช่องทางการประกาศ-->
+    <!-- รายการช่องทางการสร้างแบนเนอร์-->
     <v-data-table
       :headers="headers"
-      :items="dataAnnounces"
+      :items="dataBanners"
       :loading="loading"
       loading-text="Loading... Please wait"
       :sort-by="[{ key: 'calories', order: 'asc' }]"
@@ -15,7 +15,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>ช่องทางการประกาศ</v-toolbar-title>
+          <v-toolbar-title>ช่องทางการสร้างแบนเนอร์</v-toolbar-title>
           <v-divider
             class="mx-4"
             inset
@@ -40,8 +40,8 @@
         </div>
       </template>
 
-      <template v-slot:[`item.announce_name`]="{ item }">
-        <div class="overflow-630" >{{ item.announce_name }}</div>
+      <template v-slot:[`item.banner_name`]="{ item }">
+        <div class="overflow-630" >{{ item.banner_name }}</div>
       </template>
 
       <template v-slot:[`item.start_date`]="{ item }">
@@ -67,10 +67,10 @@
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
-          <v-btn  color="#003366" icon small @click="editAnnounce(item)">
+          <v-btn  color="#003366" icon small @click="editBanner(item)">
             <i class="f-16 fa-solid fa-pen-to-square"></i>
           </v-btn>
-          <v-btn  color="#003366" icon small @click="removeAnnounce(item)">
+          <v-btn  color="#003366" icon small @click="removeBanner(item)">
             <i class="fa-solid fa-trash"></i>
           </v-btn>
       </template>
@@ -80,9 +80,11 @@
     <!-- form การเพิ่ม-แก้ไข ข้อมูล -->
     <v-dialog v-model="dialogCreate" max-width="700px" persistent>
       <v-card>
+
         <v-card-title>
           <span class="text-h5">{{ formTitle }}</span>
         </v-card-title>
+
         <v-card-text>
           <v-overlay v-if="loading"
               :loading="loading"
@@ -94,84 +96,50 @@
               size="64"
             ></v-progress-circular>
           </v-overlay>
-          <div>
-            <v-form ref="formAnnounce" v-model="valid" lazy-validation>
-              <p class="style-label mt-2"><span>*</span>ชื่อเรื่องประกาศ</p>
-              <v-text-field
-                  v-model="dataDailogAnnounce.announce_name"
-                  :rules="announceRules"
-                  label="ชื่อเรื่องประกาศ"
-                  dense
-                  outlined
-                  single-line
-                  hide-details="auto"
-                  thai_engLanguage
-                  :maxlength="maxLengthTwoHundredFiftyFive"
-                  @input="checkRulesLength(dataDailogAnnounce.announce_name.length, maxLengthTwoHundredFiftyFive)"
-                
-              ></v-text-field>
+
+          <v-form ref="formBanner" v-model="valid" lazy-validation>
+            <p class="style-label mt-2"><span>*</span>ชื่อแบนเนอร์</p>
+            <v-text-field
+              v-model="dataDailogBanner.banner_name"
+              :rules="bannerRules"
+              label="ชื่อแบนเนอร์"
+              dense
+              outlined
+              single-line
+              hide-details="auto"
+              thai_engLanguage
+              :maxlength="maxLengthTwoHundredFiftyFive"
+              @input="checkRulesLength(dataDailogBanner.banner_name.length, maxLengthTwoHundredFiftyFive)"
+            ></v-text-field>
             
-              <p class="style-label mt-2"><span>*</span>หัวข้อประกาศ</p>
-              <v-text-field
-                  v-model="dataDailogAnnounce.announce_title"
-                  :rules="announceRules"
-                  label="หัวข้อประกาศ"
-                  dense
-                  outlined
-                  single-line
-                  hide-details="auto"
-                  thai_engLanguage
-                  :maxlength="maxLengthTwoHundredFiftyFive"
-                  @input="checkRulesLength(dataDailogAnnounce.announce_title.length, maxLengthTwoHundredFiftyFive)"
-                
-              ></v-text-field>
-              <p class="style-label mt-2"><span>*</span>ประเภทประกาศ</p>
-          
-              <v-select
-                v-model="dataDailogAnnounce.announce_type"
-                :items="selectAnnounceTpye"
-                :rules="[v => !!v || 'กรุณากรอกข้อมูล']"
-                label="เลือกประเภทประกาศ"
-                item-text="value"
-                item-value="id"
-                required
-                dense
-                outlined
-                single-line
-                hide-details="auto" 
-              ></v-select>
+            <p class="style-label mt-2"><span>*</span>ไฟล์เเนบ : (เเนบไฟล์ png, jpeg, gif ขนาดไม่เกิน 900px * 900px) </p>
+            <v-file-input 
+              v-if="dataDailogBanner.file_original == null" 
+              show-size 
+              label="เลือกไฟล์" 
+              outlined
+              dense
+              clearable 
+              single-line
+              v-model="dataDailogBanner.file"
+              :accept="acceptTypes"
+              :rules="fileRules"
+            ></v-file-input>
 
-              <p class="style-label mt-2"><span>*</span>ไฟล์เเนบ : (เเนบไฟล์ png, jpeg, gif, pdf) </p>
-              <v-file-input 
-                v-if="dataDailogAnnounce.file_original == null" 
-                show-size 
-                label="เลือกไฟล์" 
-                outlined
-                dense
-                clearable 
-                single-line
-                v-model="dataDailogAnnounce.file"
-                :accept="acceptTypes"
-                :rules="fileRules"
-              ></v-file-input>
-              <div v-else class="text-left">
-                <v-chip 
-                  class="ma-2"
-                  closable
-                >
-                  <v-icon v-if="dataDailogAnnounce.file_type == 'application/pdf'" @click="showFile(dataDailogAnnounce.file_type, dataDailogAnnounce.file_name, dataDailogAnnounce.file_original, 'UrlFilesAnnounce')">mdi-file</v-icon>
-                  <v-icon v-else @click="showFile(dataDailogAnnounce.file_type, dataDailogAnnounce.file_name, 'UrlFilesAnnounce')">mdi-image</v-icon>
-                  &nbsp;{{dataDailogAnnounce.file_original}}
-              
-                </v-chip>
-                <v-btn  color="#003366" icon small @click="removeFile(dataDailogAnnounce)">
+            <div v-else class="text-left">
+              <v-chip class="ma-2" closable>
+                <v-icon v-if="dataDailogBanner.file_type == 'application/pdf'" @click="showFile(dataDailogBanner.file_type, dataDailogBanner.file_name, 'UrlFilesBanner')">mdi-file</v-icon>
+                <v-icon v-else @click="showFile(dataDailogBanner.file_type, dataDailogBanner.file_name, 'UrlFilesBanner')">mdi-image</v-icon>
+                &nbsp;{{dataDailogBanner.file_original}}
+              </v-chip>
+              <v-btn  color="#003366" icon small @click="removeFile(dataDailogBanner)">
                   <i class="fa-solid fa-trash"></i>
-                </v-btn>
-              </div>
+              </v-btn>
+            </div>
 
-              <v-row>
-                <v-col>
-                  <p class="style-label mb-3"><span>*</span>วันที่เริ่มต้น</p> 
+            <v-row>
+              <v-col>
+                  <p class="style-label"><span>*</span>วันที่เริ่มต้น</p> 
                   <v-menu
                       ref="start_date"
                       v-model="menu_start_date"
@@ -183,7 +151,7 @@
                   >
                       <template v-slot:activator="{ on, attrs }">
                           <v-text-field                                                        
-                              v-model="dataDailogAnnounce.start_date"
+                              v-model="dataDailogBanner.start_date"
                               label="ตั้งเเต่วันที่"
                               readonly
                               v-bind="attrs"
@@ -220,10 +188,10 @@
                       </v-date-picker>
 
                   </v-menu>
-                </v-col>
+              </v-col>
 
-                <v-col>
-                  <p class="style-label mb-3"><span>*</span>วันที่สิ้นสุด </p>
+              <v-col>
+                  <p class="style-label"><span>*</span>วันที่สิ้นสุด </p>
                   <v-menu
                       ref="end_date"
                       v-model="menu_end_date"
@@ -235,7 +203,7 @@
                   >
                       <template v-slot:activator="{ on, attrs }">
                           <v-text-field                                                        
-                              v-model="dataDailogAnnounce.end_date"
+                              v-model="dataDailogBanner.end_date"
                               label="ตั้งเเต่วันที่"
                               readonly
                               v-bind="attrs"
@@ -272,49 +240,41 @@
                           </v-btn>
                       </v-date-picker>
                   </v-menu>
-                </v-col>
-              </v-row>
-
-              <v-tiptap v-model="dataDailogAnnounce.announce_content" :extensions="extensions"/>
+              </v-col>
+            </v-row>
+          </v-form>
           
-            </v-form>
-            <v-card-actions v-if="!loading"  class="px-0 py-0 mt-4">
-              <v-spacer></v-spacer>
-              <v-btn
-                class="btn btn-submit"
-                variant="text"
-                @click="saveAnnounce"
-              >
-                บันทึก
-              </v-btn>
-              <v-btn
-                class="btn btn-cancel"
-                variant="text"
-                @click="closeDailogCreate"
-              >
-                ยกเลิก
-              </v-btn>
-            </v-card-actions>
-          </div>
+          <v-card-actions v-if="!loading"  class="px-0 py-0 mt-4">
+            <v-spacer></v-spacer>
+            <v-btn
+              class="btn btn-submit"
+              variant="text"
+              @click="saveBanner"
+            >
+              บันทึก
+            </v-btn>
+            <v-btn
+              class="btn btn-cancel"
+              variant="text"
+              @click="closeDailogCreate"
+            >
+              ยกเลิก
+            </v-btn>
+          </v-card-actions> 
         </v-card-text> 
+
       </v-card>
     </v-dialog>
 
-     <!-- โชว์รูป  -->
-     <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
+    <!-- โชว์รูป  -->
+    <v-overlay class="style-bg" :opacity="opacity" :absolute="absolute"  :value="overlayImg">
       <img :src="url" />
-      <v-btn
-          class="btn-overlay"
-          icon
-          @click="overlayImg = false"
-      >
-      <v-icon  dark>
-          fa-xmark
-      </v-icon>
+      <v-btn class="btn-overlay" icon @click="overlayImg = false">
+        <v-icon dark>fa-xmark</v-icon>
       </v-btn>
     </v-overlay>
-  </div>
 
+  </div>
 </template>
 
 <script>
@@ -324,8 +284,8 @@
   import Swal from 'sweetalert2';
   import moment from 'moment';
   import axios from "axios";
-
   export default {
+
     components: { breadcrumbsView},
 
     data: () => ({
@@ -341,14 +301,14 @@
           href: '/backoffice/manage',
         },
         {
-          text: 'ช่องทางการประกาศ',
+          text: 'ช่องทางสร้างแบนเนอร์',
           disabled: true,
           href: 'breadcrumbs_link_1',
         },  
       ],
       headers: [
         { text: 'วันที่จัดทำ', value: 'create_date', align: 'center'},
-        { text: 'ช่องทางการประกาศ', value: 'announce_name' },
+        { text: 'ชื่อแบนเนอร์', value: 'banner_name' },
         { text: 'วันที่เริ่มต้น', value: 'start_date' },
         { text: 'วันที่สิ้นสุด', value: 'end_date' },
         { text: 'สถานะการใช้งาน', value: 'status' },
@@ -359,29 +319,22 @@
       opacity: 1,
       absolute: false,
       overlayImg: false,
-      dataAnnounces:[],
-      dataDate: {},
-      dataDailogAnnounce: {},
-      dataFiles: [],
-    
-      checkRemoveFile : false,
-      titleAnnounce: -1,
-      dialogCreate: false,
-      announceId: null,
-      announceFileName: '',
-      announceFileType: '',
-      announceFileOrifinal: '',
+      dataBanners:[],
+      dataDailogBanner: {},
 
+      titleBanner: -1,
+      dialogCreate: false,
+      bannerId: null,
       menu_start_date: false,
       menu_end_date: false,
       start_date: new Date().toISOString().substr(0, 10),
       end_date: new Date().toISOString().substr(0, 10),
       maxLengthTwoHundredFiftyFive: 255,
-
+  
       status: true,
       checkRemove: false,
       acceptTypes: "image/*, application/pdf",
-      announceRules: [
+      bannerRules: [
         v => !!v || 'กรุณากรอกข้อมูล',
         // v => (v && v.length <= 200) || 'กรอกรายละเอียดห้ามเกิน 200 ตัวอักษร',
       ],
@@ -390,7 +343,7 @@
           if (!value || value.length === 0) {
               return "กรุณาอัพโหลดไฟล์";
           }
-
+  
           const maxFileSize = 10 * 1024 * 1024; // 2MB in bytes
           for (let i = 0; i < value.length; i++) {
               if (value[i].size > maxFileSize) {
@@ -400,29 +353,23 @@
               }
           }
             
-          const allowedTypes = ["image/png", "image/jpeg", "image/gif", "application/pdf"];
+          const allowedTypes = ["image/png", "image/jpeg", "image/gif"];
           if (!allowedTypes.includes(value.type)) {
               return "ประเภทไฟล์ที่อัพโหลดไม่ถูกต้อง";
               }
           return true;
         }
       ],
-      selectAnnounceTpye: [
-        { value: 'ประชาสัมพันธ์', id: "ประชาสัมพันธ์" },
-        { value: 'ประกาศและระเบียบที่เกี่ยวข้อง', id: "ประกาศและระเบียบที่เกี่ยวข้อง" }
-      ],
-
 
     }),
-
+  
     mounted(){
-      this.getAnnounce()
+      this.getBanner()
       this.getEndThaiDate()
     },
-    
+
     watch: {
       start_date(v){
-        console.log(v);
         this.end_date = v
         this.getEndThaiDate()
       },
@@ -430,10 +377,10 @@
         this.getEndThaiDate()  
       },
     },
-
+  
     computed: {
       formTitle () {
-        return this.titleAnnounce === -1 ? 'สร้างรายการ' : 'แก้ไขรายการ'
+        return this.titleBanner === -1 ? 'สร้างรายการ' : 'แก้ไขรายการ'
       }
     },
 
@@ -457,14 +404,14 @@
         if (this.start_date || this.end_date){
             var d_start = new Date(this.start_date);
             var d_end = new Date(this.end_date);
-            this.dataDailogAnnounce.start_date = d_start.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
-            this.dataDailogAnnounce.end_date = d_end.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+            this.dataDailogBanner.start_date = d_start.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
+            this.dataDailogBanner.end_date = d_end.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
         }
       },
 
-      showFile(file_type, file_name, file_original, urlFiles){
+      showFile(file_type, file_name, urlFiles){
         if(file_type == 'application/pdf'){
-          this.urlPdfFiles(urlFiles, file_name, file_original)
+          this.urlPdfFiles(urlFiles, file_name)
         }else{
           this.urlFiles(urlFiles, file_name)
         }
@@ -478,139 +425,133 @@
       },
 
       closeDailogCreate () {
-        this.titleAnnounce        = -1
-        this.dataDailogAnnounce   = {}
-        this.dialogCreate         = false
-        this.checkRemoveFile      = false
-        this.$refs.formAnnounce.resetValidation()
-        this.dataDate = {
-          "start_date" : null,
-          "end_date" : null
-        }
-
-        this.dataFiles = []
-        
+        this.dialogCreate = false
+        this.titleBanner = -1
+        this.dataDailogBanner = {}
+        this.checkRemoveFile = false   
+        this.$refs.formBanner.resetValidation()
       },
-  
-      async getAnnounce(){
-        let path            = await `/api/backoffice/get/announce`
-        let response        = await axios.get(`${path}`) 
-        this.dataAnnounces  = await response.data.data
-        this.loading        = await false
+
+      async getBanner(){
+        let path         = await `/api/backoffice/get/banner`
+        let response     = await axios.get(`${path}`) 
+        this.dataBanners = await response.data.data
+        this.loading     = await false
         // await setTimeout(() => (this.$refs.loader.overlay = false), 300);
       },
-
-      async saveAnnounce(){
-        if(this.$refs.formAnnounce.validate()){
-          try {
-
-            let fd = await {};
-
-            let path = await null;
-
-            // สร้าง //
-
-            if(this.titleAnnounce === -1){
   
+      async saveBanner(){
+        if(this.$refs.formBanner.validate()){
+          try {
+  
+            let fd = await {};
+  
+            let path = await null;
+  
+            // สร้าง //
+  
+            if(this.titleBanner === -1){
+   
               fd = await {
-                "announce_name"           : this.dataDailogAnnounce.announce_name,
-                "announce_title"          : this.dataDailogAnnounce.announce_title,
-                "announce_content"        : this.dataDailogAnnounce.announce_content,
-                "announce_type"           : this.dataDailogAnnounce.announce_type,
-                "number_preview"          : 0,
-                "file_original"           : this.dataDailogAnnounce.file.name,
-                "file_type"               : this.dataDailogAnnounce.file.type,
-                "start_date"              :  this.start_date,
-                "end_date"                : this.end_date,
-                "check_remove"            : false,
-                "status"                  : this.status,
-                "create_by"               : this.check_roles.id,
+                "banner_name"               : this.dataDailogBanner.banner_name,
+                "file_original"             : this.dataDailogBanner.file.name,
+                "file_type"                 : this.dataDailogBanner.file.type,
+                "start_date"                : this.start_date,
+                "end_date"                  : this.end_date,
+                "check_remove"              : false,
+                "status"                    : this.status,
+                "create_by"                 : this.check_roles.id,
               }
             
-              path = await `/api/backoffice/create/announce`
-
+              path = await `/api/backoffice/create/banner`
+  
             }else{
-
+  
               // แก้ไข //
-
+  
               fd = await {
-                "announce_id"             : this.announceId,
-                "announce_name"           : this.dataDailogAnnounce.announce_name,
-                "announce_title"          : this.dataDailogAnnounce.announce_title,
-                "announce_content"        : this.dataDailogAnnounce.announce_content,
-                "announce_type"           : this.dataDailogAnnounce.announce_type,
-                "file_original"           : this.dataDailogAnnounce.file !== undefined ? this.dataDailogAnnounce.file.name : this.dataDailogAnnounce.file_original,
-                "file_name"               : this.dataDailogAnnounce.file !== undefined ? null : this.dataDailogAnnounce.file_name,
-                "file_type"               : this.dataDailogAnnounce.file !== undefined ? this.dataDailogAnnounce.file.type : this.dataDailogAnnounce.file_type,
+                "banner_id"               : this.dataDailogBanner.id,
+                "banner_name"             : this.dataDailogBanner.banner_name,
+                "file_original"           : this.dataDailogBanner.file !== undefined ? this.dataDailogBanner.file.name : this.dataDailogBanner.file_original,
+                "file_name"               : this.dataDailogBanner.file !== undefined ? null : this.dataDailogBanner.file_name,
+                "file_type"               : this.dataDailogBanner.file !== undefined ? this.dataDailogBanner.file.type : this.dataDailogBanner.file_type,
                 "start_date"              : `${moment(this.start_date).format('YYYY-MM-DD')}`,
                 "end_date"                : `${moment(this.end_date).format('YYYY-MM-DD')}`,
-                "status"                  : this.status,
                 "roles_id"                : this.check_roles.id,
-                "check_remove"            : this.checkRemove,
               }
-
-                path = await `/api/backoffice/edit/announce`
+  
+                path = await `/api/backoffice/edit/banner`
             }
 
+            console.log(fd);
+  
               let response = await axios.post(`${path}`, fd)
-
-            if(response){
-
-              // อัพโหลดไฟล์ to server
-
+  
+            if(response && this.dataDailogBanner.file !== undefined){
+  
+               // อัพโหลดไฟล์ to server
+  
                 const formData = await new FormData(); 
-
-                await formData.append('id', response.data.announce_id);
-
-                await formData.append('types', 'Announce');
-
-                await formData.append('files', this.dataDailogAnnounce.file);
-
+  
+                await formData.append('id', response.data.banner_id);
+  
+                await formData.append('types', 'Banner');
+  
+                await formData.append('files', this.dataDailogBanner.file);
+  
                 await formData.append('file_name', response.data.file_name);
-
+  
                 await axios.post('/api/uploadsFile', formData)
-
+  
             }
-
+  
             await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
             }).then( function(){});
-
-
+  
+  
             await this.closeDailogCreate()
-            await this.getAnnounce()
-
-
+            await this.getBanner()
+  
+  
           } catch (error) {
-          console.log('saveAnnounce' + error);
+          console.log('saveBanner' + error);
           }
-
+  
         }
       },
-
-      async editAnnounce(value){
-        await this.fetchData();
+  
+      async editBanner(value){
+  
+        // await this.fetchData();
+  
         this.dialogCreate           = await true;
-        this.titleAnnounce          = await 0;
-        this.dataDailogAnnounce     = await JSON.parse(JSON.stringify(value));
-        this.announceId             = await value.id;
-        this.start_date             = await value.start_date;
-        this.end_date               = await value.end_date;
 
-        // this.getEndThaiDate()
+        this.titleBanner            = await 0;
+  
+        this.dataDailogBanner       = await JSON.parse(JSON.stringify(value));
+
+        this.bannerId               = await value.id;
+
+        this.start_date             = await value.start_date;
+
+        this.end_date               = await value.end_date;
+  
+  
       },
       
       async toggleStatus(v){
-        Swal.fire({
-        title: 'คำเตือน',
-        text: "คุณต้องการเปลี่ยนสถานะรายการใช่หรือไม่ ?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'ตกลง',
-        cancelButtonText: 'ยกเลิก',
-        }).then(async (result) => {
+
+      Swal.fire({
+      title: 'คำเตือน',
+      text: "คุณต้องการเปลี่ยนสถานะรายการใช่หรือไม่ ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ตกลง',
+      cancelButtonText: 'ยกเลิก',
+      }).then(async (result) => {
           if (result.isConfirmed) {
               const payload = { 
                   id                 : v.id,
@@ -621,16 +562,16 @@
               let path      = `/api/backoffice/update/announcesStatus`
               let response = await axios.post(`${path}`, payload)
               console.log(response);
-
+  
               if(payload){
                   Swal.fire({
                       icon: 'success',
                       text: 'บันทึกข้อมูลเรีบร้อยเเล้ว',
                   })
-
-
-                  await this.getAnnounce()
-
+  
+  
+                  await this.getBanner()
+  
               }else{
                   Swal.fire({
                       icon: 'error',
@@ -641,14 +582,14 @@
           } else if (result.dismiss === Swal.DismissReason.cancel) {
           v.status == true ? v.status = false : v.status = true
           }
-        }) 
+      }) 
       },
-
-      async removeAnnounce(v){
+  
+      async removeBanner(v){
         try {
           await Swal.fire({
               title: 'คำเตือน',
-              text: "คุณต้องการลบรายการช่องทางการประกาศใช่หรือไม่ ?",
+              text: "คุณต้องการลบรายการแบนเนอร์ใช่หรือไม่ ?",
               icon: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',
@@ -663,7 +604,7 @@
                           check_remove : true,
                       }
     
-                      let path =  await `/api/backoffice/update/deleteAnnounce`
+                      let path =  await `/api/backoffice/update/deleteBanner`
                       let response = await axios.post(`${path}`, payload)
                       
                       if(response){
@@ -673,7 +614,8 @@
                           })
                         
                       } 
-                      await this.getAnnounce()
+                      await this.getBanner()
+                      await this.closeDailogCreate()
                   }
               })
     
@@ -683,7 +625,7 @@
             title: 'บันทึกไม่สำเร็จ',
             text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
           })
-          console.log('removeAnnounce',error);
+          console.log('removeBanner',error);
         }
       },
     
@@ -700,26 +642,30 @@
             cancelButtonText: 'ยกเลิก',
             }).then(async (result) => {
               if (result.isConfirmed) {              
-                const payload = {
-                  id : v.id,
-                  file_original : null,
-                  file_name : null,
-                  file_type : null,
-                  admin_id : this.check_roles.id,
-                }
-
-                let path =  await `/api/backoffice/update/deleteAnnounceFile`
-                let response = await axios.post(`${path}`, payload)
+                  const payload = {
+                      id : v.id,
+                      file_original : null,
+                      file_name : null,
+                      file_type : null,
+                      admin_id : this.check_roles.id,
+                      // check_remove : true,
+                  }
+  
+                  let path =  await `/api/backoffice/update/deleteBannerFile`
+                  let response = await axios.post(`${path}`, payload)
                   
-                if(response){
-                    await Swal.fire({
-                        icon: 'success',
-                        text: 'ลบข้อมูลสำเร็จ',
-                    })
-                } 
-                this.dataDailogAnnounce.file_original = await null,
-                this.dataDailogAnnounce.file_name = await null,
-                this.dataDailogAnnounce.file_type = await null
+                  if(response){
+                      await Swal.fire({
+                          icon: 'success',
+                          text: 'ลบข้อมูลสำเร็จ',
+                      })
+
+                  } 
+  
+                  this.dataDailogAnnounce.file_original = await null,
+                  this.dataDailogAnnounce.file_name = await null,
+                  this.dataDailogAnnounce.file_type = await null
+                  await this.getBanner()
               }
           })
     
@@ -729,12 +675,12 @@
             title: 'บันทึกไม่สำเร็จ',
             text: 'มีข้อผิดพลาดที่ไม่คาดคิดเกิดขึ้น โปรดลองใหม่อีกครั้ง'
           })
-          console.log('removeContactChannels',error);
+          console.log('removeFileBanner',error);
         }
-
+  
       },
 
-      async urlPdfFiles(url,file_name,file_original){
+      async urlPdfFiles(url,file_name){
         axios({
             url: `/api/get/pdf/${url}`,
             params: {"filename":file_name},
@@ -743,26 +689,28 @@
         }).then((response) => {
               var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
               var fileLink = document.createElement('a');
+  
               fileLink.href = fileURL;
-              fileLink.setAttribute('download', file_original);
+              fileLink.setAttribute('download', file_name);
               document.body.appendChild(fileLink);
+  
               window.open(fileLink, "_blank");
-
+  
         });
       },
 
       async urlFiles(url,file_name){
+  
+       
         let path = await `/api/get/${url}?filename=${file_name}`
         
         let res = await axios.get(`${path}`)
-
+  
         this.url = await res.data
-
+  
         this.overlayImg = await !this.overlayImg 
-
       },
     }
   }
 </script>
-
 <style></style>
