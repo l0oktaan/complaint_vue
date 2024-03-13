@@ -1,8 +1,8 @@
 <template>
 
   <div class="announce-view">
-    <!-- <LoaderView ref="loader"/> -->
-    <breadcrumbsView :item="item"/>
+
+    <breadcrumbsView :items="item"/>
 
     <!-- รายการช่องทางการประกาศ-->
     <v-data-table
@@ -80,12 +80,14 @@
     <!-- form การเพิ่ม-แก้ไข ข้อมูล -->
     <v-dialog v-model="dialogCreate" max-width="700px" persistent>
       <v-card>
-        <v-card-title>
-          <span class="text-h5">{{ formTitle }}</span>
-        </v-card-title>
+
+        <v-toolbar color="#167dc2" class="mb-4" dark>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+        </v-toolbar>
+
         <v-card-text>
-          <v-overlay v-if="loading"
-              :loading="loading"
+          <v-overlay v-if="loaderData"
+              :loading="loaderData"
               class="align-center justify-center"
             >
             <v-progress-circular
@@ -319,7 +321,6 @@
 
 <script>
   import breadcrumbsView from '@/components/breadcrumbsView.vue';
-  // import LoaderView from '@/components/loaderView.vue';
   import store from '../../../store/index.js';
   import Swal from 'sweetalert2';
   import moment from 'moment';
@@ -331,6 +332,7 @@
     data: () => ({
       check_roles: store.getters.user,
       loading : true,
+      loaderData : true,
       date : moment().format('YYYY-MM-DD HH:mm:ss'),
       value: '',
       extensions: [],
@@ -471,9 +473,9 @@
       },
 
       fetchData() {
-        this.loading = true; 
+        this.loaderData = true; 
         setTimeout(() => {
-          this.loading = false; // Hide the loader
+          this.loaderData = false; // Hide the loader
         }, 1000);
       },
 
@@ -599,7 +601,6 @@
         this.start_date             = await value.start_date;
         this.end_date               = await value.end_date;
 
-        // this.getEndThaiDate()
       },
       
       async toggleStatus(v){

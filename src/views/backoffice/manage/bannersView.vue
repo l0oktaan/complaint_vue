@@ -1,8 +1,7 @@
 <template>
   <div class="announce-view">
-    
-    <!-- <LoaderView ref="loader"/> -->
-    <breadcrumbsView :item="item"/>
+
+    <breadcrumbsView :items="item"/>
 
     <!-- รายการช่องทางการสร้างแบนเนอร์-->
     <v-data-table
@@ -81,13 +80,13 @@
     <v-dialog v-model="dialogCreate" max-width="700px" persistent>
       <v-card>
 
-        <v-card-title>
-          <span class="text-h5">{{ formTitle }}</span>
-        </v-card-title>
+        <v-toolbar color="#167dc2" class="mb-4" dark>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+        </v-toolbar>
 
         <v-card-text>
-          <v-overlay v-if="loading"
-              :loading="loading"
+          <v-overlay v-if="loaderData"
+              :loading="loaderData"
               class="align-center justify-center"
             >
             <v-progress-circular
@@ -244,7 +243,7 @@
             </v-row>
           </v-form>
           
-          <v-card-actions v-if="!loading"  class="px-0 py-0 mt-4">
+          <v-card-actions v-if="!loaderData"  class="px-0 py-0 mt-4">
             <v-spacer></v-spacer>
             <v-btn
               class="btn btn-submit"
@@ -279,7 +278,6 @@
 
 <script>
   import breadcrumbsView from '@/components/breadcrumbsView.vue';
-  // import LoaderView from '@/components/loaderView.vue';
   import store from '../../../store/index.js';
   import Swal from 'sweetalert2';
   import moment from 'moment';
@@ -291,6 +289,7 @@
     data: () => ({
       check_roles: store.getters.user,
       loading : true,
+      loaderData : true,
       date : moment().format('YYYY-MM-DD HH:mm:ss'),
       value: '',
       extensions: [],
@@ -418,9 +417,9 @@
       },
 
       fetchData() {
-        this.loading = true; 
+        this.loaderData = true; 
         setTimeout(() => {
-          this.loading = false; // Hide the loader
+          this.loaderData = false; // Hide the loader
         }, 1000);
       },
 
@@ -437,7 +436,7 @@
         let response     = await axios.get(`${path}`) 
         this.dataBanners = await response.data.data
         this.loading     = await false
-        // await setTimeout(() => (this.$refs.loader.overlay = false), 300);
+
       },
   
       async saveBanner(){
@@ -524,9 +523,9 @@
       },
   
       async editBanner(value){
-  
-        // await this.fetchData();
-  
+
+        await this.fetchData();
+
         this.dialogCreate           = await true;
 
         this.titleBanner            = await 0;

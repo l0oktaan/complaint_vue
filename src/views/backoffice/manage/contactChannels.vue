@@ -1,7 +1,6 @@
 <template>
   <div class="reply-message">
 
-    <!-- <LoaderView ref="loader"/> -->
     <BreadcrumbsView :items="item"/>
 
     <!-- รายการช่องทางการติดต่อ -->
@@ -69,9 +68,9 @@
     <v-dialog v-model="dialogCreate" max-width="500px" persistent>
       <v-card>
         
-        <v-card-title>
-          <span class="text-h5">{{ formTitle }}</span>
-        </v-card-title>
+        <v-toolbar color="#167dc2" class="mb-4" dark>
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+        </v-toolbar>
   
         <v-card-text>
           <v-form ref="formContactChannels" v-model="valid" lazy-validation>
@@ -134,7 +133,6 @@
 
 <script>
   import BreadcrumbsView from '@/components/breadcrumbsView.vue';
-  // import LoaderView from '@/components/loaderView.vue';
   import store from '../../../store/index.js';
   import Swal from 'sweetalert2';
   import moment from 'moment';
