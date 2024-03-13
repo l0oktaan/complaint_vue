@@ -23,7 +23,7 @@
           ></v-divider>
           <v-spacer></v-spacer>
           <v-btn
-              color="primary"
+              color="#213862"
               dark
               class="mb-2"
               @click="dialogCreate = true"
