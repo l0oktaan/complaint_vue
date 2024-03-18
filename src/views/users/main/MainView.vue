@@ -36,14 +36,14 @@
                                                 <span>ข่าวประชาสัมพันธ์</span>
                                                 
                                                 &nbsp;<span><i class="fas fa-calendar-alt"></i> {{getThaiDate(item.start_date)}}</span>
-                                                &nbsp;<span><i class="far fa-eye"></i> 2000</span>
+                                                &nbsp;<span><i class="far fa-eye"></i> {{item.number_preview}}</span>
                                             </v-card-subtitle>
                                             <v-card-text class="px-4 py-0">
                                                 <div class="text-line" v-html="item.announce_content"></div>
                                         
                                             </v-card-text>
                                             <v-card-actions class="box-readmore">
-                                                <v-btn @click="readMoreClickInformation(item.id)" class="text-none" variant="outlined">อ่านต่อ</v-btn>
+                                                <v-btn @click="readMoreClick(item.id)" class="text-none" variant="outlined">อ่านต่อ</v-btn>
                                             </v-card-actions>
                                         </div>
                                     </v-col>
@@ -70,14 +70,14 @@
                                     <v-card-title><div class="text-line">{{ item.announce_title }}</div></v-card-title>
                                     <v-card-subtitle>
                                         <span><i class="fas fa-calendar-alt"></i> {{getThaiDate(item.start_date)}}</span>
-                                        &nbsp;<span><i class="far fa-eye"></i> 2000</span>
+                                        &nbsp;<span><i class="far fa-eye"></i> {{item.number_preview}}</span>
                                     </v-card-subtitle>
                                     <v-card-text class="px-4 py-0">
                                         <div class="text-line" v-html="item.announce_content"></div>
                                 
                                     </v-card-text>
                                     <v-card-actions class="box-readmore">
-                                        <v-btn @click="handleReadMoreClick(item.announce_type ,index)" class="text-none" variant="outlined">อ่านต่อ</v-btn>
+                                        <v-btn @click="readMoreClick(item.id)" class="text-none" variant="outlined">อ่านต่อ</v-btn>
                                     </v-card-actions>
                                 </div>
                                  
@@ -88,6 +88,15 @@
 
             </v-container>
         </div>
+        <v-dialog
+            v-model="dialog"
+            max-width="900"
+            width="auto"
+        >
+
+            <img class="popup-banner" :src="imageUrl">
+
+        </v-dialog>
     </div>
   
 
@@ -100,18 +109,18 @@ import loaderView from '@/components/loaderView.vue'
 export default {
   components: { loaderView },
     data: () => ({
+        dialog: true,
         items: {},
         informationArray: [],
         policyArray: [],
         clickCount: 0,
+        imageUrl: ''
     }),
     mounted(){
+        this.getPopupBanner()
         this.getDataAnnounce()
     },
-    // created(){
-       
-    // },
-   
+
     methods: {
         getThaiDate(value){
         if (value){
@@ -128,10 +137,29 @@ export default {
             return moment(value).format('MMM')
         },
 
+        async getPopupBanner(){
+            let path                = await `/api/user/get/popupBanner`
+            let response            = await axios.get(`${path}`) 
+
+            if(response){
+
+                let path = await `/api/get/user/UrlFilesBanner?filename=${response.data.data[0].file_name}`
+
+                let res = await axios.get(`${path}`)
+
+                this.imageUrl = await res.data
+
+            }
+
+            await setTimeout(() => (this.$refs.loader.overlay = false), 300);
+        },
+
         async getDataAnnounce(){
             let path                = await `/api/user/get/dataAnnounce`
             let response            = await axios.get(`${path}`) 
             this.items              = await response.data.data
+
+            console.log(this.items );
 
             await this.items.forEach(item => {
                 switch (item.announce_type) {
@@ -148,66 +176,20 @@ export default {
         
             await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         },
-        readMoreClickInformation(id){
+        async readMoreClick(id){
 
-            this.$router.push({ name: 'main-detail', params: { id: id },})
+            await axios.post('/api/user/counter', {"id":id});
 
-            // let updatedCount = this.informationArray[index].count + 1;
+            await this.$router.push({ name: 'main-detail', params: { id: id },})
 
-            // console.log(this.informationArray[index].count);
-            console.log(id);
-
-
-            // this.$set(this.informationArray, index, {
-            //     ...this.informationArray[index],
-            //     count: this.informationArray[index].count + 1,
-            // });
             
         }
-        // handleReadMoreClick(type, index) {
-        //     // Increment the click count when the "Read More" button is clicked
-        //     // this.clickCount++;
-           
-
-        //     // this.items.forEach(item => {
-        //         switch (type) {
-        //             case 'ประชาสัมพันธ์':
-        //             const updatedCountInformation = this.informationArray[index].count + 1;
-
-        //             console.log(updatedCountInformation);
-
-        //             // this.$set(this.informationArray, index, {
-        //             //     ...this.informationArray[index],
-        //             //     count: this.informationArray[index].count + 1,
-        //             // });
-
-        //             break;
-        //             case 'ประกาศและระเบียบที่เกี่ยวข้อง':
-        //             const updatedCountPolicy = this.policyArray[index].count + 1;
-        //             console.log(updatedCountPolicy);
-        //             // this.$set(this.policyArray, index, {
-        //             //     ...this.policyArray[index],
-        //             //     count: this.policyArray[index].count + 1,
-        //             // });
-
-        //             break;
-        //             default:
-        //         }
-            
-           
-           
-          
-            
-        //     // Optionally, you can expand the content or perform other actions here
-        // },
+       
     },
   }
 </script>
-<style>
-    /* .box-information:hover, .box-information:focus,
-    .box-policy:hover, .box-policy:focus {
-        box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)!important;
-    } */
+<style scoped>
+  
     .box-information{
         width: 580px;
         height: 230px;
@@ -246,5 +228,14 @@ export default {
     }
     .h-250{
         max-height: 250px;
+    }
+    .text-none{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+    .popup-banner{
+        max-width: 900px;
+        height: auto;
     }
 </style>
