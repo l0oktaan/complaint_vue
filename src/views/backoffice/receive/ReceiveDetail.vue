@@ -291,7 +291,7 @@ import DetailComplain from '@/components/detailComplain.vue';
 
       async getSelectReplyMessage(){
 
-        let path = await `/api/get/replyMessage`
+        let path = await `/api/get/selectReplyMessage`
        
         let response = await axios.get(`${path}`)
 
@@ -302,7 +302,7 @@ import DetailComplain from '@/components/detailComplain.vue';
 
       async getSelectContactChannels(){
 
-        let path = await `/api/get/contactChannels`
+        let path = await `/api/get/selectContactChannels`
 
         let response = await axios.get(`${path}`)
 

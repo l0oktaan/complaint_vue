@@ -2,8 +2,6 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-          <!-- <pre>{{ datas }}</pre> -->
-          
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols>
@@ -28,36 +26,31 @@
           >
             <template v-slot:[`item.topic`]="{ item }">
               <div class="overflow" >{{ item.topic }}</div>
-              </template>
+            </template>
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
-            <!-- <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
-            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template> -->
-              <!-- <template v-slot:[`item.create_date`]="{ item }">
-                {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-              </template> -->
-              <template v-slot:[`item.status_call`]="{ item }">
-                <div class="overflow-160" >
-                  <v-chip
-                  :color="getColor(item.status_call)"
-                  dark
-                  >
-                  {{ getstatus(item.status_call) }}
-                  </v-chip>
-                </div>
-              </template>
-              <template v-slot:[`item.action`]="{ item }">
-               
-                <v-btn
-                  color="#003366"
-                  icon
-                  small
-                  @click="detailComplain(item.id)"
+            <template v-slot:[`item.status_call`]="{ item }">
+              <div class="overflow-160" >
+                <v-chip
+                :color="getColor(item.status_call)"
+                dark
                 >
-                  <i class="f-16 fa-solid fa-magnifying-glass"></i>
-                </v-btn>
-              </template>
-              <template v-slot:[`item.create_by`]="{ item }">{{ item.name }} {{ item.lastname }}</template>
+                {{ getstatus(item.status_call) }}
+                </v-chip>
+              </div>
+            </template>
+            <template v-slot:[`item.action`]="{ item }">
+              
+              <v-btn
+                color="#003366"
+                icon
+                small
+                @click="detailComplain(item.id)"
+              >
+                <i class="f-16 fa-solid fa-magnifying-glass"></i>
+              </v-btn>
+            </template>
+            <template v-slot:[`item.create_by`]="{ item }">{{ item.name }} {{ item.lastname }}</template>
           </v-data-table>
         </v-card>
       </div>
@@ -126,6 +119,7 @@
       detailComplain(id){
         this.$router.push({ name: 'backoffice-complaindetail', params: { id: id },})
       },
+
       getThaiDate(item){
         if (item){
           var d = new Date(item);
@@ -134,13 +128,12 @@
           return "";
         }            
       },
+
       timeFormat:function(d){
         let time =  moment(d).utcOffset("+00:00").format('HH:mm') == '00:00' ? '' : moment(d).utcOffset("+00:00").format('HH:mm') 
-
-          return time;
-
-
+        return time;
       },
+
       getColor (status_call) {
         if (status_call == 0) return '#FFA000'
         else if (status_call == 1) return '#FFA000'
@@ -150,8 +143,8 @@
         else if (status_call == 5) return 'green'
         else return 'green'
       },
-      getstatus (status_call) {
 
+      getstatus (status_call) {
         if (status_call == 0) return 'รอรับเรื่อง'
         else if (status_call == 1) return 'รับเรื่อง'
         else if (status_call == 2) return 'ไม่รับเรื่อง'
@@ -160,9 +153,11 @@
         else if (status_call == 5) return 'เรื่องเสร็จ'
         else return ''
       },
+
       formattedDate(create_date) {
         return moment(create_date).add(543, 'year').format("DD/MM/YYYY, HH:mm:ss");
       },
+
       async getListComplain(){
         try {
 
@@ -180,7 +175,7 @@
             // Handle other errors
           }
         }
-      
+    
       },
     },
   }

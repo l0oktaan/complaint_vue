@@ -398,7 +398,7 @@ export default {
         //   await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         },
         async getRegisterDetail(){
-            let path              = await `/api/get/registerDetail`
+            let path              = await `/api/backoffice/get/registerDetail`
             let response          = await axios.get(`${path}/` + this.data.register_id)
             this.user             = await response.data.data[0]
             this.user.name       =   await response.data.data[0].name + ' ' + response.data.data[0].lastname 

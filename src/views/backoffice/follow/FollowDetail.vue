@@ -1,17 +1,15 @@
 <template>
   <div class="complain-detail"> 
-    <loaderView ref="loader"/>
 
+    <loaderView ref="loader"/>
     <BreadcrumbsView :items="item"/>
+
     <v-card class="mb-3">
       <DetailComplain ref="data" @updateValue="getValue"  />
-    
     </v-card>
 
     <v-expansion-panels v-model="panel" multiple>
-
       <v-expansion-panel>
-
         <v-expansion-panel-header>ขั้นตอนการเเก้ปัญหา</v-expansion-panel-header>
         
         <v-expansion-panel-content>
@@ -32,23 +30,18 @@
                   <div class="overflow" >{{ item.division }}</div>
             </template>
            
-
             <template v-slot:[`item.detail`]="{ item }">
                   <div class="overflow" >{{ item.detail }}</div>
             </template>
            
             <template v-slot:[`item.status_call`]="{ item }">
-              <v-chip
-              :color="getColor(item.status_call)"
-              dark
-              >
-              {{ getstatus(item.status_call) }}
+              <v-chip :color="getColor(item.status_call)" dark>
+                {{ getstatus(item.status_call) }}
               </v-chip>
             </template>
 
             <template   v-slot:[`item.detailComplainStep`]="{ item }"  >
-             <div v-if="item.status_call != 0">
-             
+             <div v-if="item.status_call != 0"> 
               <v-btn color="#003366" small icon @click="DetailComplainStep(item)">
                 <i class="f-16 fa-solid fa-magnifying-glass"></i>
               </v-btn>
@@ -109,7 +102,7 @@
               </v-row>
               <v-row>
                 <v-col cols md="3">
-                  <v-subheader><p class="style-label">ไฟล์เเนบ</p></v-subheader>
+                  <v-subheader><p class="style-label">ไฟล์เเนบ : (เเนบไฟล์ png, jpeg, gif, pdf)</p></v-subheader>
                 </v-col>
                 <v-col cols md="9">
                   <InputFiles  ref="status_files" :file="vComplainStepFiles"/>
@@ -117,7 +110,6 @@
               </v-row>
               <v-row>
                 <v-col cols md="3">
-                  <!-- <v-subheader>สถานะการดำเนินงาน</v-subheader> -->
                   <v-subheader><p class="style-label"><span>*</span>สถานะการดำเนินงาน</p></v-subheader>
                 </v-col>
                 <v-col cols md="9">
@@ -164,6 +156,7 @@
             </v-form>
 
             <div v-else>
+
                 <!--ไม่รับเรื่อง -->
               <div v-if="vComplainStep.status_call === 2">
                 <v-row>
@@ -571,7 +564,7 @@
                       <div v-if="!corruptFile.check_remove" class="d-flex justify-center align-center">
                           <div class="btn-corrupt-edit mr-2" @click="dialogEditCorruptFile(corruptFile)">แก้ไข  <i class="fa-solid fa-pen-to-square"></i></div>
                         
-                        <div class="btn-corrupt-remove" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
+                        <div class="btn-corrupt-remove" color="#ff0000" @click="removeCorrupt(corruptFile)">ลบ <i class="fa-solid fa-trash"></i></div>
                       </div>
                   </v-list-item>
                 </v-list>
@@ -607,7 +600,7 @@
       </v-card>
     </v-dialog>
 
-    <!-- ไฟล์การทุจริต -->
+    <!-- แนบไฟล์การทุจริต -->
     <v-dialog v-if="dialogCorruptFile"
       v-model="dialogCorruptFile"
       persistent
@@ -642,8 +635,9 @@
               </v-skeleton-loader> 
             </div>  
             <div class="mt-4">  
-              <p class="style-label"><span>*</span>ไฟล์เเนบ</p>
+              <p class="style-label"><span>*</span>ไฟล์เเนบ : (เเนบไฟล์ png, jpeg, gif, pdf)</p>
 
+              <!-- โชว์ไฟล์แนบ -->
               <div 
                v-if="!dataCorruptFile.check_remove_file && dataCorruptFile.id && !checkRemoveFile"
                 class="text-left  display-flex align-center"
@@ -663,6 +657,7 @@
 
               </div>
              
+              <!-- อัปโหลดไฟล์แนบ -->
               <div v-else>
                 <v-file-input 
                   v-model="vCorruptFile"
@@ -724,14 +719,15 @@
   </div>
 </template>
 <script>
+
 import axios from "axios";
 import moment  from 'moment-timezone'
 import Swal from 'sweetalert2';
 import store from '../../../store/index.js';
+import InputFiles from '@/components/inputFiles.vue';
 import loaderView from '@/components/loaderView.vue';
 import BreadcrumbsView from '@/components/breadcrumbsView.vue';
 import DetailComplain from '@/components/detailComplain.vue';
-import InputFiles from '@/components/inputFiles.vue';
 
 
 export default {
@@ -835,9 +831,11 @@ export default {
         return true;
       }
     ],
+
     dateValidationRule: [
       v => !!v || 'Date is required',
     ],
+
     selectStatus: [
       { value: 'อยู่ระหว่างดำเนินการ', id: 3 },
       { value: 'สอบถามข้อมูลเพิ่มเติม', id: 4 },
@@ -846,18 +844,18 @@ export default {
     
     
   }),
+
   mounted() {
     this.getComplainStep()
     this.getEndThaiDate()
-
-   
-  
   },
+
   watch: {
     vCorruptDate(){
-        this.getEndThaiDate()
+      this.getEndThaiDate()
     },
   },
+
   computed: {
     formTitleComplain () {
       return this.editComplainStep === -1 ? 'สถานะการดำเนินงานของเจ้าหน้าที่' : 'รายละเอียดสถานะการดำเนินงานของเจ้าหน้าที่'
@@ -876,11 +874,12 @@ export default {
       setTimeout(() => {
         this.loading = false; // Hide the loader
       }, 1000);
-
     },
+
     formattedDate(create_date) {
       return moment(create_date).add(543, 'year').utcOffset("+00:00").format("DD/MM/YYYY");
     },
+
     getColor (status_call) {
       if (status_call == 0) return '#a19d9d'
       else if (status_call == 1) return '#FFA000'
@@ -890,6 +889,7 @@ export default {
       else if (status_call == 5) return 'green'
       else return 'green'
     },
+
     getstatus (status_call) {
       if (status_call == 0) return 'รอรับเรื่อง'
       else if (status_call == 1) return 'รับเรื่อง'
@@ -899,12 +899,14 @@ export default {
       else if (status_call == 5) return 'เรื่องเสร็จ'
       else return ''
     },
+
     getEndThaiDate(){
       if (this.vCorruptDate){
         var d = new Date(this.vCorruptDate);
         this.CorruptNewDate = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
       }
     },
+
     showDetailStatus(v){
       console.log(v);
       if(v.id != 5){
@@ -913,41 +915,41 @@ export default {
         this.showStatusComplainStep = true
       }   
     },
-    showFile(v, urlFiles){
 
+    showFile(v, urlFiles){
       if(v.file_type == 'application/pdf'){
         this.urlPdfFiles(urlFiles, v.file_name)
       }else{
         this.urlFiles(urlFiles, v.file_name)
       }
     },
+
     checkRulesLength(valueLength, maxLength){
       if(valueLength === maxLength){
           Swal.fire(`กรอกได้ไม่เกิน ${maxLength} ตัวอักษร`)
       }
     },
+
     async urlPdfFiles(url,file_name){
       axios({
-          url: `/api/get/pdf/${url}`,
-          params: {"filename":file_name},
-          method: 'GET',
-          responseType: 'blob',
+        url: `/api/get/pdf/${url}`,
+        params: {"filename":file_name},
+        method: 'GET',
+        responseType: 'blob',
       }).then((response) => {
-            var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-            var fileLink = document.createElement('a');
+        var fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+        var fileLink = document.createElement('a');
 
-            fileLink.href = fileURL;
-            fileLink.setAttribute('download', file_name);
-            document.body.appendChild(fileLink);
-
-            window.open(fileLink, "_blank");
-
-          //  fileLink.click();
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', file_name);
+        document.body.appendChild(fileLink);
+        window.open(fileLink, "_blank");
+      //  fileLink.click();
       });
     },
+
     async urlFiles(url,file_name){
 
-     
       let path = await `/api/get/${url}?filename=${file_name}`
       
       let res = await axios.get(`${path}`)
@@ -957,7 +959,6 @@ export default {
       this.overlayImg = await !this.overlayImg 
     },
     
-
     // Complain Step
     async DetailComplainStep(v){
       await this.fetchData();
@@ -969,26 +970,29 @@ export default {
     
 
     },
+
     async backComplainStep(){
       this.dialogStatusComplainStep = await false,
       this.vComplainStep            = await {},
       this.vComplainStepFiles       = await {}
       this.editComplainStep         = await -1
     },
+
     async getComplainStep(){
       let path                = await `/api/backoffice/get/complainStep`
       let response            = await axios.get(`${path}/`+ this.$route.params.id) 
       this.dataComaplinStep   = await response.data.data
       await setTimeout(() => (this.$refs.loader.overlay = false), 300);
     },
+
     async getComplainStepFiles(v){
       let path                = await `/api/backoffice/get/ComplainStepFiles`
       let response            = await axios.get(`${path}/`+ v.id)
       this.vComplainStepFiles = await response.data.data
     },
+
     async saveStatusComplainStep(){
       if(this.$refs.form.validate()){
-     
         try {
           let fd = await {
             "complain_id"       : this.dataComplain.id,
@@ -1004,7 +1008,6 @@ export default {
             "modified_by"       : this.check_roles.id,
           }
 
-          
           let path        = await `/api/backoffice/create/complainStep`
 
           let response    = await axios.post(`${path}`, fd)
@@ -1105,7 +1108,6 @@ export default {
       this.dialogStatusComplainStep =  false
       this.editComplainStep         = -1
       this.vComplainStep            = {}
-      // this.$refs.form.reset()
       this.$refs.form.resetValidation()
     },
 
@@ -1115,7 +1117,7 @@ export default {
 
       let fd_corrupt = await {
         "admin_id"          : this.check_roles.id,
-        "complain_step_id"  : this.complainStepId,
+        "complaiปn_step_id"  : this.complainStepId,
       }
 
 
@@ -1254,43 +1256,45 @@ export default {
         try {
 
 
-          const formData = await new FormData(); 
+          // const formData = await new FormData(); 
 
-          let fileName = await ''
+          // let fileName = await ''
 
-          if(this.vCorruptFile !== null){
+          // if(this.vCorruptFile !== null){
 
-            await formData.append('id', this.corruptFileId);
+          //   await formData.append('id', this.corruptFileId);
 
-            await formData.append('types', 'Corrupt');
+          //   await formData.append('types', 'Corrupt');
 
-            await formData.append('files', this.vCorruptFile);
+          //   await formData.append('files', this.vCorruptFile);
             
-            const arrFile = await this.vCorruptFile.type.split("/")
+          //   const arrFile = await this.vCorruptFile.type.split("/")
 
-            if(this.vCorruptFile.type === 'image/jpeg' || this.vCorruptFile.type === 'image/jpg' || this.vCorruptFile.type === 'image/png'){
+          //   if(this.vCorruptFile.type === 'image/jpeg' || this.vCorruptFile.type === 'image/jpg' || this.vCorruptFile.type === 'image/png'){
 
-              fileName = await 'imgCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+          //     fileName = await 'imgCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
 
-            }else if(this.vCorruptFile.type === 'application/pdf'){
+          //   }else if(this.vCorruptFile.type === 'application/pdf'){
 
-              fileName = await 'pdfCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
-            }
+          //     fileName = await 'pdfCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+          //   }
 
-          }
+          // }
 
           let fd_corrupt_file = await {
             "id"                  : this.corruptFileId,
             "corrupt_id"          : this.corruptId,
             "admin_id"            : this.check_roles.id,
             "reference_code"      : this.vCorruptReferenceCode,
-            "file_original"       : this.vCorruptFile !== null ? this.vCorruptFile.name : this.dataCorruptFile.file_original ,
-            "file_name"           : this.vCorruptFile !== null ? fileName : this.dataCorruptFile.file_name,
+            "file_original"       : this.vCorruptFile !== null ? this.vCorruptFile.name : this.dataCorruptFile.file_original,
+            "file_name"           : this.vCorruptFile !== null ? null : this.dataCorruptFile.file_name,
             "file_type"           : this.vCorruptFile !== null ? this.vCorruptFile.type : this.dataCorruptFile.file_type,
             "check_remove"        : false,
-            "check_remove_file"   : false,
+            // "check_remove_file"   : this.vCorruptFile !== null ? true : false,
   
           }
+
+          console.log(fd_corrupt_file);
         
           
           let path_api = null
@@ -1301,20 +1305,57 @@ export default {
           }
           
   
-          await axios.post(`${path_api}`, fd_corrupt_file )
+          let response = await axios.post(`${path_api}`, fd_corrupt_file )
 
-          await this.getCorruptFiles();
+          
+          if(response && this.vCorruptFile !== null){
 
-          if(this.vCorruptFile){
+            // อัพโหลดไฟล์ to server
+
+            const formData = await new FormData(); 
+
+            // let fileName = await ''
+
+            // if(this.vCorruptFile !== null){
+
+              await formData.append('id', response.data.corrupt_file_id);
+
+              await formData.append('types', 'Corrupt');
+
+              await formData.append('files', this.vCorruptFile);
+              
+              await formData.append('file_name', response.data.file_name);
+
+              // const arrFile = await this.vCorruptFile.type.split("/")
+
+              // if(this.vCorruptFile.type === 'image/jpeg' || this.vCorruptFile.type === 'image/jpg' || this.vCorruptFile.type === 'image/png'){
+
+              //   fileName = await 'imgCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+
+              // }else if(this.vCorruptFile.type === 'application/pdf'){
+
+              //   fileName = await 'pdfCorrupt' + this.corruptFileId + '_1' + '.' + arrFile[1] 
+              // }
+
+            // }
+
+
             await axios.post('/api/uploadsFile', formData)
-
           }
+
+          
+
+          // if(this.vCorruptFile){
+          //   await axios.post('/api/uploadsFile', formData)
+
+          // }
 
           await Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ',
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
           }).then( function(){});
+          await this.getCorruptFiles();
           await this.closeCorruptFile();
         
 
@@ -1355,7 +1396,6 @@ export default {
                   const payload = {
                       id : v.id,
                       admin_id : this.check_roles.id,
-                      check_remove_file : true,
                   }
 
                   let path =  await `/api/update/deleteCorruptFile`
@@ -1387,6 +1427,7 @@ export default {
       this.dataRegister = await v.user
     },
     closeCorruptFile(){
+
       this.dialogCorruptFile        = false
       this.editCorruptFile          = -1
       this.dataCorruptFile          = {}
@@ -1435,10 +1476,10 @@ export default {
   cursor: pointer;
 }
 .btn-corrupt-remove{
-  border: 1px solid #167dc2;
+  border: 1px solid #ff0000;
   padding: 4px 12px;
   border-radius: 30px;
-  background: #167dc2!important;
+  background: #ff0000!important;
   color: white!important;
   cursor: pointer;
 }
