@@ -85,6 +85,7 @@
         </v-toolbar>
 
         <v-card-text>
+
           <v-overlay v-if="loaderData"
               :loading="loaderData"
               class="align-center justify-center"
@@ -243,7 +244,7 @@
             </v-row>
           </v-form>
           
-          <v-card-actions v-if="!loaderData"  class="px-0 py-0 mt-4">
+          <v-card-actions class="px-0 py-0 mt-4">
             <v-spacer></v-spacer>
             <v-btn
               class="btn btn-submit"
@@ -289,7 +290,7 @@
     data: () => ({
       check_roles: store.getters.user,
       loading : true,
-      loaderData : true,
+      loaderData : false,
       date : moment().format('YYYY-MM-DD HH:mm:ss'),
       value: '',
       extensions: [],

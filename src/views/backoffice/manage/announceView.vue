@@ -86,6 +86,7 @@
         </v-toolbar>
 
         <v-card-text>
+
           <v-overlay v-if="loaderData"
               :loading="loaderData"
               class="align-center justify-center"
@@ -96,7 +97,8 @@
               size="64"
             ></v-progress-circular>
           </v-overlay>
-          <div>
+
+          
             <v-form ref="formAnnounce" v-model="valid" lazy-validation>
               <p class="style-label mt-2"><span>*</span>ชื่อเรื่องประกาศ</p>
               <v-text-field
@@ -280,7 +282,7 @@
               <v-tiptap v-model="dataDailogAnnounce.announce_content" :extensions="extensions"/>
           
             </v-form>
-            <v-card-actions v-if="!loading"  class="px-0 py-0 mt-4">
+            <v-card-actions  class="px-0 py-0 mt-4">
               <v-spacer></v-spacer>
               <v-btn
                 class="btn btn-submit"
@@ -297,7 +299,7 @@
                 ยกเลิก
               </v-btn>
             </v-card-actions>
-          </div>
+
         </v-card-text> 
       </v-card>
     </v-dialog>
@@ -332,7 +334,7 @@
     data: () => ({
       check_roles: store.getters.user,
       loading : true,
-      loaderData : true,
+      loaderData : false,
       date : moment().format('YYYY-MM-DD HH:mm:ss'),
       value: '',
       extensions: [],
