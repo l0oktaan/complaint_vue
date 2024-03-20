@@ -41,6 +41,7 @@ import ManageView from '../views/backoffice/manage/manageView.vue'
 import ReplyMessage from '../views/backoffice/manage/replyMessage.vue'
 import ContactChannels from '../views/backoffice/manage/contactChannels.vue'
 import AnnounceView from '../views/backoffice/manage/announceView.vue'
+import BannersView from '../views/backoffice/manage/bannersView.vue'
 
 
 
@@ -228,6 +229,13 @@ const routes = [
         path: '/backoffice/manage/announceView',
         name: 'announce-view',
         component: AnnounceView,
+        
+      },
+
+      {
+        path: '/backoffice/manage/bannersView',
+        name: 'banners-view',
+        component: BannersView,
         
       },
       

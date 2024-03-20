@@ -346,14 +346,17 @@
 
                 this.selectDistrict = await [];
                 this.selectSubDistrict = await [];
+
               
                 await response.data.data.forEach(async item => {
-                    await this.selectProvince.push({'id':item.id, 'value':item.name_th})
+                    await this.selectProvince.push({'id':item.province_id, 'value':item.name_th})
                 })
             },
-            async getDistricts(id){
+            async getDistricts(province_id){
                 let path = await `/api/get/districts`
-                let response = await axios.get(`${path}/`+id)
+                let response = await axios.get(`${path}/`+province_id)
+
+
 
                 if(this.selectDistrict.length !== 0){
                     this.selectDistrict = await []
@@ -361,15 +364,16 @@
                     this.item.postcode = await ''
                 }
 
+
                 await response.data.data.forEach(async item => {
 
-                    await this.selectDistrict.push({'id':item.id, 'value':item.name_th})
+                    await this.selectDistrict.push({'id':item.district_id, 'value':item.name_th})
 
                 })
             },
-            async getSubDistricts(id){
+            async getSubDistricts(district_id){
                 let path = await `/api/get/subdistricts`
-                let response = await axios.get(`${path}/`+id)
+                let response = await axios.get(`${path}/`+district_id)
 
                 if(this.selectSubDistrict.length !== 0){
                     this.selectSubDistrict = await []
@@ -378,7 +382,7 @@
            
                 await response.data.data.forEach(async item => {
 
-                    await this.selectSubDistrict.push({'id':item.id, 'value':item.name_th, 'postcode': item.postcode})
+                    await this.selectSubDistrict.push({'id':item.subdistrict_id, 'value':item.name_th, 'postcode': item.postcode})
 
                 })
 

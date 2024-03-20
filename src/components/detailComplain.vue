@@ -391,6 +391,8 @@ export default {
             this.data.start_date  = await moment(response.data.data[0].start_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
             this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
             this.files            = await response.data.data_files
+
+          
             await this.getRegisterDetail()
             this.updateValue()
 
@@ -398,10 +400,12 @@ export default {
         //   await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         },
         async getRegisterDetail(){
-            let path              = await `/api/backoffice/get/registerDetail`
-            let response          = await axios.get(`${path}/` + this.data.register_id)
-            this.user             = await response.data.data[0]
-            this.user.name       =   await response.data.data[0].name + ' ' + response.data.data[0].lastname 
+            let path                =   await `/api/backoffice/get/registerDetail`
+            let response            =   await axios.get(`${path}/` + this.data.register_id)
+            this.user               =   await response.data.data[0]
+            this.user.name          =   await response.data.data[0].name + ' ' + response.data.data[0].lastname 
+            this.user.address       =   await response.data.data[0].address + ' ' + response.data.data[0].subdistrict_name + ' ' + response.data.data[0].district_name + ' ' + response.data.data[0].province_name + ' ' + response.data.data[0].postcode
+            console.log( this.user);
            
         },
         async urlPdfFiles(url,file_name){
