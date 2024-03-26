@@ -2,6 +2,7 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
+          <pre>{{ check_roles }}</pre>
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols="12" sm="6">
@@ -155,9 +156,13 @@
       async getListComplain(){
         try {
           let path      =   await `/api/user/get/listFollow`
-          let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          // let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
           this.datas    =   await response.data.data
+
           this.loading  =   await false
+
+          console.log(this.datas)
         } catch (error) {
           if (error.response.status === 401) {
             // Redirect to the login page
