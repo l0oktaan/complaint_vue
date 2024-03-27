@@ -497,10 +497,21 @@
       },
   
       async getAnnounce(){
-        let path            = await `/api/backoffice/get/announce`
-        let response        = await axios.get(`${path}`) 
-        this.dataAnnounces  = await response.data.data
-        this.loading        = await false
+        try {
+          let path            = await `/api/backoffice/get/announce`
+          let response        = await axios.get(`${path}`) 
+          this.dataAnnounces  = await response.data.data
+          this.loading        = await false
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getAnnounce');
+            // Handle other errors
+          }
+        }
+  
         // await setTimeout(() => (this.$refs.loader.overlay = false), 300);
       },
 
@@ -588,7 +599,7 @@
 
 
           } catch (error) {
-          console.log('saveAnnounce' + error);
+            console.log('saveAnnounce' + error);
           }
 
         }

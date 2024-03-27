@@ -2,7 +2,6 @@
     <div class="follow-view">
       <div class="style-page">
         <v-card class="style-card">
-          <pre>{{ check_roles }}</pre>
           <v-card-title>เเสดงรายการปัญหา</v-card-title>
           <v-row>
             <v-col cols="12" sm="6">
@@ -31,12 +30,7 @@
             </template>
             <template v-slot:[`item.start_date`]="{ item }">{{getThaiDate(item.start_date)}}</template>
             <template v-slot:[`item.end_date`]="{ item }">{{getThaiDate(item.end_date)}}</template>
-            <!-- <template v-slot:[`item.start_time`]="{ item }">{{timeFormat(item.start_date)}}</template>
-            <template v-slot:[`item.end_time`]="{ item }">{{timeFormat(item.end_date)}}</template> -->
-            <!-- <template v-slot:[`item.create_date`]="{ item }">
-              
-              {{ formattedDate(item.create_date) == 'Invalid date' ? '' : formattedDate(item.create_date) }}
-            </template> -->
+           
             <template v-slot:[`item.status_call`]="{ item }">
                 <v-chip
                 :color="getColor(item.status_call)"
@@ -155,11 +149,11 @@
       },
       async getListComplain(){
         try {
+          
           let path      =   await `/api/user/get/listFollow`
-          // let response  =   await axios.get(`${path}/`+ this.check_roles.id)
-          let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
+          let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
           this.datas    =   await response.data.data
-
           this.loading  =   await false
 
           console.log(this.datas)

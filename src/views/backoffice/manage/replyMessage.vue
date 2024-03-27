@@ -223,10 +223,21 @@
       },
 
       async getReplyMessage(){
-        let path                = await `/api/backoffice/get/replyMessage`
-        let response            = await axios.get(`${path}`) 
-        this.dataReplyMessage   = await response.data.data
-        this.loading            = await false
+        try {
+          let path                = await `/api/backoffice/get/replyMessage`
+          let response            = await axios.get(`${path}`) 
+          this.dataReplyMessage   = await response.data.data
+          this.loading            = await false
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getReplyMessage');
+            // Handle other errors
+          }
+        }
+       
       },
 
       async editReplyMessage(value){

@@ -433,10 +433,21 @@
       },
 
       async getBanner(){
-        let path         = await `/api/backoffice/get/banner`
-        let response     = await axios.get(`${path}`) 
-        this.dataBanners = await response.data.data
-        this.loading     = await false
+        try {
+          let path         = await `/api/backoffice/get/banner`
+          let response     = await axios.get(`${path}`) 
+          this.dataBanners = await response.data.data
+          this.loading     = await false
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getBanner');
+            // Handle other errors
+          }
+        }
+      
 
       },
   
@@ -517,7 +528,14 @@
   
   
           } catch (error) {
-          console.log('saveBanner' + error);
+
+            if (error.response.status === 401) {
+            // Redirect to the login page
+              this.$router.push('/backoffice/login'); // Replace with your login route
+            } else {
+              console.log('saveBanner' + error);
+              // Handle other errors
+            }
           }
   
         }

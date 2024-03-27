@@ -219,10 +219,21 @@
       },
 
       async getContactChannels(){
-        let path                  = await `/api/backoffice/get/contactChannels`
-        let response              = await axios.get(`${path}`) 
-        this.dataContactChannels  = await response.data.data
-        this.loading              = await false
+        try {
+          let path                  = await `/api/backoffice/get/contactChannels`
+          let response              = await axios.get(`${path}`) 
+          this.dataContactChannels  = await response.data.data
+          this.loading              = await false
+
+        } catch (error) {
+          if (error.response.status === 401) {
+            // Redirect to the login page
+            this.$router.push('/backoffice/login'); // Replace with your login route
+          } else {
+            console.log('getContactChannels');
+            // Handle other errors
+          }
+        }
 
         // await setTimeout(() => (this.$refs.loader.overlay = false), 300);
         
