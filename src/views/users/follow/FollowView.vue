@@ -151,7 +151,8 @@
         try {
           
           let path      =   await `/api/user/get/listFollow`
-          let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          let response  =   await axios.get(`${path}/`)
+          // let response  =   await axios.get(`${path}/`+ this.check_roles.id)
           // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
           this.datas    =   await response.data.data
           this.loading  =   await false
