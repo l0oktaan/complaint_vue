@@ -152,7 +152,7 @@
           
           let path      =   await `/api/user/get/listFollow`
           // let response  =   await axios.get(`${path}/`)
-          let response  =   await axios.get(`${path}/`+ this.check_roles.id)
+          let response  =   await axios.get(`${path}`)
           // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
           // let path = await `/api/backoffice/get/listFollow`
           // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
