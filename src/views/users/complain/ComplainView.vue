@@ -33,6 +33,7 @@ export default {
     async insertComplain(){
       if(this.$refs.formComplain.validate()){
         try {
+          this.isActive =  await true
           this.employee   = await this.$refs.employee
           let end_date    = await `${moment(this.employee.end_date).format('YYYY-MM-DD')}`
           let end_time    = await this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '00:00:00' 
@@ -110,7 +111,7 @@ export default {
               text: 'ระบบได้ทำการบันทึกข้อมูลของคุณแล้ว'
           }).then( function(){
           });
-          this.isActive =  await true
+          this.isActive =  await false
           if (this.$route.path.includes("cgd")){
               await this.$router.push({name:"cgd_follow"});
 
@@ -120,6 +121,7 @@ export default {
           }
           
         } catch (error) {
+          this.isActive =  await false
           console.log(error);
         }
       }
