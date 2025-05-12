@@ -6,10 +6,12 @@
                     <div class="h2">ร้องเรียน เจ้าหน้าที่ / หน่วยงาน </div>
                 </v-col>
             </v-row>
-           
+           <v-row>
+            <v-col><v-checkbox label="ไม่ระบุชื่อ - นามสกุล" v-model="notSpecName" v-if="isCgd"></v-checkbox></v-col>
+           </v-row>
             <v-row>
                 <v-col cols="12" sm="6">
-                <v-checkbox label="ไม่ระบุชื่อ" v-model="notSpecName" v-if="isCgd"></v-checkbox>
+                
                 <p class="style-label"><span>*</span>ชื่อ : </p>
                 <v-text-field
                     ref="nameField"
@@ -28,15 +30,15 @@
                 
                 </v-col>
                 <v-col cols="12" sm="6">
-                    <v-checkbox label="ไม่ระบุนามสกุล" v-model="notSpecLastName" v-if="isCgd"></v-checkbox>
+                    
                 <p class="style-label"><span>*</span>นามสกุล : </p>
                     <v-text-field
                         ref="lastnameField"
                         v-model="lastname"
                         :rules="lastnameRules"
                         label="นามสกุล"
-                        :required="!notSpecLastName"
-                        :disabled="notSpecLastName && isCgd"
+                        :required="!notSpecName"
+                        :disabled="notSpecName && isCgd"
                         dense
                         outlined
                         single-line
@@ -374,8 +376,8 @@
 import Swal from 'sweetalert2'
 export default {
     data: () => ({
-        notSpecName: true,
-        notSpecLastName: true,
+        notSpecName: false,
+        
         data:{},
         name: '',
         lastname: '',
@@ -470,10 +472,10 @@ export default {
     mounted(){
         this.getEndThaiDate()
         if (this.$route.path.includes("cgd")){
-            this.notSpecName = true
-            this.notSpecLastName = true
-            this.name = 'ไม่ระบุชื่อ'
-            this.lastname = 'ไม่ระบุนามสกุล'
+            // this.notSpecName = true
+            // this.notSpecLastName = true
+            // this.name = 'ไม่ระบุชื่อ'
+            // this.lastname = 'ไม่ระบุนามสกุล'
         }
     },
     computed: {
@@ -508,14 +510,16 @@ export default {
             if (val){
                 this.$refs.nameField.resetValidation()
                 this.name = 'ไม่ระบุชื่อ'
-            }
-        },
-        notSpecLastName(val){
-            if (val){
                 this.$refs.lastnameField.resetValidation()
                 this.lastname = 'ไม่ระบุนามสกุล'
+            }else{
+                this.$refs.nameField.resetValidation()
+                this.name = ''
+                this.$refs.lastnameField.resetValidation()
+                this.lastname = ''
             }
         },
+        
     },
 
     methods:{
