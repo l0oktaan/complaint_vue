@@ -13,7 +13,7 @@
                 รายละเอียดปัญหา
                 <i class="fa-solid fa-comment"></i>
             </v-tab>
-            <v-tab href="#tab-2">
+            <v-tab href="#tab-2" v-if="data.complain_type == 'user'">
                 รายละเอียดผู้เเจ้งปัญหา
                 <i class="fa-solid fa-user"></i>
             </v-tab>
@@ -259,7 +259,7 @@
                     </v-card-text>
                 </v-card>
             </v-tab-item>
-            <v-tab-item :value="'tab-2'">
+            <v-tab-item :value="'tab-2'" v-if="data.complain_type == 'user'">
                 <v-card flat>
                     <v-card-text>
                         <v-container fluid>
@@ -386,7 +386,7 @@ export default {
             let response          =  await axios.get(`${path}`,{
                 params: {
                     id: this.$route.params.id,
-                    userType: this.$route.path.includes('cgd') ? 'cgd' : this.$route.path.includes('backoffice') ?'admin' : 'user',
+                    userType: this.$route.path.includes('cgd') ? 'cgd' : this.$route.path.includes('backoffice') ?'admin' : 'user'
                 }
             })
             this.data             = await response.data.data[0]
@@ -398,8 +398,10 @@ export default {
             this.data.end_date    = await moment(response.data.data[0].end_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
             this.files            = await response.data.data_files
 
-          
-            await this.getRegisterDetail()
+            if (this.data.complain_type == 'user'){
+                
+                await this.getRegisterDetail()
+            }
             this.updateValue()
 
 
@@ -457,5 +459,8 @@ export default {
 <style>
     .theme--light.v-text-field--solo > .v-input__control > .v-input__slot{
         background: #ebe9e9!important;
+    }
+    .btn-files{
+        cursor: pointer;
     }
 </style>

@@ -9,26 +9,34 @@
            
             <v-row>
                 <v-col cols="12" sm="6">
+                <v-checkbox label="ไม่ระบุชื่อ" v-model="notSpecName" v-if="isCgd"></v-checkbox>
                 <p class="style-label"><span>*</span>ชื่อ : </p>
                 <v-text-field
+                    ref="nameField"
                     v-model="name"
                     :rules="nameRules"
                     label="กรอกชื่อ"
-                    required
+                    :required="!notSpecName"
+                    :disabled="notSpecName && isCgd"
                     dense
                     outlined
                     single-line
                     :maxlength="maxLengthFifty"
                     @input="checkRulesLength(name.length, maxLengthFifty)"
+                    
                 ></v-text-field>
+                
                 </v-col>
                 <v-col cols="12" sm="6">
+                    <v-checkbox label="ไม่ระบุนามสกุล" v-model="notSpecLastName" v-if="isCgd"></v-checkbox>
                 <p class="style-label"><span>*</span>นามสกุล : </p>
                     <v-text-field
+                        ref="lastnameField"
                         v-model="lastname"
                         :rules="lastnameRules"
                         label="นามสกุล"
-                        required
+                        :required="!notSpecLastName"
+                        :disabled="notSpecLastName && isCgd"
                         dense
                         outlined
                         single-line
@@ -362,9 +370,12 @@
 </template>
 
 <script>
+// import { is } from 'core-js/core/object';
 import Swal from 'sweetalert2'
 export default {
     data: () => ({
+        notSpecName: true,
+        notSpecLastName: true,
         data:{},
         name: '',
         lastname: '',
@@ -456,11 +467,28 @@ export default {
         end_date: new Date().toISOString().substr(0, 10),
         
       }),
-
-      mounted(){
+    mounted(){
         this.getEndThaiDate()
+        if (this.$route.path.includes("cgd")){
+            this.notSpecName = true
+            this.notSpecLastName = true
+            this.name = 'ไม่ระบุชื่อ'
+            this.lastname = 'ไม่ระบุนามสกุล'
+        }
     },
-
+    computed: {
+        // filteredItems() {
+        //     return this.datas.filter(item => {
+        //         const status_call = this.getstatus(item.status_call)
+        //         return (
+        //             (this.$refs.filter_status.selectedStatus === 'ทั้งหมด' || status_call === this.$refs.filter_status.selectedStatus) 
+        //         );  
+        //     });
+        // },
+        isCgd(){
+            return this.$route.path.includes("cgd") ? true : false
+        },
+    },
     watch: {
         start_date(v){
             console.log(v);
@@ -475,10 +503,23 @@ export default {
         },
         files(val) {
             this.previousFiles = val
-        }  
+        },
+        notSpecName(val){
+            if (val){
+                this.$refs.nameField.resetValidation()
+                this.name = 'ไม่ระบุชื่อ'
+            }
+        },
+        notSpecLastName(val){
+            if (val){
+                this.$refs.lastnameField.resetValidation()
+                this.lastname = 'ไม่ระบุนามสกุล'
+            }
+        },
     },
 
     methods:{
+        
         getEndThaiDate(){
             if (this.start_date || this.end_date){
                 var d_start = new Date(this.start_date);
