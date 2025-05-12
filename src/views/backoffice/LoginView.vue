@@ -63,6 +63,8 @@
 <script>
 import Swal from 'sweetalert2'
 import store from '../../store/index.js';
+// router.js
+// import router from '@/router'
 export default {
     data: () => ({
       valid: true,
@@ -81,15 +83,25 @@ export default {
 
     methods: {
         async login () {
+            let isCgd = await this.$route.path.includes("cgd") ? true : false
+            
             if( this.$refs.form.validate()){
                 try { 
                     this.disabled =  await true
                     await store.dispatch('login',{
                         username: this.username,
-                        password: this.password
+                        password: this.password,
+                        userType: isCgd ? 'cgd' : 'admin'
                     })
+                        
+                    if (isCgd){
+                        await this.$router.push({name:"cgd_follow"});
 
-                    await this.$router.push({name:"receive"});
+                        // await this.$router.push({name:"receive"});
+                    }else{
+                        await this.$router.push({name:"receive"});
+                    }
+                    
                 
                     await Swal.fire({
                         position: 'center',

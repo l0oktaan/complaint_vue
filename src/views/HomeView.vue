@@ -26,10 +26,10 @@
 
       <v-list class="mt-5" dense nav>  
         <router-link 
-          v-if="check_roles.roles === 'user'"
+          v-if="!$route.path.includes('backoffice') && (check_roles.roles.includes('user') || check_roles.roles.includes('cgd'))"
           class="d-flex align-center menu-link"
           active-class="activemenu"
-          to="/user/follow"
+          :to="$route.path.includes('cgd') ? {path : '/cgd/follow'} : {path : '/user/follow'}"
         >
           <v-list-item link>
             <i class="fa-solid fa-eye menu-icon"></i>
@@ -42,10 +42,10 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'user'"
+          v-if="!$route.path.includes('backoffice') && (check_roles.roles.includes('user') || check_roles.roles.includes('cgd'))"
           class="d-flex align-center menu-link"
           active-class="activemenu"
-          to="/user/report"
+          :to="$route.path.includes('cgd') ? {path :'/cgd/report'} : {path : '/user/report'}"
         >
           <v-list-item link>
             <i class="fa-solid fa-comment menu-icon"></i>
@@ -58,7 +58,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin' || check_roles.roles === 'general'"
+          v-if="$route.path.includes('backoffice') && (check_roles.roles.includes('admin') || check_roles.roles.includes('general'))"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/receive"
@@ -74,7 +74,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin' || check_roles.roles === 'general'"
+          v-if="$route.path.includes('backoffice') && (check_roles.roles.includes('admin') || check_roles.roles.includes('general'))"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/follow"
@@ -90,7 +90,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin'"
+          v-if="$route.path.includes('backoffice') && check_roles.roles.includes('admin')"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/personnel"
@@ -106,7 +106,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin'"
+          v-if="$route.path.includes('backoffice') && check_roles.roles.includes('admin')"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/register"
@@ -122,7 +122,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin' && check_roles.id === 1"
+          v-if="$route.path.includes('backoffice') && check_roles.roles.includes('admin') && check_roles.id === 1"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/report"
@@ -138,7 +138,7 @@
         </router-link>
 
         <router-link 
-          v-if="check_roles.roles === 'admin' && check_roles.id === 1"
+          v-if="$route.path.includes('backoffice') && check_roles.roles.includes('admin') && check_roles.id === 1"
           class="d-flex align-center menu-link"
           active-class="activemenu"
           to="/backoffice/manage"
@@ -168,7 +168,7 @@
           rounded
           offset-y
         > -->
-        <span class="mr-2 color-primary">{{check_roles.name}} {{ check_roles.lastname }}</span>
+        <span class="mr-2 color-primary">{{!$route.path.includes('user')? check_roles.username :check_roles.name + ' ' + check_roles.lastname }}</span>
         
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -197,7 +197,7 @@
               </v-list-item-title>
             </v-list-item> -->
 
-            <v-list-item >
+            <v-list-item v-if="check_roles.roles == 'user'">
               <v-list-item-title>
                 <v-btn depressed rounded text @click="editProfile"> โปรไฟล์ </v-btn>
                 <v-divider  class="my-3"></v-divider> 
@@ -227,6 +227,23 @@
                   @click="opensumone()"
                 >
                   เปลี่ยนรหัสผ่าน
+                </v-btn>
+                <v-divider class="my-3"></v-divider>
+              
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="check_roles.roles.includes('admin') && $route.path.includes('cgd')">
+              <v-list-item-title>
+                <!-- <v-btn depressed rounded text @click="editProfile"> แก้ไขโปรไฟล์ </v-btn>
+                <v-divider v-if="check_roles.roles == 'user'" class="my-3"></v-divider>  -->
+                <v-btn
+                  
+                  depressed
+                  rounded
+                  text
+                  @click="$router.push('/backoffice/receive')"
+                >
+                  เมนูผู้ดูแลระบบ
                 </v-btn>
                 <v-divider class="my-3"></v-divider>
               
@@ -309,12 +326,21 @@ import store from '../store/index.js';
       },
       async logout() {
           await this.$store.dispatch("logout");
-          if (this.check_roles.roles === "user") {
+          if (this.$route.path.includes("cgd")){
+              await this.$router.push({name:"cgd_login"});              
+          }else if (this.$route.path.includes("user")){
               await this.$router.push("/user/login");
-          }
-          else {
+          }else if (this.$route.path.includes("backoffice")){
               await this.$router.push("/backoffice/login");
           }
+
+          // if (this.check_roles.roles === "user") {
+          //     await this.$router.push("/user/login");
+          // }else if (){
+
+          // }else {
+          //     await this.$router.push("/backoffice/login");
+          // }
       }
     },
   

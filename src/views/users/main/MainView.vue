@@ -88,7 +88,7 @@
 
             </v-container>
         </div>
-        <v-dialog
+        <!-- <v-dialog
             v-model="dialog"
             max-width="900"
             width="auto"
@@ -96,7 +96,7 @@
 
             <img class="popup-banner" :src="imageUrl">
 
-        </v-dialog>
+        </v-dialog> -->
     </div>
   
 

@@ -38,6 +38,7 @@ export default {
           let end_time    = await this.employee.complain_end_time !== null ? `${this.employee.complain_end_time}` : '00:00:00' 
           let start_time  = await this.employee.complain_start_time !== null ? `${this.employee.complain_start_time}` : '00:00:00'  
           let fd          = await {
+            "complain_type"    : this.check_roles.roles.includes('cgd') ? 'cgd' : 'user',
             "name"              : this.employee.name,
             "lastname"          : this.employee.lastname,
             "register_id"       : this.check_roles.id,
@@ -87,6 +88,7 @@ export default {
               }
 
               let fd_upload = await {
+                "complain_type" : this.check_roles.roles.includes('cgd') ? 'cgd' : 'user',
                 "register_id"   : this.check_roles.id,
                 "complain_id"   : complain_id,
                 "file_original" : file.name,
@@ -109,7 +111,14 @@ export default {
           }).then( function(){
           });
           this.isActive =  await true
-          await this.$router.push({name:'complain-follow'})
+          if (this.$route.path.includes("cgd")){
+              await this.$router.push({name:"cgd_follow"});
+
+              // await this.$router.push({name:"receive"});
+          }else{
+              await this.$router.push({name:'complain-follow'})
+          }
+          
         } catch (error) {
           console.log(error);
         }

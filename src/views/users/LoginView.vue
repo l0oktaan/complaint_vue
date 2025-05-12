@@ -164,8 +164,8 @@ export default {
                     let path        = await `/api/user/checkLogin`
                     let response    =  await axios.post(path,{
                         email: this.email,
-                        password: this.password,
-                     
+                        password: this.password
+                        
                     })
                     console.log(response);
 
@@ -176,7 +176,8 @@ export default {
 
                         await store.dispatch('userLogin',{
                             email: this.email,
-                            password: this.password
+                            password: this.password,
+                            userType : 'user'
                         })
 
 

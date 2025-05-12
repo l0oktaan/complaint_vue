@@ -159,6 +159,7 @@
       },
 
       async getListComplain(){
+        
         try {
 
           let path = await `/api/backoffice/get/listFollow`
@@ -168,6 +169,7 @@
 
         } catch (error) {
           if (error.response.status === 401) {
+            
             // Redirect to the login page
             this.$router.push('/backoffice/login'); // Replace with your login route
           } else {

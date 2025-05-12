@@ -18,6 +18,11 @@ import ForgotPasswordView from '../views/users/ForgotPassword.vue'
 import ResetPasswordView from '../views/users/ResetPassword.vue'
 
 
+// CGD
+// import CgdView from '../views/CgdView.vue'
+import CgdFollow from '../views/users/follow/FollowView.vue'
+import CgdFollowDetail from '../views/users/follow/FollowDetail.vue'
+import CgdComplain from '../views/users/complain/ComplainView.vue'
 
 
 // backoffice
@@ -108,6 +113,8 @@ const routes = [
 
     
   },
+
+  
 
   {
     path: '/backoffice/login',
@@ -298,6 +305,51 @@ const routes = [
     
     ]
 
+  },
+  {
+    path: '/cgd',    
+    component: HomeUserView,
+    beforeEnter (to, from, next) {
+      store.dispatch('checkLogin')
+      if(store.state.user && store.state.user.roles.includes('cgd')){
+        next()      
+      }else{
+        // console.log('==========');
+        // next('/user/login')
+        next({ name: 'cgd_login' })
+      }
+    },
+    children: [
+      {
+        path: '',
+        redirect : '/cgd/follow'
+      },
+      {
+        path: 'follow',
+        name: 'cgd_follow',
+        component: CgdFollow,
+        
+      },
+      {
+        path: 'follow/:id',
+        name: 'cgd_follow_detail',
+        component: CgdFollowDetail,
+        
+      },
+      {
+        path: 'report',
+        name: 'cgd-complain',
+        component: CgdComplain,
+      },
+      
+    ]
+
+  },
+  {
+    path: '/cgd/login',
+    name: 'cgd_login',
+    component: LoginView,
+    
   },
 
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: PageNotFound },

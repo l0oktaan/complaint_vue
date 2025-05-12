@@ -36,12 +36,14 @@ export default new Vuex.Store({
   actions: {
 
     async login ( {commit}, authData){
-
+      console.log( authData.userType)
       let path = await '/api/backoffice/login'
       let response =  await axios.post(path,{
           username: authData.username,
-          password: authData.password
+          password: authData.password,
+          userType: authData.userType
       })
+      
 
       const expirationTime = await 1000 * 60 * 60; // 1 hour
 
@@ -59,7 +61,8 @@ export default new Vuex.Store({
       let path = await '/api/user/login'
       let response =  await axios.post(path,{
           email: authData.email,
-          password: authData.password
+          password: authData.password,
+          userType: authData.userType
       })
 
       const expirationTime = await 1000 * 60 * 60; // 1 hour

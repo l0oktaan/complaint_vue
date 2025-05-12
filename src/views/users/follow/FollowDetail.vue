@@ -453,7 +453,13 @@ export default {
 
     async getComplainDetail(){
       let path              = await `/api/user/get/complainDetail`
-      let response          =  await axios.get(`${path}/`+ this.$route.params.id)
+      // let response          =  await axios.get(`${path}/`+ this.$route.params.id)
+      let response          =  await axios.get(`${path}`,{
+          params: {
+              id: this.$route.params.id,
+              userType: this.$route.path.includes('cgd') ? 'cgd' : this.$route.path.includes('backoffice') ?'admin' : 'user'
+          }
+      })
       this.data             = await response.data.data[0]
       this.data.create_date = await  moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY')
       // this.data.create_date = await moment(response.data.data[0].create_date).add(543, 'year').tz("Asia/Bangkok").locale('th').format('DD MMMM YYYY') + ' ' + moment(response.data.data[0].create_date).utcOffset("+00:00").format('HH:mm')

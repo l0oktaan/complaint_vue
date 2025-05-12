@@ -40,7 +40,13 @@
                 </v-chip>
             </template>
             <template v-slot:[`item.detail`]="{ item }">
-              <router-link :to="{ name: 'complain-detail', params: { id: item.id }}">
+              <!-- <router-link 
+              :to="{ name: 'complain-detail', params: { id: item.id }}"
+                
+              > -->
+              <router-link               
+                :to="$route.path.includes('cgd') ? {name : 'cgd_follow_detail',params: { id: item.id } } : {name : 'complain-detail',params: { id: item.id }}"
+              >
                 <i class="fa-solid fa-magnifying-glass"></i>
               </router-link>
             </template>
@@ -151,8 +157,10 @@
         try {
           
           let path      =   await `/api/user/get/listFollow`
-          // let response  =   await axios.get(`${path}/`)
-          let response  =   await axios.get(`${path}`)
+          // let response  =   await axios.get(`${path}/`)          
+          let response  =   await axios.get(`${path}`,{
+            params : {userType: this.$route.path.includes('cgd') ? 'cgd' : 'user'}
+          })
           // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id}})
           // let path = await `/api/backoffice/get/listFollow`
           // let response =  await axios.get(`${path}`, { params: { id: this.check_roles.id, roles : this.check_roles.roles }})
@@ -160,10 +168,12 @@
           this.datas    =   await response.data.data
           this.loading  =   await false
 
-          console.log(this.datas)
+          console.log(`Path ปัจจุบันคือ: ${this.$route.path}`);
         } catch (error) {
+          console.log('error', error);
+          
           if (error.response.status === 401) {
-            // Redirect to the login page
+            
             this.$router.push('/user/login'); // Replace with your login route
           } else {
             console.log('getListComplain');
